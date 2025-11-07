@@ -1,4 +1,4 @@
-package entity;
+package de.adrianwalter.movie_list_rest_api.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
