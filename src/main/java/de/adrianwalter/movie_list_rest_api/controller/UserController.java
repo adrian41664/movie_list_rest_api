@@ -1,26 +1,54 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import de.adrianwalter.movie_list_rest_api.service.UserService;
+import de.adrianwalter.movie_list_rest_api.payload.CreateUserRequest;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    private UserRepository userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
 
     @GetMapping("")
-    public List<User> index(){
+    public ResponseEntity<Page<User>> index(Pageable pageable){
 
-        return userRepository.findAll();
-    };
-
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+        return ResponseEntity.ok(userService.findAll(pageable));
     }
+
+
+    @PostMapping("")
+    public ResponseEntity<User> create(@Valid @RequestBody CreateUserRequest request) {
+
+        return ResponseEntity.ok(userService.create(request));
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> show(@PathVariable String id) {
+
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+
+        userService.deleteById(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+
 }
