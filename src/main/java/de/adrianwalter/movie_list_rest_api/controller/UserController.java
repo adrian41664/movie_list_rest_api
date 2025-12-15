@@ -9,6 +9,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    Endpoints tested with postman,
+    works as intended,
+
+    post-endpoint needs json body:
+    {
+        "id": number,
+        "userName": "test_user name"
+    }
+ */
+
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
