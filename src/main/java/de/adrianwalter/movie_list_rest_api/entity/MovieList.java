@@ -15,12 +15,13 @@ public class MovieList {
     @Column(name = "id", unique = true)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany( mappedBy = "movie_list", cascade = CascadeType.ALL)
+//    @OneToMany( mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL)
     private List<Movie> movies;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @NotBlank
     private String name;
