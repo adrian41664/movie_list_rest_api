@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 public class User {
@@ -17,6 +19,16 @@ public class User {
     @Column(unique = true)
     private String userName;
 
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MovieList> movieLists;
+
+    public List<MovieList> getMovieLists(){
+        return movieLists;
+    }
+
+    public void setMovieLists( List<MovieList> movieLists ){
+        this.movieLists = movieLists;
+    }
 
     public long getId() {
         return id;

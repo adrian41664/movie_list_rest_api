@@ -19,7 +19,7 @@ public class MovieList {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL)
+    @OneToMany( mappedBy = "movie_list", cascade = CascadeType.ALL)
     private List<Movie> movies;
 
     @NotBlank
