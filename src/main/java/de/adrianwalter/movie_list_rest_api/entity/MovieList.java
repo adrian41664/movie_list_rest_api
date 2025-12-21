@@ -15,7 +15,6 @@ public class MovieList {
     @Column(name = "id", unique = true)
     private long id;
 
-//    @OneToMany( mappedBy = "movie", cascade = CascadeType.ALL)
     @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL)
     private List<Movie> movies;
 
@@ -24,12 +23,10 @@ public class MovieList {
     private User user;
 
     @NotBlank
-    private String name;
+    private String movieListName;
 
     private String description;
 
-    private String readKey;
-    private String writeKey;
 
     public long getId() {
         return id;
@@ -55,12 +52,12 @@ public class MovieList {
         this.movies = movies;
     }
 
-    public String getName() {
-        return name;
+    public String getMovieListName() {
+        return movieListName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovieListName(String movieListName) {
+        this.movieListName = movieListName;
     }
 
     public String getDescription() {
@@ -70,20 +67,5 @@ public class MovieList {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public String getReadKey() {
-        return readKey;
-    }
-
-    public void setReadKey(String readKey) {
-        this.readKey = readKey;
-    }
-
-    public String getWriteKey() {
-        return writeKey;
-    }
-
-    public void setWriteKey(String writeKey) {
-        this.writeKey = writeKey;
-    }
+    
 }

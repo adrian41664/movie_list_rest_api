@@ -26,6 +26,26 @@ public class User {
         return movieLists;
     }
 
+    private String readKey;
+
+    private String writeKey;
+
+    public String getReadKey() {
+        return readKey;
+    }
+
+    public void setReadKey(String readKey) {
+        this.readKey = readKey;
+    }
+
+    public String getWriteKey() {
+        return writeKey;
+    }
+
+    public void setWriteKey(String writeKey) {
+        this.writeKey = writeKey;
+    }
+
     public void setMovieLists( List<MovieList> movieLists ){
         this.movieLists = movieLists;
     }

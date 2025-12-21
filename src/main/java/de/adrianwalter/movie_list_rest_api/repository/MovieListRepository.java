@@ -1,13 +1,13 @@
 package de.adrianwalter.movie_list_rest_api.repository;
 
-import de.adrianwalter.movie_list_rest_api.entity.User;
+import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface MovieListRepository extends JpaRepository<MovieList, Long> {
 
-    Optional<User> findByUserName(String name);
+    Optional<MovieList> findByMovieListName( String name );
 }

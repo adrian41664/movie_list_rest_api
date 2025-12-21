@@ -2,7 +2,7 @@ package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
-import de.adrianwalter.movie_list_rest_api.payload.CreateUserRequest;
+import de.adrianwalter.movie_list_rest_api.payload.CreateUserDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,21 +40,21 @@ public class UserController {
 
 
     @PostMapping("")
-    public ResponseEntity<User> create(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<User> create(@Valid @RequestBody CreateUserDTO request) {
 
         return ResponseEntity.ok(userService.create(request));
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> show(@PathVariable String id) {
+    public ResponseEntity<User> show(@PathVariable Long id) {
 
-        return ResponseEntity.ok(userService.findById(id));
+        return ResponseEntity.ok(userService.findById( id ));
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
 
         userService.deleteById(id);
 

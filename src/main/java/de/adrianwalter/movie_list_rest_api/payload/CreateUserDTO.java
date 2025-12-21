@@ -5,7 +5,7 @@ import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
-public class CreateUserRequest {
+public class CreateUserDTO {
 
     @NotBlank
     private String userName;
@@ -18,4 +18,5 @@ public class CreateUserRequest {
 
         return this.userName;
     }
+
 }

@@ -28,14 +28,14 @@ public class Movie {
     //	> MOVIE_NAME
     @NotBlank
     @Column(unique = true)
-    private String name;
+    private String movieName;
 
     //	> RELEASE_YEAR {nullable}
     @Column(nullable = true)
     private int releaseYear;
 
     //	> ADDED TO LIST DATE TIME / Seen
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime seenAt;
 
     //	> PLATFORM (SEEN ON) {nullable}
@@ -47,7 +47,8 @@ public class Movie {
     private String userNote;
 
     // MovieDetail Instanz für optionale Infos
-    @OneToOne
+    @OneToOne( optional = true )
+    @JoinColumn(nullable = true)
     private MovieDetail movieDetail;
 
     public long getId() {
@@ -74,12 +75,12 @@ public class Movie {
         this.userRating = userRating;
     }
 
-    public String getName() {
-        return name;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public int getReleaseYear() {

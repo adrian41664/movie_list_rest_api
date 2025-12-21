@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.CreateUserRequest;
+import de.adrianwalter.movie_list_rest_api.payload.CreateUserDTO;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ public class UserService {
         return userRepository.findAll( pageable );
     }
 
-    public User findById( String id ){
+    public User findById( Long id ){
 
         Optional<User> user = userRepository.findById( id );
 
@@ -35,7 +35,7 @@ public class UserService {
         return user.get();
     }
 
-    public void deleteById(String id) {
+    public void deleteById(Long id) {
         userRepository.deleteById( id );
     }
 
@@ -43,7 +43,8 @@ public class UserService {
         return userRepository.findByUserName(userName);
     }
 
-    public User create(CreateUserRequest request) {
+    public User create(CreateUserDTO request) {
+
         Optional<User> existingCustomer = findByUserName(request.getUserName());
 
         if (existingCustomer.isPresent()) {
