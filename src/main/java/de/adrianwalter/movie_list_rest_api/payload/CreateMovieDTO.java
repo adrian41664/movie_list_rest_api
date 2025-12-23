@@ -4,13 +4,12 @@ import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class CreateMovieDTO {
 
     @NotBlank
-
     private String movieName;
 
     private MovieList movieList;
@@ -20,7 +19,7 @@ public class CreateMovieDTO {
     // nullable
     private int releaseYear;
 
-    private LocalDateTime seenAt;
+    private LocalDate seenAt;
 
     // nullable
     private String seenOn;

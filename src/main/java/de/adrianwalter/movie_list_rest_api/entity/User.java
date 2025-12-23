@@ -19,6 +19,7 @@ public class User {
     @Column(unique = true)
     private String userName;
 
+    // movieLists is a List of Lists containing Movie-Objects
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL)
     private List<MovieList> movieLists;
 
@@ -26,24 +27,15 @@ public class User {
         return movieLists;
     }
 
-    private String readKey;
+    // ToDo: Apply functionality
+    private String readAndWriteKey;
 
-    private String writeKey;
-
-    public String getReadKey() {
-        return readKey;
+    public String getReadAndWriteKey() {
+        return readAndWriteKey;
     }
 
-    public void setReadKey(String readKey) {
-        this.readKey = readKey;
-    }
-
-    public String getWriteKey() {
-        return writeKey;
-    }
-
-    public void setWriteKey(String writeKey) {
-        this.writeKey = writeKey;
+    public void setReadAndWriteKey(String readKey) {
+        this.readAndWriteKey = readKey;
     }
 
     public void setMovieLists( List<MovieList> movieLists ){

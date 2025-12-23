@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -25,9 +25,9 @@ public class Movie {
     @Column(nullable = false)
     private String userRating;
 
-    //	> MOVIE_NAME
+    //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
     @NotBlank
-    @Column(unique = true)
+    @Column(unique = false)
     private String movieName;
 
     //	> RELEASE_YEAR {nullable}
@@ -36,17 +36,17 @@ public class Movie {
 
     //	> ADDED TO LIST DATE TIME / Seen
     @Column(nullable = true)
-    private LocalDateTime seenAt;
+    private LocalDate seenAt;
 
     //	> PLATFORM (SEEN ON) {nullable}
     @Column(nullable = true)
     private String seenOn;
 
-    //	> USER NOTE {nullable, freies Textfeld für alle möglichen Infos des Users}
+    //	> USER NOTE {nullable} text field for user
     @Column(nullable = true)
     private String userNote;
 
-    // MovieDetail Instanz für optionale Infos
+    // MovieDetail - Instance for optional details
     @OneToOne( optional = true )
     @JoinColumn(nullable = true)
     private MovieDetail movieDetail;
@@ -91,11 +91,11 @@ public class Movie {
         this.releaseYear = releaseYear;
     }
 
-    public LocalDateTime getSeenAt() {
+    public LocalDate getSeenAt() {
         return seenAt;
     }
 
-    public void setSeenAt(LocalDateTime seenAt) {
+    public void setSeenAt(LocalDate seenAt) {
         this.seenAt = seenAt;
     }
 
