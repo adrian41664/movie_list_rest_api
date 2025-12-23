@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Data
 public class CreateMovieDTO {
 
+    // toDo: Create more Versions (short, full, detailed)
+
     @NotBlank
     private String movieName;
 

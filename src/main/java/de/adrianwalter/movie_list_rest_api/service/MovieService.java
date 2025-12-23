@@ -44,6 +44,8 @@ public class MovieService {
     }
 
     public Movie create(CreateMovieDTO request) {
+
+        // toDo: How to handle? Name is not unique. Movie should be unique per MovieList.
         Optional<Movie> existingMovie = findByMovieName(request.getMovieName());
 
         if (existingMovie.isPresent()) {
