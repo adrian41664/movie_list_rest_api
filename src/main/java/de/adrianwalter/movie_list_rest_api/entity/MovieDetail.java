@@ -15,6 +15,9 @@ public class MovieDetail {
     @OneToOne
     private Movie movie;
 
+    @Column ( nullable = true )
+    private int movieLength;
+
     //	> SYNOPSIS {nullable}
     @Column(nullable = true)
     private String synopsis;
@@ -36,6 +39,14 @@ public class MovieDetail {
     //	> CAST_NAMES {nullable}
     @Column(nullable = true)
     private String castNames;
+
+    public int getMovieLength() {
+        return movieLength;
+    }
+
+    public void setMovieLength(int movieLength) {
+        this.movieLength = movieLength;
+    }
 
     public Movie getMovie() {
         return movie;
