@@ -43,9 +43,9 @@ public class MovieListController {
 
 
     @PostMapping("")
-    public ResponseEntity<MovieList> createMovieList(@Valid @RequestBody CreateMovieListDTO request) {
+    public ResponseEntity<MovieList> createMovieList(@Valid @RequestBody CreateMovieListDTO requestBody) {
 
-        return ResponseEntity.ok(movieListService.create(request));
+        return ResponseEntity.ok(movieListService.create(requestBody));
     }
 
 

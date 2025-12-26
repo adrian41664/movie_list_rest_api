@@ -1,5 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class User {
     }
 
     // ToDo: Apply functionality
+    @JsonIgnore
     private String readAndWriteKey;
 
     public String getReadAndWriteKey() {

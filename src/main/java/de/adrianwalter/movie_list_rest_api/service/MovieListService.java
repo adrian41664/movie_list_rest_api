@@ -2,10 +2,9 @@ package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByIdDTO;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByNameDTO;
+import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByUserIdDTO;
+import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByUserNameDTO;
 import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListDTO;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
@@ -59,7 +58,7 @@ public class MovieListService {
 
     public MovieList create(CreateMovieListDTO movieListDTO) {
 
-        if (movieListDTO instanceof CreateMovieListByIdDTO idDTO) {
+        if (movieListDTO instanceof CreateMovieListByUserIdDTO idDTO) {
 
             Optional<User> existingUser = userRepository.findByUserId(idDTO.getUserId());
 
@@ -78,7 +77,7 @@ public class MovieListService {
                 throw new IllegalArgumentException("UserId not found!");
             }
 
-        } else if (movieListDTO instanceof CreateMovieListByNameDTO nameDTO) {
+        } else if (movieListDTO instanceof CreateMovieListByUserNameDTO nameDTO) {
 
             Optional<User> existingUser = userRepository.findByUserName(nameDTO.getUserName());
 

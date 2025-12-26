@@ -39,9 +39,9 @@ public class UserController {
 
 
     @PostMapping("")
-    public ResponseEntity<User> create(@Valid @RequestBody CreateUserDTO request) {
+    public ResponseEntity<User> create(@Valid @RequestBody CreateUserDTO requestBody) {
 
-        return ResponseEntity.ok(userService.create(request));
+        return ResponseEntity.ok(userService.create(requestBody));
     }
 
 
