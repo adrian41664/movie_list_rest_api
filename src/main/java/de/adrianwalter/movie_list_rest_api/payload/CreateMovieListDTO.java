@@ -1,20 +1,30 @@
 package de.adrianwalter.movie_list_rest_api.payload;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@Data
-public class CreateMovieListDTO {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CreateMovieListByIdDTO.class, name = "by_id"),
+        @JsonSubTypes.Type(value = CreateMovieListByNameDTO.class, name = "by_name")
+})
+public abstract class CreateMovieListDTO {
 
     @NotBlank
     private String movieListName;
 
-    public void setMovieListName(String movieListName) {
-        this.movieListName = movieListName;
-    }
+    private String description;
 
     public String getMovieListName() {
-        return this.movieListName;
+        return movieListName;
     }
 
+    public String getDescription() {
+        return description;
+    }
 }

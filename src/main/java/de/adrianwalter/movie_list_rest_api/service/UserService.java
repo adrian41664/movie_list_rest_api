@@ -45,9 +45,9 @@ public class UserService {
 
     public User create(CreateUserDTO request) {
 
-        Optional<User> existingCustomer = findByUserName(request.getUserName());
+        Optional<User> existingUser = this.findByUserName(request.getUserName());
 
-        if (existingCustomer.isPresent()) {
+        if (existingUser.isPresent()) {
             throw new NameAlreadyExistsException();
         }
 
