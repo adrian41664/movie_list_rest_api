@@ -13,7 +13,7 @@ public class MovieList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private long id;
+    private long movieListId;
 
     @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL)
     private List<Movie> movies;
@@ -28,12 +28,12 @@ public class MovieList {
     private String description;
 
 
-    public long getId() {
-        return id;
+    public long getMovieListId() {
+        return movieListId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setMovieListId(long movieListId) {
+        this.movieListId = movieListId;
     }
 
     public User getUser() {

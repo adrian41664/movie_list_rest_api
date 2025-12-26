@@ -53,7 +53,6 @@ public class MovieListController {
     // single list (of a certain user, because every list is tied to one user)
     @GetMapping("/{movieListId}")
     public ResponseEntity<MovieList> getMovieList(@PathVariable Long movieListId ){
-        // @toDo: not sure, if movieListId param name must resemble name of id field of MovieList Class
 
         MovieList movieList = movieListService.findById( movieListId );
 
