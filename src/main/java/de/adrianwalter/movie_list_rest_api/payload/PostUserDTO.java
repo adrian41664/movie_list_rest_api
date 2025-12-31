@@ -1,13 +1,12 @@
 package de.adrianwalter.movie_list_rest_api.payload;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import jakarta.validation.constraints.NotBlank;
 
 @Data
-public class CreateUserDTO {
+public class PostUserDTO {
 
     @NotBlank
     @JsonAlias({"userName", "user_name"})

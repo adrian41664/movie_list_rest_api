@@ -3,14 +3,12 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByUserIdDTO;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListByUserNameDTO;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserIdDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserNameDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListDTO;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,9 +26,9 @@ public class MovieListService {
         this.userRepository = userRepository;
     }
 
-    public Page<MovieList> findAll(Pageable pageable) {
-        return movieListRepository.findAll(pageable);
-    }
+//    public Page<MovieList> findAll(Pageable pageable) {
+//        return movieListRepository.findAll(pageable);
+//    }
 
     public MovieList findById(Long id) {
 
@@ -56,9 +54,9 @@ public class MovieListService {
     }
 
 
-    public MovieList create(CreateMovieListDTO movieListDTO) {
+    public MovieList create(PostMovieListDTO movieListDTO) {
 
-        if (movieListDTO instanceof CreateMovieListByUserIdDTO idDTO) {
+        if (movieListDTO instanceof PostMovieListByUserIdDTO idDTO) {
 
             Optional<User> existingUser = userRepository.findByUserId(idDTO.getUserId());
 
@@ -77,7 +75,7 @@ public class MovieListService {
                 throw new IllegalArgumentException("UserId not found!");
             }
 
-        } else if (movieListDTO instanceof CreateMovieListByUserNameDTO nameDTO) {
+        } else if (movieListDTO instanceof PostMovieListByUserNameDTO nameDTO) {
 
             Optional<User> existingUser = userRepository.findByUserName(nameDTO.getUserName());
 

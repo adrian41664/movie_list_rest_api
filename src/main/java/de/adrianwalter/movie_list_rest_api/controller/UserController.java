@@ -2,7 +2,7 @@ package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
-import de.adrianwalter.movie_list_rest_api.payload.CreateUserDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostUserDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ public class UserController {
 
     // in test: OK
     @PostMapping("")
-    public ResponseEntity<User> createNewUser(@Valid @RequestBody CreateUserDTO requestBody) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody PostUserDTO requestBody) {
 
         return ResponseEntity.ok(userService.create(requestBody));
     }

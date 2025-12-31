@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.CreateUserDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostUserDTO;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public class UserService {
         return userRepository.findByUserName(userName);
     }
 
-    public User create(CreateUserDTO request) {
+    public User create(PostUserDTO request) {
 
         Optional<User> existingUser = this.findByUserName(request.getUserName());
 

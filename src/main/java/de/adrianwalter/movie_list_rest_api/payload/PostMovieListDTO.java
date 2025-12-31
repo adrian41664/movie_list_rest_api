@@ -10,10 +10,10 @@ import jakarta.validation.constraints.NotBlank;
         property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CreateMovieListByUserIdDTO.class, name = "by_id"),
-        @JsonSubTypes.Type(value = CreateMovieListByUserNameDTO.class, name = "by_name")
+        @JsonSubTypes.Type(value = PostMovieListByUserIdDTO.class, name = "by_id"),
+        @JsonSubTypes.Type(value = PostMovieListByUserNameDTO.class, name = "by_name")
 })
-public abstract class CreateMovieListDTO {
+public abstract class PostMovieListDTO {
 
     @NotBlank
     @JsonProperty("movie_list_name")

@@ -1,10 +1,9 @@
 package de.adrianwalter.movie_list_rest_api.payload;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
-public class CreateMovieListByUserNameDTO extends CreateMovieListDTO {
+public class PostMovieListByUserNameDTO extends PostMovieListDTO {
 
     private String type = "by_name";
 

@@ -1,7 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
-import de.adrianwalter.movie_list_rest_api.payload.CreateMovieListDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListDTO;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -36,15 +36,15 @@ public class MovieListController {
 
     // in test: OK
     @PostMapping("")
-    public ResponseEntity<MovieList> createNewMovieList(@Valid @RequestBody CreateMovieListDTO requestBody) {
+    public ResponseEntity<MovieList> createNewMovieList(@Valid @RequestBody PostMovieListDTO requestBody) {
 
         return ResponseEntity.ok(movieListService.create(requestBody));
     }
 
 
     // single list (of a certain user, because every list is tied to one user)
+    // in test: OK
     // ToDo: Response nested with User
-    // ToDo: create test in Postman
     @GetMapping("/{movieListId}")
     public ResponseEntity<MovieList> getMovieList(@PathVariable Long movieListId ){
 
