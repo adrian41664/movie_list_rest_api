@@ -3,8 +3,9 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserIdDTO;
-import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserNameDTO;
+import de.adrianwalter.movie_list_rest_api.payload.GetMovieListResponseDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserIdBodyDTO;
+import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserNameBodyDTO;
 import de.adrianwalter.movie_list_rest_api.payload.PostMovieListDTO;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
@@ -26,19 +27,45 @@ public class MovieListService {
         this.userRepository = userRepository;
     }
 
-//    public Page<MovieList> findAll(Pageable pageable) {
-//        return movieListRepository.findAll(pageable);
-//    }
+    public GetMovieListResponseDTO create( MovieList movieList ){
 
-    public MovieList findById(Long id) {
+        //
+        return null;
+    }
 
-        Optional<MovieList> movieList = movieListRepository.findById(id);
+    private GetMovieListResponseDTO mapToGetMovieListResponseDTO( MovieList movieList ){
 
-        if (movieList.isEmpty()) {
+        GetMovieListResponseDTO dto = new GetMovieListResponseDTO();
+
+        dto.setMovieListId( movieList.getMovieListId() );
+        dto.setMovieListName( movieList.getMovieListName() );
+
+        dto.setUserId( movieList.getUser().getUserId() );
+        dto.setUserName( movieList.getUser().getUserName() );
+
+        dto.setDescription( movieList.getDescription() );
+        dto.setMovies( movieList.getMovies() );
+
+        return dto;
+    }
+
+
+
+
+    public GetMovieListResponseDTO findById(Long id) {
+
+        Optional<MovieList> movieList = movieListRepository.findByMovieListId( id );
+
+        if( movieList.isPresent() ){
+
+            GetMovieListResponseDTO getMovieListResponseDTO;
+            getMovieListResponseDTO = mapToGetMovieListResponseDTO( movieList.get() );
+
+            return getMovieListResponseDTO;
+
+        } else {
             throw new ResourceNotFoundException();
         }
-
-        return movieList.get();
     }
 
     public void deleteById(Long id) {
@@ -49,22 +76,24 @@ public class MovieListService {
         return movieListRepository.findByMovieListName(name);
     }
 
-    public Optional<MovieList> findByMovieListId(Long id) {
-        return movieListRepository.findByMovieListId(id);
-    }
+//    public Optional<MovieList> findByMovieListId(Long id) {
+//        return movieListRepository.findByMovieListId(id);
+//    }
 
 
     public MovieList create(PostMovieListDTO movieListDTO) {
 
-        if (movieListDTO instanceof PostMovieListByUserIdDTO idDTO) {
+        // ToDo: Refactoring; DRY
 
-            Optional<User> existingUser = userRepository.findByUserId(idDTO.getUserId());
+        if (movieListDTO instanceof PostMovieListByUserIdBodyDTO idDTO) {
 
-            if (existingUser.isPresent()) {
+            Optional<User> user = userRepository.findByUserId(idDTO.getUserId());
+
+            if ( user.isPresent() ) {
 
                 MovieList movieList = new MovieList();
 
-                movieList.setUser(existingUser.get());
+                movieList.setUser(user.get());
 
                 movieList.setMovieListName( idDTO.getMovieListName() );
                 movieList.setDescription( idDTO.getDescription() );
@@ -75,15 +104,15 @@ public class MovieListService {
                 throw new IllegalArgumentException("UserId not found!");
             }
 
-        } else if (movieListDTO instanceof PostMovieListByUserNameDTO nameDTO) {
+        } else if (movieListDTO instanceof PostMovieListByUserNameBodyDTO nameDTO) {
 
-            Optional<User> existingUser = userRepository.findByUserName(nameDTO.getUserName());
+            Optional<User> user = userRepository.findByUserName(nameDTO.getUserName());
 
-            if (existingUser.isPresent()) {
+            if (user.isPresent()) {
 
                 MovieList movieList = new MovieList();
 
-                movieList.setUser(existingUser.get());
+                movieList.setUser(user.get());
 
                 movieList.setMovieListName( nameDTO.getMovieListName() );
                 movieList.setDescription( nameDTO.getDescription() );
@@ -99,5 +128,11 @@ public class MovieListService {
         }
 
     }
+
+
+    //    public Page<MovieList> findAll(Pageable pageable) {
+    //        return movieListRepository.findAll(pageable);
+    //    }
+
 
 }

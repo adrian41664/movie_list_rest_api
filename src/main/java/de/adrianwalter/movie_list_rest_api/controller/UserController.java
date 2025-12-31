@@ -29,6 +29,7 @@ public class UserController {
 
 
     // in test: OK
+    // ToDo: Response nested with MovieList
     @PostMapping("")
     public ResponseEntity<User> createNewUser(@Valid @RequestBody PostUserDTO requestBody) {
 
@@ -41,7 +42,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> showUser(@PathVariable Long id) {
 
-        return ResponseEntity.ok(userService.findById( id ));
+        return ResponseEntity.ok( userService.findById( id ));
     }
 
     // ToDo: create test in postman

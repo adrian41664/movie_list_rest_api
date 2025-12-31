@@ -43,16 +43,16 @@ public class UserService {
         return userRepository.findByUserName(userName);
     }
 
-    public User create(PostUserDTO request) {
+    public User create(PostUserDTO postUserDTO) {
 
-        Optional<User> existingUser = this.findByUserName(request.getUserName());
+        Optional<User> existingUser = this.findByUserName(postUserDTO.getUserName());
 
         if (existingUser.isPresent()) {
             throw new NameAlreadyExistsException();
         }
 
         User user = new User();
-        user.setUserName(request.getUserName());
+        user.setUserName(postUserDTO.getUserName());
 
         return userRepository.save(user);
     }

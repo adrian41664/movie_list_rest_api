@@ -1,6 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
+import de.adrianwalter.movie_list_rest_api.payload.GetMovieListResponseDTO;
 import de.adrianwalter.movie_list_rest_api.payload.PostMovieListDTO;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
@@ -46,9 +47,9 @@ public class MovieListController {
     // in test: OK
     // ToDo: Response nested with User
     @GetMapping("/{movieListId}")
-    public ResponseEntity<MovieList> getMovieList(@PathVariable Long movieListId ){
+    public ResponseEntity<GetMovieListResponseDTO> getMovieList(@PathVariable Long movieListId ){
 
-        MovieList movieList = movieListService.findById( movieListId );
+        GetMovieListResponseDTO movieList = movieListService.findById( movieListId );
 
         return ResponseEntity.ok(movieList);
     }

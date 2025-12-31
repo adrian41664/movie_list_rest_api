@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.payload;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
 
-public class PostMovieListByUserNameDTO extends PostMovieListDTO {
+public class PostMovieListByUserNameBodyDTO extends PostMovieListDTO {
 
     private String type = "by_name";
 
