@@ -9,17 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/*
-    Endpoints tested with postman,
-    works as intended,
-
-    post-endpoint needs json body:
-    {
-        "id": number,
-        "userName": "test_user name"
-    }
- */
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -30,30 +19,34 @@ public class UserController {
         this.userService = userService;
     }
 
-
+    // in test: OK
+    // ToDo: Response nested with MovieList
     @GetMapping("")
-    public ResponseEntity<Page<User>> index(Pageable pageable){
+    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable){
 
         return ResponseEntity.ok(userService.findAll(pageable));
     }
 
 
+    // in test: OK
     @PostMapping("")
-    public ResponseEntity<User> create(@Valid @RequestBody CreateUserDTO requestBody) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody CreateUserDTO requestBody) {
 
         return ResponseEntity.ok(userService.create(requestBody));
     }
 
 
+    // in test: OK
+    // ToDo: Response nested with MovieList
     @GetMapping("/{id}")
-    public ResponseEntity<User> show(@PathVariable Long id) {
+    public ResponseEntity<User> showUser(@PathVariable Long id) {
 
         return ResponseEntity.ok(userService.findById( id ));
     }
 
-
+    // ToDo: create test in postman
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
         userService.deleteById(id);
 
