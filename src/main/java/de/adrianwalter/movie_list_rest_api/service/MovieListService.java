@@ -72,13 +72,12 @@ public class MovieListService {
         movieListRepository.deleteById(id);
     }
 
+    /* ToDo: In MovieList Names are not unique, how to find MovieList by Name?
+        Is method needed for planned endpoint?
+    */
     public Optional<MovieList> findByMovieListName(String name) {
         return movieListRepository.findByMovieListName(name);
     }
-
-//    public Optional<MovieList> findByMovieListId(Long id) {
-//        return movieListRepository.findByMovieListId(id);
-//    }
 
 
     public MovieList create(PostMovieListDTO movieListDTO) {

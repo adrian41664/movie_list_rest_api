@@ -11,5 +11,5 @@ public interface MovieListRepository extends JpaRepository<MovieList, Long> {
 
     Optional<MovieList> findByMovieListId( Long id );
 
-    Optional<MovieList> findByMovieListName( String name );
+    // Optional<MovieList> findByMovieListName( String name );
 }
