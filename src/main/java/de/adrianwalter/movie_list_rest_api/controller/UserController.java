@@ -16,11 +16,14 @@ public class UserController {
     private final UserService userService;
 
     public UserController(UserService userService) {
+
         this.userService = userService;
     }
 
-    // in test: OK
+
+    // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
+    // ToDo: Remove "Pageable"
     @GetMapping("")
     public ResponseEntity<Page<User>> getAllUsers(Pageable pageable){
 
@@ -28,7 +31,7 @@ public class UserController {
     }
 
 
-    // in test: OK
+    // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
     @PostMapping("")
     public ResponseEntity<User> createNewUser(@Valid @RequestBody PostUserDTO requestBody) {
@@ -37,15 +40,16 @@ public class UserController {
     }
 
 
-    // in test: OK
+    // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
     @GetMapping("/{id}")
-    public ResponseEntity<User> showUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
 
         return ResponseEntity.ok( userService.findById( id ));
     }
 
-    // ToDo: create test in postman
+
+    // ToDo: in test; ok
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
@@ -53,7 +57,6 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
-
 
 
 }

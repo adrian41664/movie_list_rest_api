@@ -74,10 +74,11 @@ public class MovieListService {
 
     /* ToDo: In MovieList Names are not unique, how to find MovieList by Name?
         Is method needed for planned endpoint?
-    */
+
     public Optional<MovieList> findByMovieListName(String name) {
         return movieListRepository.findByMovieListName(name);
     }
+    */
 
 
     public MovieList create(PostMovieListDTO movieListDTO) {

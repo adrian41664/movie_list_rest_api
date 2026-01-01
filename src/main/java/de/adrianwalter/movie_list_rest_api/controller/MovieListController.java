@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/movie-list")
 public class MovieListController {
@@ -15,10 +17,12 @@ public class MovieListController {
     private final MovieListService movieListService;
 
     public MovieListController(MovieListService movieListService) {
+
         this.movieListService = movieListService;
     }
 
-    // in test: OK
+
+    // ToDo: in test; ok
     @PostMapping("")
     public ResponseEntity<MovieList> createNewMovieList(@Valid @RequestBody PostMovieListDTO requestBody) {
 
@@ -27,8 +31,7 @@ public class MovieListController {
 
 
     // single list (of a certain user, because every list is tied to one user)
-    // in test: OK,
-    // Done: Response nested with User
+    // ToDo: in test; ok
     @GetMapping("/{movieListId}")
     public ResponseEntity<GetMovieListResponseDTO> getMovieList(@PathVariable Long movieListId ){
 
@@ -38,22 +41,16 @@ public class MovieListController {
     }
 
 
-    // all lists of all users
-    // not sure if needed
-    //    @GetMapping("")
-    //    public ResponseEntity<Page<MovieList>> getAllMovieLists(Pageable pageable){
-    //
-    //        return ResponseEntity.ok(movieListService.findAll(pageable));
-    //    }
-
     // all lists of a certain user
-    //    @GetMapping("/user/{userId}")
-    //    public ResponseEntity<List<MovieList>> getUsersMovieLists(@PathVariable Long userId ){
-    //
-    //        List<MovieList> usersMovieLists = movieListService.getUsersMovieLists( userId );
-    //
-    //        return ResponseEntity.ok(usersMovieLists);
-    //    }
+    // ToDo: Implement method in movieListService
+    // ToDo: Create DTO to avoid nested response json
+//    @GetMapping("/user/{userId}")
+//    public ResponseEntity<List<MovieList>> getUsersMovieLists(@PathVariable Long userId ){
+//
+//        List<MovieList> usersMovieLists = movieListService.getUsersMovieLists( userId );
+//
+//        return ResponseEntity.ok(usersMovieLists);
+//    }
 
 
 }
