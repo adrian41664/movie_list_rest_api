@@ -51,8 +51,7 @@ public class UserController {
     }
 
 
-    // ToDo: in test; ok/nested
-    // ToDo: Response nested with MovieList
+    // ToDo: in test; ok
     @GetMapping("/{userId}")
     public ResponseEntity< UserShortResponseDto > getUser( @PathVariable Long userId) {
 
@@ -60,8 +59,8 @@ public class UserController {
         return ResponseEntity.ok( responseDto );
     }
 
-    // ToDo: in test; ok/nested
-    // ToDo: Response nested with MovieList
+
+    // ToDo: Create test
     @GetMapping("/{userId}/details")
     public ResponseEntity< UserShortResponseDto > getUserDetails( @PathVariable Long userId) {
 
