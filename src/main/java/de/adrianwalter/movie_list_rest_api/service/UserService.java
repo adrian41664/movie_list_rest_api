@@ -51,9 +51,13 @@ public class UserService {
     }
 
 
-    public void deleteById( Long id ) {
+    public UserShortResponseDto deleteByIdAndMapToShortResponse( Long userId ) {
 
-        userRepository.deleteById( id );
+        User user = this.findById( userId );
+
+        userRepository.deleteById( userId );
+
+        return this.mapToShortResponseDto( user );
     }
 
 

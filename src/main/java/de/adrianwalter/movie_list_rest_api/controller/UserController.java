@@ -74,11 +74,11 @@ public class UserController {
 
     // ToDo: in test; ok
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<UserShortResponseDto> deleteUser(@PathVariable Long userId) {
 
-        userService.deleteById(userId);
+        UserShortResponseDto responseDto = userService.deleteByIdAndMapToShortResponse(userId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok( responseDto );
     }
 
 
