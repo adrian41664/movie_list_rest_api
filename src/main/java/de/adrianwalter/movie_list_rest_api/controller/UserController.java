@@ -1,7 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.payload.UserResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.UserShortResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
 import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
@@ -24,10 +24,10 @@ public class UserController {
 
     // ToDo: in test; ok
     @PutMapping("/{userId}")
-    public ResponseEntity< UserResponseDto > updateUser(
+    public ResponseEntity< UserShortResponseDto > updateUser(
             @PathVariable Long userId, @RequestBody @Valid UserUpdateDto userUpdateDto ){
 
-        UserResponseDto responseDto = userService.update( userId, userUpdateDto );
+        UserShortResponseDto responseDto = userService.update( userId, userUpdateDto );
         return ResponseEntity.ok( responseDto );
     }
 
@@ -54,9 +54,22 @@ public class UserController {
     // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable Long userId) {
+    public ResponseEntity< UserShortResponseDto > getUser( @PathVariable Long userId) {
 
-        return ResponseEntity.ok( userService.findById( userId ));
+        UserShortResponseDto responseDto = userService.findByIdAndMapToShortResponse( userId );
+        return ResponseEntity.ok( responseDto );
+    }
+
+    // ToDo: in test; ok/nested
+    // ToDo: Response nested with MovieList
+    @GetMapping("/{userId}/details")
+    public ResponseEntity< UserShortResponseDto > getUserDetails( @PathVariable Long userId) {
+
+        // ToDo: Implement when Movie full implemented
+        // UserShortResponseDto responseDto = userService.findByIdAndMapToDetailedResponse( userId );
+
+        UserShortResponseDto responseDto = userService.findByIdAndMapToShortResponse( userId );
+        return ResponseEntity.ok( responseDto );
     }
 
 

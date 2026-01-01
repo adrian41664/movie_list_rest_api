@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.payload;
 import lombok.Data;
 
 @Data
-public class UserResponseDto {
+public class UserShortResponseDto {
 
     private long userId;
     private String userName;

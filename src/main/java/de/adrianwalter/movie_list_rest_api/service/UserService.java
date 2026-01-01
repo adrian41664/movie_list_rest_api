@@ -4,7 +4,7 @@ import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
-import de.adrianwalter.movie_list_rest_api.payload.UserResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.UserShortResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,10 +32,16 @@ public class UserService {
         return userRepository.findAll( pageable );
     }
 
+    public UserShortResponseDto findByIdAndMapToShortResponse( Long userId ) {
 
-    public User findById( Long id ) {
+        User user = this.findById( userId );
 
-        Optional< User > user = userRepository.findById( id );
+        return mapToShortResponseDto( user );
+    }
+
+    private User findById( Long userId ) {
+
+        Optional< User > user = userRepository.findById( userId );
 
         if ( user.isEmpty() ) {
             throw new ResourceNotFoundException();
@@ -57,7 +63,7 @@ public class UserService {
     }
 
 
-    public UserResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
+    public UserShortResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
         User user = userRepository.findById( userId )
                 .orElseThrow( () -> new EntityNotFoundException(
@@ -71,13 +77,13 @@ public class UserService {
         user.setUserName( userUpdateDTO.getUserName() );
         userRepository.save( user );
 
-        return this.mapToResponseDto( user );
+        return this.mapToShortResponseDto( user );
     }
 
 
-    private UserResponseDto mapToResponseDto( User user ) {
+    private UserShortResponseDto mapToShortResponseDto( User user ) {
 
-        UserResponseDto dto = new UserResponseDto();
+        UserShortResponseDto dto = new UserShortResponseDto();
         dto.setUserId( user.getUserId() );
         dto.setUserName( user.getUserName() );
 
