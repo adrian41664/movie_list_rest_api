@@ -3,10 +3,10 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.GetMovieListResponseDTO;
-import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserIdBodyDTO;
-import de.adrianwalter.movie_list_rest_api.payload.PostMovieListByUserNameBodyDTO;
-import de.adrianwalter.movie_list_rest_api.payload.PostMovieListDTO;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListReadResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserIdBodyDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserNameBodyDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,15 @@ public class MovieListService {
         this.userRepository = userRepository;
     }
 
-    public GetMovieListResponseDTO create( MovieList movieList ){
+    public MovieListReadResponseDto create( MovieList movieList ){
 
         //
         return null;
     }
 
-    private GetMovieListResponseDTO mapToGetMovieListResponseDTO( MovieList movieList ){
+    private MovieListReadResponseDto mapToGetMovieListResponseDTO( MovieList movieList ){
 
-        GetMovieListResponseDTO dto = new GetMovieListResponseDTO();
+        MovieListReadResponseDto dto = new MovieListReadResponseDto();
 
         dto.setMovieListId( movieList.getMovieListId() );
         dto.setMovieListName( movieList.getMovieListName() );
@@ -52,13 +52,13 @@ public class MovieListService {
 
 
 
-    public GetMovieListResponseDTO findById(Long id) {
+    public MovieListReadResponseDto findById( Long id) {
 
         Optional<MovieList> movieList = movieListRepository.findByMovieListId( id );
 
         if( movieList.isPresent() ){
 
-            GetMovieListResponseDTO getMovieListResponseDTO;
+            MovieListReadResponseDto getMovieListResponseDTO;
             getMovieListResponseDTO = mapToGetMovieListResponseDTO( movieList.get() );
 
             return getMovieListResponseDTO;
@@ -81,11 +81,11 @@ public class MovieListService {
     */
 
 
-    public MovieList create(PostMovieListDTO movieListDTO) {
+    public MovieList create( MovieListCreateDto movieListDTO) {
 
         // ToDo: Refactoring; DRY
 
-        if (movieListDTO instanceof PostMovieListByUserIdBodyDTO idDTO) {
+        if (movieListDTO instanceof MovieListCreateByUserIdBodyDto idDTO) {
 
             Optional<User> user = userRepository.findByUserId(idDTO.getUserId());
 
@@ -104,7 +104,7 @@ public class MovieListService {
                 throw new IllegalArgumentException("UserId not found!");
             }
 
-        } else if (movieListDTO instanceof PostMovieListByUserNameBodyDTO nameDTO) {
+        } else if (movieListDTO instanceof MovieListCreateByUserNameBodyDto nameDTO) {
 
             Optional<User> user = userRepository.findByUserName(nameDTO.getUserName());
 

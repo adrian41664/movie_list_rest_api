@@ -6,13 +6,14 @@ import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
-public class PostUserDTO {
+public class UserCreateDto {
 
     @NotBlank
     @JsonAlias({"userName", "user_name"})
     private String userName;
 
     public void setUserName(String userName) {
+
         this.userName = userName;
     }
 

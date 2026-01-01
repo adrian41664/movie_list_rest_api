@@ -2,18 +2,22 @@ package de.adrianwalter.movie_list_rest_api.payload;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-public class PostMovieListByUserNameBodyDTO extends PostMovieListDTO {
-
-    private String type = "by_name";
+@Data
+public class UserUpdateDto {
 
     @NotBlank
-    //@JsonProperty("user_name")
-    @JsonAlias({"userName", "user_name"})
     private String userName;
 
+    public void setUserName(String userName) {
+
+        this.userName = userName;
+    }
 
     public String getUserName() {
-        return userName;
+
+        return this.userName;
     }
+
 }

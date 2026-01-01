@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GetMovieListResponseDTO {
+public class MovieListReadResponseDto {
 
     private Long movieListId;
     private String movieListName;
@@ -17,19 +17,7 @@ public class GetMovieListResponseDTO {
     private String description;
     private List<Movie> movies;
 
-    public GetMovieListResponseDTO() {
-    }
-
-    public GetMovieListResponseDTO(Long movieListId, String movieListName, Long userId, String userName,
-                                   String description, List<Movie> movies ) {
-        this.movieListId = movieListId;
-        this.movieListName = movieListName;
-
-        this.userId = userId;
-        this.userName = userName;
-
-        this.description = description;
-        this.movies = movies;
+    public MovieListReadResponseDto() {
     }
 
     public Long getMovieListId() {

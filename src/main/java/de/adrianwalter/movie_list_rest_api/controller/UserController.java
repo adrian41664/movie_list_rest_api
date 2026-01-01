@@ -1,8 +1,10 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
+import de.adrianwalter.movie_list_rest_api.payload.UserResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
-import de.adrianwalter.movie_list_rest_api.payload.PostUserDTO;
+import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    // ToDo: in test; ok
+    @PutMapping("/{userId}")
+    public ResponseEntity< UserResponseDto > updateUser(
+            @PathVariable Long userId, @RequestBody @Valid UserUpdateDto userUpdateDto ){
+
+        UserResponseDto responseDto = userService.update( userId, userUpdateDto );
+        return ResponseEntity.ok( responseDto );
+    }
+
 
     // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
@@ -31,10 +42,10 @@ public class UserController {
     }
 
 
-    // ToDo: in test; ok/nested
+    // ToDo: in test; ok
     // ToDo: Response nested with MovieList
     @PostMapping("")
-    public ResponseEntity<User> createNewUser(@Valid @RequestBody PostUserDTO requestBody) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody UserCreateDto requestBody) {
 
         return ResponseEntity.ok(userService.create(requestBody));
     }
@@ -42,18 +53,18 @@ public class UserController {
 
     // ToDo: in test; ok/nested
     // ToDo: Response nested with MovieList
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUser(@PathVariable Long userId) {
 
-        return ResponseEntity.ok( userService.findById( id ));
+        return ResponseEntity.ok( userService.findById( userId ));
     }
 
 
     // ToDo: in test; ok
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 
-        userService.deleteById(id);
+        userService.deleteById(userId);
 
         return ResponseEntity.ok().build();
     }
