@@ -22,6 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
+
     // ToDo: in test; ok
     @PutMapping("/{userId}")
     public ResponseEntity< UserShortResponseDto > updateUser(
@@ -43,7 +44,7 @@ public class UserController {
 
 
     // ToDo: in test; ok
-    // ToDo: Response nested with MovieList
+    // ToDo: Response should be UserShortResponseDTO
     @PostMapping("")
     public ResponseEntity<User> createNewUser(@Valid @RequestBody UserCreateDto requestBody) {
 
