@@ -29,4 +29,51 @@ public class MovieShortCreateDto {
     // should not be null, but is required as null in special cases
     private LocalDate seenAt;
 
+    public long getMovieListId() {
+        return movieListId;
+    }
+
+    public void setMovieListId( long movieListId ) {
+        this.movieListId = movieListId;
+    }
+
+    public String getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating( String userRating ) {
+        this.userRating = userRating;
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName( String movieName ) {
+        this.movieName = movieName;
+    }
+
+    public String getSeenOn() {
+        return seenOn;
+    }
+
+    public void setSeenOn( String seenOn ) {
+        this.seenOn = seenOn;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear( Integer releaseYear ) {
+        this.releaseYear = releaseYear;
+    }
+
+    public LocalDate getSeenAt() {
+        return seenAt;
+    }
+
+    public void setSeenAt( LocalDate seenAt ) {
+        this.seenAt = seenAt;
+    }
 }

@@ -29,7 +29,6 @@ public class MovieListController {
     }
 
 
-    // single list (of a certain user, because every list is tied to one user)
     // ToDo: in test; ok
     @GetMapping( "/{movieListId}" )
     public ResponseEntity< MovieListResponseDto > getMovieList( @PathVariable Long movieListId ) {
@@ -39,17 +38,6 @@ public class MovieListController {
         return ResponseEntity.ok( movieList );
     }
 
-    /* ToDo: Implement:
-    @GetMapping("/{movieListName}/user/{userName}/")
-    public ResponseEntity<MovieListReadResponseDto> getMovieListByName(
-            @PathVariable String userName,
-            @PathVariable String movieListName) {
-
-        MovieListReadResponseDto movieList = movieListService
-                .findByUserAndName(userName, movieListName);
-        return ResponseEntity.ok(movieList);
-    }
-    */
 
     // all lists of a certain user
     /* ToDo: Implement:
@@ -61,5 +49,19 @@ public class MovieListController {
         return ResponseEntity.ok(usersMovieLists);
     }
     */
+
+
+    /* ToDo: Implement:
+    @GetMapping("/{movieListName}/user/{userName}/")
+    public ResponseEntity<MovieListReadResponseDto> getMovieListByNameAndUserId(
+            @PathVariable String userName,
+            @PathVariable String movieListName) {
+
+        MovieListReadResponseDto movieList = movieListService
+                .findByUserAndName(userName, movieListName);
+        return ResponseEntity.ok(movieList);
+    }
+    */
+
 
 }

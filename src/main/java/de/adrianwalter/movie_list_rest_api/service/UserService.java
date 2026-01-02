@@ -7,7 +7,7 @@ import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserShortResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -86,12 +86,14 @@ public class UserService {
     public UserShortResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
         User user = userRepository.findById( userId )
-                .orElseThrow( () -> new EntityNotFoundException(
+                .orElseThrow( () -> new ResourceNotFoundException(
                         "cant find User with ID " + userId ) );
 
-        if ( userNameIsAlreadyExisting( userUpdateDTO.getUserName() ) ) {
+        String newUserName = userUpdateDTO.getUserName();
 
-            throw new NameAlreadyExistsException();
+        if ( userNameIsAlreadyExisting( newUserName ) ) {
+
+            throw new EntityExistsException( "User with the given name already exists: " + newUserName );
         }
 
         user.setUserName( userUpdateDTO.getUserName() );

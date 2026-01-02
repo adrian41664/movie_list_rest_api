@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 public class UserCreateDto {
 
     @NotBlank
-    @JsonAlias({"userName", "user_name"})
+    @JsonAlias({"userName"})
     private String userName;
 
     public void setUserName(String userName) {
