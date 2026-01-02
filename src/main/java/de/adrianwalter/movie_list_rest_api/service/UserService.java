@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -27,10 +29,23 @@ public class UserService {
     }
 
 
-    public Page< User > findAll( Pageable pageable ) {
+    public Page< UserShortResponseDto > UNUSED_findAll( Pageable pageable ) {
 
-        return userRepository.findAll( pageable );
+        Page<User> allUsersPage = userRepository.findAll( pageable );
+
+        return allUsersPage.map( (User user) -> this.mapToShortResponseDto( user ) );
     }
+
+    public List< UserShortResponseDto > findAll( Pageable pageable ) {
+
+        Page<User> allUsersPage = userRepository.findAll( pageable );
+
+        return allUsersPage.getContent()
+                .stream()
+                .map( (User user) -> this.mapToShortResponseDto( user ) )
+                .collect( Collectors.toList() );
+    }
+
 
     public UserShortResponseDto findByIdAndMapToShortResponse( Long userId ) {
 
@@ -38,6 +53,7 @@ public class UserService {
 
         return mapToShortResponseDto( user );
     }
+
 
     private User findById( Long userId ) {
 

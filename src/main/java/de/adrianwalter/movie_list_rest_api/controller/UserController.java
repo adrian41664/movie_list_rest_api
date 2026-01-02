@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,13 +35,33 @@ public class UserController {
     }
 
 
-    // ToDo: in test; ok/nested
-    // ToDo: Response nested with MovieList
-    // ToDo: Remove "Pageable"
-    @GetMapping("")
-    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable){
+    // ToDo: in test; ok
+    // @GetMapping("")
+    public ResponseEntity<Page<UserShortResponseDto>> UNUSED_getAllUsers(Pageable pageable){
 
-        return ResponseEntity.ok(userService.findAll(pageable));
+        Page<UserShortResponseDto> users = userService.UNUSED_findAll( pageable );
+
+        return ResponseEntity.ok(users);
+    }
+
+    // ToDo: in test; ok
+    @GetMapping("")
+    public ResponseEntity< List<UserShortResponseDto> > getAllUsers( Pageable pageable){
+
+        List<UserShortResponseDto> users = userService.findAll( pageable );
+
+        return ResponseEntity.ok(users);
+    }
+
+
+    // ToDo: create test
+    //@GetMapping("/details")
+    public ResponseEntity< List<UserShortResponseDto> > getAllUsersDetails( Pageable pageable){
+
+        // ToDo: Implement when Movie full implemented
+        List<UserShortResponseDto> users = userService.findAll( pageable );
+
+        return ResponseEntity.ok(users);
     }
 
 
@@ -62,7 +84,7 @@ public class UserController {
 
 
     // ToDo: Create test
-    @GetMapping("/{userId}/details")
+    //@GetMapping("/{userId}/details")
     public ResponseEntity< UserShortResponseDto > getUserDetails( @PathVariable Long userId) {
 
         // ToDo: Implement when Movie full implemented
