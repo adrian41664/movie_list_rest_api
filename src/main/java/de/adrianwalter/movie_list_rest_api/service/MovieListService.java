@@ -9,6 +9,7 @@ import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserNameBody
 import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +23,18 @@ public class MovieListService {
     private final UserRepository userRepository;
 
     @Autowired
-    public MovieListService(MovieListRepository movieListRepository, UserRepository userRepository) {
+    public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository ) {
         this.movieListRepository = movieListRepository;
         this.userRepository = userRepository;
     }
 
-    public MovieListReadResponseDto create( MovieList movieList ){
+    public MovieListReadResponseDto create( MovieList movieList ) {
 
         //
         return null;
     }
 
-    private MovieListReadResponseDto mapToGetMovieListResponseDTO( MovieList movieList ){
+    private MovieListReadResponseDto mapToGetMovieListResponseDTO( MovieList movieList ) {
 
         MovieListReadResponseDto dto = new MovieListReadResponseDto();
 
@@ -50,13 +51,11 @@ public class MovieListService {
     }
 
 
+    public MovieListReadResponseDto findById( Long id ) {
 
+        Optional< MovieList > movieList = movieListRepository.findByMovieListId( id );
 
-    public MovieListReadResponseDto findById( Long id) {
-
-        Optional<MovieList> movieList = movieListRepository.findByMovieListId( id );
-
-        if( movieList.isPresent() ){
+        if ( movieList.isPresent() ) {
 
             MovieListReadResponseDto getMovieListResponseDTO;
             getMovieListResponseDTO = mapToGetMovieListResponseDTO( movieList.get() );
@@ -68,8 +67,8 @@ public class MovieListService {
         }
     }
 
-    public void deleteById(Long id) {
-        movieListRepository.deleteById(id);
+    public void deleteById( Long id ) {
+        movieListRepository.deleteById( id );
     }
 
     /* ToDo: In MovieList Names are not unique, how to find MovieList by Name?
@@ -81,52 +80,54 @@ public class MovieListService {
     */
 
 
-    public MovieList create( MovieListCreateDto movieListDTO) {
+    public MovieList create( MovieListCreateDto movieListCreateDto ) {
 
-        // ToDo: Refactoring; DRY
+        User user = this.findUser( movieListCreateDto );
 
-        if (movieListDTO instanceof MovieListCreateByUserIdBodyDto idDTO) {
+        MovieList movieList = new MovieList();
 
-            Optional<User> user = userRepository.findByUserId(idDTO.getUserId());
+        movieList.setUser( user );
+        movieList.setMovieListName( movieListCreateDto.getMovieListName() );
+        movieList.setDescription( movieListCreateDto.getDescription() );
 
-            if ( user.isPresent() ) {
+        return movieListRepository.save( movieList );
+    }
 
-                MovieList movieList = new MovieList();
 
-                movieList.setUser(user.get());
+    private User findUser( MovieListCreateDto movieListCreateDto ) {
 
-                movieList.setMovieListName( idDTO.getMovieListName() );
-                movieList.setDescription( idDTO.getDescription() );
+        if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDTO ) {
 
-                return movieListRepository.save(movieList);
+            return userRepository.findByUserName( nameDTO.getUserName() )
+                    .orElseThrow( () -> new EntityNotFoundException(
+                            "cant find User with name" + nameDTO.getUserName() ) );
 
-            } else {
-                throw new IllegalArgumentException("UserId not found!");
-            }
+        } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
 
-        } else if (movieListDTO instanceof MovieListCreateByUserNameBodyDto nameDTO) {
+            return userRepository.findByUserId( idDto.getUserId() )
+                    .orElseThrow( () -> new EntityNotFoundException(
+                            "cant find User with ID" + idDto.getUserId() ) );
 
-            Optional<User> user = userRepository.findByUserName(nameDTO.getUserName());
-
-            if (user.isPresent()) {
-
-                MovieList movieList = new MovieList();
-
-                movieList.setUser(user.get());
-
-                movieList.setMovieListName( nameDTO.getMovieListName() );
-                movieList.setDescription( nameDTO.getDescription() );
-
-                return movieListRepository.save(movieList);
-
-            } else {
-                throw new IllegalArgumentException("UserName not found!");
-            }
-
-        } else {
-            throw new IllegalArgumentException("DTO is invalid!");
         }
 
+        throw new IllegalArgumentException( "Body is invalid!" );
+    }
+
+    private MovieList mapToMovieList( MovieListCreateByUserNameBodyDto nameDto ){
+
+
+        User user = userRepository.findByUserName( nameDto.getUserName() )
+                .orElseThrow( () -> new EntityNotFoundException(
+                        "cant find User with name" + nameDto.getUserName() ) );
+
+        MovieList movieList = new MovieList();
+
+        movieList.setUser( user );
+
+        movieList.setMovieListName( nameDto.getMovieListName() );
+        movieList.setDescription( nameDto.getDescription() );
+
+        return movieList;
     }
 
 

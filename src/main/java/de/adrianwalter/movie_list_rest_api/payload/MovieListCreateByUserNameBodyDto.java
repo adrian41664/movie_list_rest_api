@@ -1,15 +1,16 @@
 package de.adrianwalter.movie_list_rest_api.payload;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public class MovieListCreateByUserNameBodyDto extends MovieListCreateDto {
 
-    private String type = "by_name";
+    private String type = "byName";
 
     @NotBlank
-    //@JsonProperty("user_name")
-    @JsonAlias({"userName", "user_name"})
+    @JsonProperty( "userName" )
+    @JsonAlias( { "userName" } )
     private String userName;
 
 
