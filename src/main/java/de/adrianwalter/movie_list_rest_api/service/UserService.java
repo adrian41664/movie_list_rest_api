@@ -118,7 +118,7 @@ public class UserService {
         return existingUser.isPresent();
     }
 
-    public User create( UserCreateDto userCreateDTO ) {
+    public UserShortResponseDto create( UserCreateDto userCreateDTO ) {
 
         if ( this.userNameIsAlreadyExisting( userCreateDTO.getUserName() ) ) {
 
@@ -130,7 +130,7 @@ public class UserService {
 
         userRepository.save( user );
 
-        return user;
+        return this.mapToShortResponseDto( user );
     }
 
 
