@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MovieListReadResponseDto {
+public class MovieListResponseDto {
 
     private Long movieListId;
     private String movieListName;
@@ -15,16 +15,16 @@ public class MovieListReadResponseDto {
     private String userName;
 
     private String description;
-    private List<Movie> movies;
+    private List< Movie > movies;
 
-    public MovieListReadResponseDto() {
+    public MovieListResponseDto() {
     }
 
     public Long getMovieListId() {
         return movieListId;
     }
 
-    public void setMovieListId(Long movieListId) {
+    public void setMovieListId( Long movieListId ) {
         this.movieListId = movieListId;
     }
 
@@ -32,7 +32,7 @@ public class MovieListReadResponseDto {
         return movieListName;
     }
 
-    public void setMovieListName(String movieListName) {
+    public void setMovieListName( String movieListName ) {
         this.movieListName = movieListName;
     }
 
@@ -40,7 +40,7 @@ public class MovieListReadResponseDto {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId( Long userId ) {
         this.userId = userId;
     }
 
@@ -48,7 +48,7 @@ public class MovieListReadResponseDto {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName( String userName ) {
         this.userName = userName;
     }
 
@@ -56,15 +56,15 @@ public class MovieListReadResponseDto {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
-    public List<Movie> getMovies() {
+    public List< Movie > getMovies() {
         return movies;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies( List< Movie > movies ) {
         this.movies = movies;
     }
 }

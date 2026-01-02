@@ -1,7 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.entity.MovieList;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListReadResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
@@ -22,18 +21,20 @@ public class MovieListController {
 
     // ToDo: in test; ok
     @PostMapping( "" )
-    public ResponseEntity< MovieList > createNewMovieList( @Valid @RequestBody MovieListCreateDto requestBody ) {
+    public ResponseEntity< MovieListResponseDto > createNewMovieList( @Valid @RequestBody MovieListCreateDto requestBody ) {
 
-        return ResponseEntity.ok( movieListService.create( requestBody ) );
+        MovieListResponseDto movieList = movieListService.create( requestBody );
+
+        return ResponseEntity.ok( movieList );
     }
 
 
     // single list (of a certain user, because every list is tied to one user)
     // ToDo: in test; ok
     @GetMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListReadResponseDto > getMovieList( @PathVariable Long movieListId ) {
+    public ResponseEntity< MovieListResponseDto > getMovieList( @PathVariable Long movieListId ) {
 
-        MovieListReadResponseDto movieList = movieListService.findById( movieListId );
+        MovieListResponseDto movieList = movieListService.findById( movieListId );
 
         return ResponseEntity.ok( movieList );
     }

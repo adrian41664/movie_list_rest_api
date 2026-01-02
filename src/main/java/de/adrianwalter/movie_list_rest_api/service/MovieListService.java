@@ -2,8 +2,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListReadResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieListResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserIdBodyDto;
 import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserNameBodyDto;
 import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
@@ -22,21 +21,17 @@ public class MovieListService {
 
     private final UserRepository userRepository;
 
+
     @Autowired
     public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository ) {
         this.movieListRepository = movieListRepository;
         this.userRepository = userRepository;
     }
 
-    public MovieListReadResponseDto create( MovieList movieList ) {
 
-        //
-        return null;
-    }
+    private MovieListResponseDto mapToGetMovieListResponseDto( MovieList movieList ) {
 
-    private MovieListReadResponseDto mapToGetMovieListResponseDTO( MovieList movieList ) {
-
-        MovieListReadResponseDto dto = new MovieListReadResponseDto();
+        MovieListResponseDto dto = new MovieListResponseDto();
 
         dto.setMovieListId( movieList.getMovieListId() );
         dto.setMovieListName( movieList.getMovieListName() );
@@ -51,20 +46,13 @@ public class MovieListService {
     }
 
 
-    public MovieListReadResponseDto findById( Long id ) {
+    public MovieListResponseDto findById( Long movieListId ) {
 
-        Optional< MovieList > movieList = movieListRepository.findByMovieListId( id );
+        MovieList movieList = movieListRepository.findByMovieListId( movieListId )
+                .orElseThrow( () -> new EntityNotFoundException(
+                        "cant find MovieList with ID " + movieListId ) );
 
-        if ( movieList.isPresent() ) {
-
-            MovieListReadResponseDto getMovieListResponseDTO;
-            getMovieListResponseDTO = mapToGetMovieListResponseDTO( movieList.get() );
-
-            return getMovieListResponseDTO;
-
-        } else {
-            throw new ResourceNotFoundException();
-        }
+            return mapToGetMovieListResponseDto( movieList );
     }
 
     public void deleteById( Long id ) {
@@ -80,7 +68,16 @@ public class MovieListService {
     */
 
 
-    public MovieList create( MovieListCreateDto movieListCreateDto ) {
+    public MovieListResponseDto create( MovieListCreateDto movieListCreateDto ) {
+
+        MovieList movieList = this.mapToMovieList( movieListCreateDto );
+
+        movieListRepository.save( movieList );
+
+        return this.mapToGetMovieListResponseDto( movieList );
+    }
+
+    private MovieList mapToMovieList( MovieListCreateDto movieListCreateDto ){
 
         User user = this.findUser( movieListCreateDto );
 
@@ -90,7 +87,7 @@ public class MovieListService {
         movieList.setMovieListName( movieListCreateDto.getMovieListName() );
         movieList.setDescription( movieListCreateDto.getDescription() );
 
-        return movieListRepository.save( movieList );
+        return movieList;
     }
 
 
@@ -100,40 +97,18 @@ public class MovieListService {
 
             return userRepository.findByUserName( nameDTO.getUserName() )
                     .orElseThrow( () -> new EntityNotFoundException(
-                            "cant find User with name" + nameDTO.getUserName() ) );
+                            "cant find User with name " + nameDTO.getUserName() ) );
 
         } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
 
             return userRepository.findByUserId( idDto.getUserId() )
                     .orElseThrow( () -> new EntityNotFoundException(
-                            "cant find User with ID" + idDto.getUserId() ) );
+                            "cant find User with ID " + idDto.getUserId() ) );
 
         }
 
         throw new IllegalArgumentException( "Body is invalid!" );
     }
-
-    private MovieList mapToMovieList( MovieListCreateByUserNameBodyDto nameDto ){
-
-
-        User user = userRepository.findByUserName( nameDto.getUserName() )
-                .orElseThrow( () -> new EntityNotFoundException(
-                        "cant find User with name" + nameDto.getUserName() ) );
-
-        MovieList movieList = new MovieList();
-
-        movieList.setUser( user );
-
-        movieList.setMovieListName( nameDto.getMovieListName() );
-        movieList.setDescription( nameDto.getDescription() );
-
-        return movieList;
-    }
-
-
-    //    public Page<MovieList> findAll(Pageable pageable) {
-    //        return movieListRepository.findAll(pageable);
-    //    }
 
 
 }
