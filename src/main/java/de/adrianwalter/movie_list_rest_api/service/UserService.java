@@ -1,6 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
+import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
@@ -69,17 +70,25 @@ public class UserService {
 
         User user = this.findUserById( userId );
 
-        String newUserName = userUpdateDTO.getUserName();
+        if( userUpdateDTO.getUserName() != null && ! userUpdateDTO.getUserName().isEmpty() ) {
 
-        if ( userNameIsAlreadyExisting( newUserName ) ) {
+            String newUserName = userUpdateDTO.getUserName();
 
-            throw new NameAlreadyExistsException( "User with the name " + newUserName + " already exists!");
+            if ( userNameIsAlreadyExisting( newUserName ) ) {
+
+                throw new NameAlreadyExistsException( "User with the name " + newUserName + " already exists!" );
+            }
+
+            user.setUserName( userUpdateDTO.getUserName() );
+            userRepository.save( user );
+
+            return this.mapToShortResponseDto( user );
+
         }
+        else {
 
-        user.setUserName( userUpdateDTO.getUserName() );
-        userRepository.save( user );
-
-        return this.mapToShortResponseDto( user );
+            throw new InvalidBodyException( );
+        }
     }
 
 

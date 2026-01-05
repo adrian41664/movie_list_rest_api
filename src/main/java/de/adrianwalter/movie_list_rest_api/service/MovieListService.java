@@ -2,6 +2,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
+import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.payload.MovieListResponseDto;
@@ -11,10 +12,12 @@ import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieListService {
@@ -35,7 +38,7 @@ public class MovieListService {
     }
 
 
-    private MovieListResponseDto mapToGetMovieListResponseDto( MovieList movieList ) {
+    private MovieListResponseDto mapToMovieListResponseDto( MovieList movieList ) {
 
         MovieListResponseDto dto = new MovieListResponseDto();
 
@@ -58,7 +61,7 @@ public class MovieListService {
                 .orElseThrow( () -> new ResourceNotFoundException(
                         "cant find MovieList with ID " + movieListId ) );
 
-        return mapToGetMovieListResponseDto( movieList );
+        return mapToMovieListResponseDto( movieList );
     }
 
 
@@ -91,7 +94,7 @@ public class MovieListService {
 
         movieListRepository.save( movieList );
 
-        return this.mapToGetMovieListResponseDto( movieList );
+        return this.mapToMovieListResponseDto( movieList );
     }
 
 
@@ -120,17 +123,24 @@ public class MovieListService {
             return this.userService.findUserById( idDto.getUserId() );
         }
 
-        throw new IllegalArgumentException( "Body is invalid!" );
+        throw new InvalidBodyException( "Body is invalid!" );
     }
-
-
 
 
     public List< MovieListResponseDto > getUsersMovieLists( Long userId ) {
 
         User user = this.userService.findUserById( userId );
 
-        return null;
+        List< MovieList > movieLists = user.getMovieLists();
+
+        // ToDo: Expect nested-JSON issue, if Movies of each MovieList is not longer empty
+
+        List< MovieListResponseDto > responseDtoList = movieLists
+                .stream()
+                .map( ( MovieList movieList ) -> this.mapToMovieListResponseDto( movieList ) )
+                .toList();
+
+        return responseDtoList;
     }
 
 

@@ -42,7 +42,7 @@ public class MovieListController {
 
 
     // all lists of a certain user
-    // ToDo: Implement:
+    // ToDo: in test; ok
     @GetMapping( "/user/{userId}" )
     public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable Long userId ) {
 
