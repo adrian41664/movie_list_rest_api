@@ -13,11 +13,16 @@ import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MovieListService {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     private final MovieListRepository movieListRepository;
 
     private final UserRepository userRepository;
@@ -55,6 +60,7 @@ public class MovieListService {
 
         return mapToGetMovieListResponseDto( movieList );
     }
+
 
     public void deleteById( Long id ) {
         movieListRepository.deleteById( id );
@@ -105,21 +111,26 @@ public class MovieListService {
 
     private User findUser( MovieListCreateDto movieListCreateDto ) {
 
-        if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDTO ) {
+        if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDto ) {
 
-            return userRepository.findByUserName( nameDTO.getUserName() )
-                    .orElseThrow( () -> new ResourceNotFoundException(
-                            "cant find User with name " + nameDTO.getUserName() ) );
+            return this.userService.findUserByName( nameDto.getUserName() );
 
         } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
 
-            return userRepository.findByUserId( idDto.getUserId() )
-                    .orElseThrow( () -> new ResourceNotFoundException(
-                            "cant find User with ID " + idDto.getUserId() ) );
-
+            return this.userService.findUserById( idDto.getUserId() );
         }
 
         throw new IllegalArgumentException( "Body is invalid!" );
+    }
+
+
+
+
+    public List< MovieListResponseDto > getUsersMovieLists( Long userId ) {
+
+        User user = this.userService.findUserById( userId );
+
+        return null;
     }
 
 

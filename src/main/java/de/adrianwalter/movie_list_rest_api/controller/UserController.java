@@ -78,7 +78,7 @@ public class UserController {
     @GetMapping( "/{userId}" )
     public ResponseEntity< UserShortResponseDto > getUser( @PathVariable Long userId ) {
 
-        UserShortResponseDto responseDto = userService.findByIdAndMapToShortResponse( userId );
+        UserShortResponseDto responseDto = userService.findUserAndMapToShortResponse( userId );
         return ResponseEntity.ok( responseDto );
     }
 
@@ -90,7 +90,7 @@ public class UserController {
         // ToDo: Implement when Movie full implemented
         // UserShortResponseDto responseDto = userService.findByIdAndMapToDetailedResponse( userId );
 
-        UserShortResponseDto responseDto = userService.findByIdAndMapToShortResponse( userId );
+        UserShortResponseDto responseDto = userService.findUserAndMapToShortResponse( userId );
         return ResponseEntity.ok( responseDto );
     }
 

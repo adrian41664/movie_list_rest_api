@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping( "/movie-lists" )
 public class MovieListController {
@@ -40,15 +42,15 @@ public class MovieListController {
 
 
     // all lists of a certain user
-    /* ToDo: Implement:
-    @GetMapping("/user/{userId})
-    public ResponseEntity<List<MovieListReadResponseDto>> getUsersMovieLists(@PathVariable Long userId ){
+    // ToDo: Implement:
+    @GetMapping( "/user/{userId}" )
+    public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable Long userId ) {
 
-        List<MovieListReadResponseDto> usersMovieLists = movieListService.getUsersMovieLists( userId );
+        List< MovieListResponseDto > usersMovieLists = movieListService.getUsersMovieLists( userId );
 
-        return ResponseEntity.ok(usersMovieLists);
+        return ResponseEntity.ok( usersMovieLists );
     }
-    */
+
 
 
     /* ToDo: Implement:

@@ -7,7 +7,6 @@ import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserShortResponseDto;
 import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,29 +46,18 @@ public class UserService {
     }
 
 
-    public UserShortResponseDto findByIdAndMapToShortResponse( Long userId ) {
+    public UserShortResponseDto findUserAndMapToShortResponse( Long userId ) {
 
-        User user = this.findById( userId );
+        User user = this.findUserById( userId );
 
         return mapToShortResponseDto( user );
     }
 
 
-    private User findById( Long userId ) {
-
-        Optional< User > user = userRepository.findById( userId );
-
-        if ( user.isEmpty() ) {
-            throw new ResourceNotFoundException();
-        }
-
-        return user.get();
-    }
-
 
     public UserShortResponseDto deleteByIdAndMapToShortResponse( Long userId ) {
 
-        User user = this.findById( userId );
+        User user = this.findUserById( userId );
 
         userRepository.deleteById( userId );
 
@@ -77,23 +65,15 @@ public class UserService {
     }
 
 
-    public Optional< User > findByUserName( String userName ) {
-
-        return userRepository.findByUserName( userName );
-    }
-
-
     public UserShortResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
-        User user = userRepository.findById( userId )
-                .orElseThrow( () -> new ResourceNotFoundException(
-                        "cant find User with ID " + userId ) );
+        User user = this.findUserById( userId );
 
         String newUserName = userUpdateDTO.getUserName();
 
         if ( userNameIsAlreadyExisting( newUserName ) ) {
 
-            throw new EntityExistsException( "User with the given name already exists: " + newUserName );
+            throw new NameAlreadyExistsException( "User with the name " + newUserName + " already exists!");
         }
 
         user.setUserName( userUpdateDTO.getUserName() );
@@ -113,9 +93,25 @@ public class UserService {
     }
 
 
-    private boolean userNameIsAlreadyExisting( String name ) {
+    public User findUserById( long userId ){
 
-        Optional< User > existingUser = this.findByUserName( name );
+        return userRepository.findByUserId( userId )
+                .orElseThrow( () -> new ResourceNotFoundException(
+                        "cant find User with ID " + userId ) );
+
+    }
+
+    public User findUserByName( String userName ){
+
+        return userRepository.findByUserName( userName )
+                .orElseThrow( () -> new ResourceNotFoundException(
+                        "cant find User with name " + userName ) );
+    }
+
+
+    private boolean userNameIsAlreadyExisting( String userName ) {
+
+        Optional< User > existingUser = userRepository.findByUserName( userName );
 
         return existingUser.isPresent();
     }
