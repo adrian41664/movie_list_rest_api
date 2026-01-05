@@ -74,7 +74,7 @@ public class UserService {
 
             String newUserName = userUpdateDTO.getUserName();
 
-            if ( userNameIsAlreadyExisting( newUserName ) ) {
+            if ( this.userIsExisting( newUserName ) ) {
 
                 throw new NameAlreadyExistsException( "User with the name " + newUserName + " already exists!" );
             }
@@ -118,7 +118,7 @@ public class UserService {
     }
 
 
-    private boolean userNameIsAlreadyExisting( String userName ) {
+    public boolean userIsExisting( String userName ) {
 
         Optional< User > existingUser = userRepository.findByUserName( userName );
 
@@ -127,7 +127,7 @@ public class UserService {
 
     public UserShortResponseDto create( UserCreateDto userCreateDTO ) {
 
-        if ( this.userNameIsAlreadyExisting( userCreateDTO.getUserName() ) ) {
+        if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
 
             throw new NameAlreadyExistsException();
         }

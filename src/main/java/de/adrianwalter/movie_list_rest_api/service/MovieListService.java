@@ -12,12 +12,10 @@ import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieListService {
@@ -78,6 +76,14 @@ public class MovieListService {
         return movieListSearch.isPresent();
     }
 
+    private boolean userHasMovieListWithName( String userName, String movieListName ) {
+
+        Optional< MovieList > movieListSearch = movieListRepository
+                .findByUser_UserNameAndMovieListName( userName, movieListName );
+
+        return movieListSearch.isPresent();
+    }
+
 
     public MovieListResponseDto create( MovieListCreateDto movieListCreateDto ) {
 
@@ -127,21 +133,55 @@ public class MovieListService {
     }
 
 
-    public List< MovieListResponseDto > getUsersMovieLists( Long userId ) {
+    public List< MovieListResponseDto > getUsersMovieLists( long userId ) {
 
         User user = this.userService.findUserById( userId );
 
-        List< MovieList > movieLists = user.getMovieLists();
+        return mapToResponseDtoLists( user.getMovieLists() );
+    }
+
+
+    public List< MovieListResponseDto > getUsersMovieLists( String userName ) {
+
+        User user = this.userService.findUserByName( userName );
+
+        return mapToResponseDtoLists( user.getMovieLists() );
+    }
+
+
+    private List< MovieListResponseDto > mapToResponseDtoLists( List< MovieList > movieLists ) {
 
         // ToDo: Expect nested-JSON issue, if Movies of each MovieList is not longer empty
+        // ToDo: Create specific DTO [?] cause every MovieList repeats UserName und UserId
 
-        List< MovieListResponseDto > responseDtoList = movieLists
+        List< MovieListResponseDto > responseDtoLists = movieLists
                 .stream()
                 .map( ( MovieList movieList ) -> this.mapToMovieListResponseDto( movieList ) )
                 .toList();
 
-        return responseDtoList;
+        return responseDtoLists;
     }
 
+
+    public MovieListResponseDto findByNameAndUserName( String movieListName, String userName ) {
+
+        if ( this.userService.userIsExisting( userName ) ) {
+
+            MovieList movieList = this.findMovieListByNameAndUserName( movieListName, userName );
+
+            return this.mapToMovieListResponseDto( movieList );
+
+        } else {
+
+            throw new ResourceNotFoundException( "cant find user " + userName );
+        }
+    }
+
+
+    private MovieList findMovieListByNameAndUserName( String movieListName, String userName ) {
+
+        return this.movieListRepository.findByUser_UserNameAndMovieListName( userName, movieListName )
+                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieList " + movieListName ) );
+    }
 
 }

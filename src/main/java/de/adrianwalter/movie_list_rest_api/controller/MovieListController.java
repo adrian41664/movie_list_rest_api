@@ -51,19 +51,25 @@ public class MovieListController {
         return ResponseEntity.ok( usersMovieLists );
     }
 
+    // all lists of a certain user
+    // ToDo: in test; ok
+    @GetMapping( "/user/{userName}" )
+    public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
 
+        List< MovieListResponseDto > usersMovieLists = movieListService.getUsersMovieLists( userName );
 
-    /* ToDo: Implement:
-    @GetMapping("/{movieListName}/user/{userName}/")
-    public ResponseEntity<MovieListReadResponseDto> getMovieListByNameAndUserId(
-            @PathVariable String userName,
-            @PathVariable String movieListName) {
-
-        MovieListReadResponseDto movieList = movieListService
-                .findByUserAndName(userName, movieListName);
-        return ResponseEntity.ok(movieList);
+        return ResponseEntity.ok( usersMovieLists );
     }
-    */
+
+    // ToDo: in test; ok
+    @GetMapping( "/{movieListName}/user/{userName}" )
+    public ResponseEntity< MovieListResponseDto > getMovieListByNameAndUserId(
+            @PathVariable String userName,
+            @PathVariable String movieListName ) {
+
+        MovieListResponseDto responseDto = movieListService.findByNameAndUserName( movieListName, userName );
+        return ResponseEntity.ok( responseDto );
+    }
 
 
 }
