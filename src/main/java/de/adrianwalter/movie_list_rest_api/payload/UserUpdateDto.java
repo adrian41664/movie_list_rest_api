@@ -1,6 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.payload;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ public class UserUpdateDto {
     @NotBlank
     private String userName;
 
-    public void setUserName(String userName) {
+    public void setUserName( String userName ) {
 
         this.userName = userName;
     }
