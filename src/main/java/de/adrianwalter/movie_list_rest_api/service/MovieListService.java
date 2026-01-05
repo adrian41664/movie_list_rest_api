@@ -31,6 +31,7 @@ public class MovieListService {
 
     @Autowired
     public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository ) {
+
         this.movieListRepository = movieListRepository;
         this.userRepository = userRepository;
     }
@@ -64,6 +65,7 @@ public class MovieListService {
 
 
     public void deleteById( Long id ) {
+
         movieListRepository.deleteById( id );
     }
 
@@ -75,6 +77,7 @@ public class MovieListService {
 
         return movieListSearch.isPresent();
     }
+
 
     private boolean userHasMovieListWithName( String userName, String movieListName ) {
 
@@ -154,12 +157,10 @@ public class MovieListService {
         // ToDo: Expect nested-JSON issue, if Movies of each MovieList is not longer empty
         // ToDo: Create specific DTO [?] cause every MovieList repeats UserName und UserId
 
-        List< MovieListResponseDto > responseDtoLists = movieLists
+        return movieLists
                 .stream()
                 .map( ( MovieList movieList ) -> this.mapToMovieListResponseDto( movieList ) )
                 .toList();
-
-        return responseDtoLists;
     }
 
 
@@ -173,7 +174,24 @@ public class MovieListService {
 
         } else {
 
-            throw new ResourceNotFoundException( "cant find user " + userName );
+            throw new ResourceNotFoundException( "cant find UserName " + userName );
+        }
+    }
+
+
+    public MovieListResponseDto findByNameAndUserId( String movieListName, long userId ) {
+
+        if ( this.userService.userIsExisting( userId ) ) {
+
+            System.out.print( "User is existing" );
+            MovieList movieList = this.findMovieListByUserIdAndMovieListName( movieListName, userId );
+
+            return this.mapToMovieListResponseDto( movieList );
+
+        } else {
+
+            System.out.print( "User is not existing" );
+            throw new ResourceNotFoundException( "cant find UserId " + userId );
         }
     }
 
@@ -181,7 +199,15 @@ public class MovieListService {
     private MovieList findMovieListByNameAndUserName( String movieListName, String userName ) {
 
         return this.movieListRepository.findByUser_UserNameAndMovieListName( userName, movieListName )
-                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieList " + movieListName ) );
+                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
     }
+
+
+    private MovieList findMovieListByUserIdAndMovieListName( String movieListName, long userId ) {
+
+        return this.movieListRepository.findByUser_UserIdAndMovieListName( userId, movieListName )
+                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
+    }
+
 
 }

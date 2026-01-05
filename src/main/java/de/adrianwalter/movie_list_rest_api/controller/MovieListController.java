@@ -15,6 +15,7 @@ public class MovieListController {
 
     private final MovieListService movieListService;
 
+
     public MovieListController( MovieListService movieListService ) {
 
         this.movieListService = movieListService;
@@ -51,6 +52,7 @@ public class MovieListController {
         return ResponseEntity.ok( usersMovieLists );
     }
 
+
     // all lists of a certain user
     // ToDo: in test; ok
     @GetMapping( "/user/{userName}" )
@@ -61,13 +63,28 @@ public class MovieListController {
         return ResponseEntity.ok( usersMovieLists );
     }
 
+
     // ToDo: in test; ok
     @GetMapping( "/{movieListName}/user/{userName}" )
-    public ResponseEntity< MovieListResponseDto > getMovieListByNameAndUserId(
+    public ResponseEntity< MovieListResponseDto > getMovieListByNameAndUserName(
             @PathVariable String userName,
             @PathVariable String movieListName ) {
 
         MovieListResponseDto responseDto = movieListService.findByNameAndUserName( movieListName, userName );
+        return ResponseEntity.ok( responseDto );
+    }
+
+
+    /*
+    Spring Boot has problems handling "/{movieListName}/user/{userId}" and "/{movieListName}/user/{userName}"
+    at the same time, by same mapping annotation
+     */
+    // @GetMapping( "/{movieListName}/user/{userId}" )
+    public ResponseEntity< MovieListResponseDto > UNUSED_getMovieListByNameAndUserId(
+            @PathVariable String movieListName,
+            @PathVariable long userId ) {
+
+        MovieListResponseDto responseDto = movieListService.findByNameAndUserId( movieListName, userId );
         return ResponseEntity.ok( responseDto );
     }
 

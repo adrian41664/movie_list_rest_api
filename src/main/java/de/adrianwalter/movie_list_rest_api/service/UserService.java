@@ -125,6 +125,13 @@ public class UserService {
         return existingUser.isPresent();
     }
 
+    public boolean userIsExisting( long userId ) {
+
+        Optional< User > existingUser = userRepository.findByUserId( userId );
+
+        return existingUser.isPresent();
+    }
+
     public UserShortResponseDto create( UserCreateDto userCreateDTO ) {
 
         if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
