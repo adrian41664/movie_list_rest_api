@@ -35,30 +35,9 @@ public class UserController {
 
 
     // ToDo: in test; ok
-    // @GetMapping("")
-    public ResponseEntity< Page< UserShortResponseDto > > UNUSED_getAllUsers( Pageable pageable ) {
-
-        Page< UserShortResponseDto > users = userService.UNUSED_findAll( pageable );
-
-        return ResponseEntity.ok( users );
-    }
-
-
-    // ToDo: in test; ok
     @GetMapping( "" )
     public ResponseEntity< List< UserShortResponseDto > > getAllUsers( Pageable pageable ) {
 
-        List< UserShortResponseDto > users = userService.findAll( pageable );
-
-        return ResponseEntity.ok( users );
-    }
-
-
-    // ToDo: create test
-    //@GetMapping("/details")
-    public ResponseEntity< List< UserShortResponseDto > > getAllUsersDetails( Pageable pageable ) {
-
-        // ToDo: Implement when Movie full implemented
         List< UserShortResponseDto > users = userService.findAll( pageable );
 
         return ResponseEntity.ok( users );
@@ -83,6 +62,15 @@ public class UserController {
     }
 
 
+    // ToDo: in test; ok
+    @DeleteMapping( "/{userId}" )
+    public ResponseEntity< UserShortResponseDto > deleteUser( @PathVariable Long userId ) {
+
+        UserShortResponseDto responseDto = userService.deleteByIdAndMapToShortResponse( userId );
+        return ResponseEntity.ok( responseDto );
+    }
+
+
     // ToDo: Create test
     //@GetMapping("/{userId}/details")
     public ResponseEntity< UserShortResponseDto > getUserDetails( @PathVariable Long userId ) {
@@ -95,12 +83,24 @@ public class UserController {
     }
 
 
-    // ToDo: in test; ok
-    @DeleteMapping( "/{userId}" )
-    public ResponseEntity< UserShortResponseDto > deleteUser( @PathVariable Long userId ) {
+    // ToDo: create test
+    //@GetMapping("/details")
+    public ResponseEntity< List< UserShortResponseDto > > getAllUsersDetails( Pageable pageable ) {
 
-        UserShortResponseDto responseDto = userService.deleteByIdAndMapToShortResponse( userId );
-        return ResponseEntity.ok( responseDto );
+        // ToDo: Implement when Movie full implemented
+        List< UserShortResponseDto > users = userService.findAll( pageable );
+
+        return ResponseEntity.ok( users );
+    }
+
+
+    // ToDo: in test; ok
+    // @GetMapping("")
+    public ResponseEntity< Page< UserShortResponseDto > > OLD_getAllUsers( Pageable pageable ) {
+
+        Page< UserShortResponseDto > users = userService.UNUSED_findAll( pageable );
+
+        return ResponseEntity.ok( users );
     }
 
 

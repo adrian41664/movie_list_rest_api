@@ -68,9 +68,19 @@ public class UserService {
 
     public UserShortResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
+        User user = this.updateUser( userId, userUpdateDTO );
+
+        userRepository.save( user );
+
+        return this.mapToShortResponseDto( user );
+
+    }
+
+    private User updateUser( Long userId, UserUpdateDto userUpdateDTO ){
+
         User user = this.findUserById( userId );
 
-        if ( userUpdateDTO.getUserName() != null && !userUpdateDTO.getUserName().isEmpty() ) {
+        if ( !userUpdateDTO.getUserName().isBlank() ) {
 
             String newUserName = userUpdateDTO.getUserName();
 
@@ -80,14 +90,13 @@ public class UserService {
             }
 
             user.setUserName( userUpdateDTO.getUserName() );
-            userRepository.save( user );
-
-            return this.mapToShortResponseDto( user );
 
         } else {
 
             throw new InvalidBodyException();
         }
+
+        return user;
     }
 
 
@@ -99,6 +108,7 @@ public class UserService {
 
         return dto;
     }
+
 
 
     public User findUserById( long userId ) {

@@ -1,7 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.payload.MovieListResponseDto;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
+import de.adrianwalter.movie_list_rest_api.payload.*;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +46,9 @@ public class MovieListController {
     @GetMapping( "/user/{userName}" )
     public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
 
-        List< MovieListResponseDto > usersMovieLists = movieListService.getUsersMovieLists( userName );
+        List< MovieListResponseDto > usersMovieListResponseDtos = movieListService.getUsersMovieLists( userName );
 
-        return ResponseEntity.ok( usersMovieLists );
+        return ResponseEntity.ok( usersMovieListResponseDtos );
     }
 
 
@@ -68,8 +67,18 @@ public class MovieListController {
     @DeleteMapping( "/{movieListId}" )
     public ResponseEntity< MovieListResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
 
-        MovieListResponseDto movieListResponseDto = movieListService.deleteByIdAndMapToResponse( movieListId );
-        return ResponseEntity.ok( movieListResponseDto );
+        MovieListResponseDto responseDto = movieListService.deleteByIdAndMapToResponse( movieListId );
+        return ResponseEntity.ok( responseDto );
+    }
+
+
+    // ToDo: in test; ok
+    @PutMapping( "/{movieListId}" )
+    public ResponseEntity< MovieListResponseDto > updateMovieList(
+            @PathVariable Long movieListId, @RequestBody @Valid MovieListUpdateDto movieListUpdateDto ) {
+
+        MovieListResponseDto responseDto = movieListService.update( movieListId, movieListUpdateDto );
+        return ResponseEntity.ok( responseDto );
     }
 
 

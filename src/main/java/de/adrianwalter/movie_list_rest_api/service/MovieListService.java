@@ -5,12 +5,10 @@ import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListResponseDto;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserIdBodyDto;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateByUserNameBodyDto;
-import de.adrianwalter.movie_list_rest_api.payload.MovieListCreateDto;
+import de.adrianwalter.movie_list_rest_api.payload.*;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +61,8 @@ public class MovieListService {
         return movieList;
     }
 
-    public MovieListResponseDto findByIdAndMapToResponse( Long movieListId ){
+
+    public MovieListResponseDto findByIdAndMapToResponse( Long movieListId ) {
 
         MovieList movieList = this.findById( movieListId );
         return mapToMovieListResponseDto( movieList );
@@ -222,5 +221,41 @@ public class MovieListService {
                 .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
     }
 
+
+    public MovieListResponseDto update( Long movieListId, @Valid MovieListUpdateDto movieListUpdateDto ) {
+
+        MovieList movieList = this.updateMovieList( movieListId, movieListUpdateDto );
+        this.movieListRepository.save( movieList );
+
+        return this.mapToMovieListResponseDto( movieList );
+    }
+
+
+    private MovieList updateMovieList( Long movieListId, @Valid MovieListUpdateDto movieListUpdateDto ) {
+
+        MovieList movieList = this.findById( movieListId );
+
+        if ( !movieListUpdateDto.getMovieListName().isBlank() ) {
+
+            long userId = movieList.getUser().getUserId();
+
+            if ( this.userHasMovieListWithName( userId, movieListUpdateDto.getMovieListName() ) ) {
+
+                throw new NameAlreadyExistsException(
+                        "Cant change name of MovieList; User already owns MovieList with the given name" );
+            } else {
+
+                movieList.setMovieListName( movieListUpdateDto.getMovieListName() );
+            }
+        } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
+
+            movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
+        } else {
+
+            throw new InvalidBodyException();
+        }
+
+        return movieList;
+    }
 
 }
