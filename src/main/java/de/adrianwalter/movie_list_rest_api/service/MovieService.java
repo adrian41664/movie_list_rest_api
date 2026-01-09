@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.MovieShortCreateDto;
+import de.adrianwalter.movie_list_rest_api.payload.MovieCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public class MovieService {
         return movieRepository.findByMovieName(movieName);
     }
 
-    public Movie create(MovieShortCreateDto request) {
+    public Movie create( MovieCreateDto request) {
 
         // toDo: How to handle? Name is not unique. Movie should be unique per MovieList.
         Optional<Movie> existingMovie = findByMovieName(request.getMovieName());

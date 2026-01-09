@@ -12,115 +12,146 @@ public class Movie {
 
     //  > MOVIE_ID (PK)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @Column( name = "id", unique = true )
     private long id;
 
     //	> MOVIE_LIST_ID (FK)
     @ManyToOne
-    @JoinColumn(name = "movie_list_id", nullable = false)
+    @JoinColumn( name = "movie_list_id", nullable = false )
     private MovieList movieList;
 
     //	> USER_RATING
-    @Column(nullable = false)
-    private String userRating;
+    @Column( nullable = false )
+    private int userRating;
 
     //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
     @NotBlank
-    @Column(unique = false)
+    @Column( unique = false )
     private String movieName;
 
     //	> RELEASE_YEAR {nullable}
-    @Column(nullable = true)
+    @Column( nullable = true )
     private int releaseYear;
 
     //	> ADDED TO LIST DATE TIME / Seen
-    @Column(nullable = true)
+    @Column( nullable = true )
     private LocalDate seenAt;
 
     //	> PLATFORM (SEEN ON) {nullable}
-    @Column(nullable = true)
+    @Column( nullable = true )
     private String seenOn;
 
     //	> USER NOTE {nullable} text field for user
-    @Column(nullable = true)
+    @Column( nullable = true )
     private String userNote;
+
+    @Column( nullable = true )
+    private String genre;
 
     // MovieDetail - Instance for optional details
     @OneToOne( optional = true )
-    @JoinColumn(nullable = true)
+    @JoinColumn( nullable = true )
     private MovieDetail movieDetail;
+
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+
+    public void setId( long id ) {
         this.id = id;
     }
+
 
     public MovieList getMovieList() {
         return movieList;
     }
 
-    public void setMovieList(MovieList movieList) {
+
+    public void setMovieList( MovieList movieList ) {
         this.movieList = movieList;
     }
 
-    public String getUserRating() {
+
+    public int getUserRating() {
         return userRating;
     }
 
-    public void setUserRating(String userRating) {
+
+    public void setUserRating( int userRating ) {
         this.userRating = userRating;
     }
+
 
     public String getMovieName() {
         return movieName;
     }
 
-    public void setMovieName(String movieName) {
+
+    public void setMovieName( String movieName ) {
         this.movieName = movieName;
     }
+
 
     public int getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(int releaseYear) {
+
+    public void setReleaseYear( int releaseYear ) {
         this.releaseYear = releaseYear;
     }
+
 
     public LocalDate getSeenAt() {
         return seenAt;
     }
 
-    public void setSeenAt(LocalDate seenAt) {
+
+    public void setSeenAt( LocalDate seenAt ) {
         this.seenAt = seenAt;
     }
+
 
     public String getSeenOn() {
         return seenOn;
     }
 
-    public void setSeenOn(String seenOn) {
+
+    public void setSeenOn( String seenOn ) {
         this.seenOn = seenOn;
     }
+
 
     public String getUserNote() {
         return userNote;
     }
 
-    public void setUserNote(String userNote) {
+
+    public void setUserNote( String userNote ) {
         this.userNote = userNote;
     }
+
 
     public MovieDetail getMovieDetail() {
         return movieDetail;
     }
 
-    public void setMovieDetail(MovieDetail movieDetail) {
+
+    public void setMovieDetail( MovieDetail movieDetail ) {
         this.movieDetail = movieDetail;
+    }
+
+
+    public String getGenre() {
+        return genre;
+    }
+
+
+    public void setGenre( String genre ) {
+        this.genre = genre;
     }
 
 }

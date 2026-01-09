@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class MovieShortCreateDto {
+public class MovieCreateDto {
 
     // toDo: Create more Versions (short, full, detailed)
 
