@@ -31,18 +31,19 @@ public class UserService {
 
     public Page< UserShortResponseDto > UNUSED_findAll( Pageable pageable ) {
 
-        Page<User> allUsersPage = userRepository.findAll( pageable );
+        Page< User > allUsersPage = userRepository.findAll( pageable );
 
-        return allUsersPage.map( (User user) -> this.mapToShortResponseDto( user ) );
+        return allUsersPage.map( ( User user ) -> this.mapToShortResponseDto( user ) );
     }
+
 
     public List< UserShortResponseDto > findAll( Pageable pageable ) {
 
-        Page<User> allUsersPage = userRepository.findAll( pageable );
+        Page< User > allUsersPage = userRepository.findAll( pageable );
 
         return allUsersPage.getContent()
                 .stream()
-                .map( (User user) -> this.mapToShortResponseDto( user ) )
+                .map( ( User user ) -> this.mapToShortResponseDto( user ) )
                 .collect( Collectors.toList() );
     }
 
@@ -53,7 +54,6 @@ public class UserService {
 
         return mapToShortResponseDto( user );
     }
-
 
 
     public UserShortResponseDto deleteByIdAndMapToShortResponse( Long userId ) {
@@ -70,7 +70,7 @@ public class UserService {
 
         User user = this.findUserById( userId );
 
-        if( userUpdateDTO.getUserName() != null && ! userUpdateDTO.getUserName().isEmpty() ) {
+        if ( userUpdateDTO.getUserName() != null && !userUpdateDTO.getUserName().isEmpty() ) {
 
             String newUserName = userUpdateDTO.getUserName();
 
@@ -84,10 +84,9 @@ public class UserService {
 
             return this.mapToShortResponseDto( user );
 
-        }
-        else {
+        } else {
 
-            throw new InvalidBodyException( );
+            throw new InvalidBodyException();
         }
     }
 
@@ -102,7 +101,7 @@ public class UserService {
     }
 
 
-    public User findUserById( long userId ){
+    public User findUserById( long userId ) {
 
         return userRepository.findByUserId( userId )
                 .orElseThrow( () -> new ResourceNotFoundException(
@@ -110,7 +109,8 @@ public class UserService {
 
     }
 
-    public User findUserByName( String userName ){
+
+    public User findUserByName( String userName ) {
 
         return userRepository.findByUserName( userName )
                 .orElseThrow( () -> new ResourceNotFoundException(
@@ -125,12 +125,14 @@ public class UserService {
         return existingUser.isPresent();
     }
 
+
     public boolean userIsExisting( long userId ) {
 
         Optional< User > existingUser = userRepository.findByUserId( userId );
 
         return existingUser.isPresent();
     }
+
 
     public UserShortResponseDto create( UserCreateDto userCreateDTO ) {
 

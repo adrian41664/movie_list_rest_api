@@ -54,19 +54,29 @@ public class MovieListService {
     }
 
 
-    public MovieListResponseDto findById( Long movieListId ) {
+    private MovieList findById( Long movieListId ) {
 
         MovieList movieList = movieListRepository.findByMovieListId( movieListId )
                 .orElseThrow( () -> new ResourceNotFoundException(
                         "cant find MovieList with ID " + movieListId ) );
 
+        return movieList;
+    }
+
+    public MovieListResponseDto findByIdAndMapToResponse( Long movieListId ){
+
+        MovieList movieList = this.findById( movieListId );
         return mapToMovieListResponseDto( movieList );
     }
 
 
-    public void deleteById( Long id ) {
+    public MovieListResponseDto deleteByIdAndMapToResponse( Long movieListId ) {
 
-        movieListRepository.deleteById( id );
+        MovieList movieList = this.findById( movieListId );
+
+        movieListRepository.deleteById( movieListId );
+
+        return mapToMovieListResponseDto( movieList );
     }
 
 

@@ -36,7 +36,7 @@ public class MovieListController {
     @GetMapping( "/{movieListId}" )
     public ResponseEntity< MovieListResponseDto > getMovieList( @PathVariable Long movieListId ) {
 
-        MovieListResponseDto movieList = movieListService.findById( movieListId );
+        MovieListResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
 
         return ResponseEntity.ok( movieList );
     }
@@ -44,8 +44,8 @@ public class MovieListController {
 
     // all lists of a certain user
     // ToDo: in test; ok
-    @GetMapping( "/user/{userId}" )
-    public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable Long userId ) {
+    // @GetMapping( "/user/{userId}" )
+    public ResponseEntity< List< MovieListResponseDto > > UNUSED_getMovieListsOfUser( @PathVariable Long userId ) {
 
         List< MovieListResponseDto > usersMovieLists = movieListService.getUsersMovieLists( userId );
 
@@ -86,6 +86,15 @@ public class MovieListController {
 
         MovieListResponseDto responseDto = movieListService.findByNameAndUserId( movieListName, userId );
         return ResponseEntity.ok( responseDto );
+    }
+
+
+    // ToDo: in test; ok
+    @DeleteMapping( "/{movieListId}" )
+    public ResponseEntity< MovieListResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
+
+        MovieListResponseDto movieListResponseDto = movieListService.deleteByIdAndMapToResponse( movieListId );
+        return ResponseEntity.ok( movieListResponseDto );
     }
 
 
