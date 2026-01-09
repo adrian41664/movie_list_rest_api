@@ -89,6 +89,7 @@ public class MovieListService {
     }
 
 
+    // ToDo: delete
     private boolean userHasMovieListWithName( String userName, String movieListName ) {
 
         Optional< MovieList > movieListSearch = movieListRepository
@@ -146,6 +147,7 @@ public class MovieListService {
     }
 
 
+    // ToDo: delete
     public List< MovieListResponseDto > getUsersMovieLists( long userId ) {
 
         User user = this.userService.findUserById( userId );
@@ -189,6 +191,7 @@ public class MovieListService {
     }
 
 
+    // ToDo: delete
     public MovieListResponseDto findByNameAndUserId( String movieListName, long userId ) {
 
         if ( this.userService.userIsExisting( userId ) ) {
