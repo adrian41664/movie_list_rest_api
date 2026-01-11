@@ -12,7 +12,7 @@ public class MovieResponseBasicDto {
     private String movieName;
 
     private int userRating;
-    private int releaseYear;
+    private Integer releaseYear;
     private String seenOn;
     private String userNote;
     private String genre;
@@ -49,12 +49,12 @@ public class MovieResponseBasicDto {
     }
 
 
-    public int getReleaseYear() {
+    public Integer getReleaseYear() {
         return releaseYear;
     }
 
 
-    public void setReleaseYear( int releaseYear ) {
+    public void setReleaseYear( Integer releaseYear ) {
         this.releaseYear = releaseYear;
     }
 

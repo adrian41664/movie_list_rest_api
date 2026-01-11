@@ -212,14 +212,14 @@ public class MovieService {
         try {
             movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
         } catch ( Exception e ) {
-            movie.setUserRating( -1 );
+            movie.setUserRating( null );
         }
         movie.setMovieName( oneLineMovieFields[1] );
 
         try {
             movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
         } catch ( Exception e ) {
-            movie.setReleaseYear( -1 );
+            movie.setReleaseYear( null );
         }
 
         movie.setGenre( oneLineMovieFields[3] );
@@ -230,7 +230,7 @@ public class MovieService {
             try {
                 movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
             } catch ( Exception e ) {
-                movie.setSeenAt( LocalDate.parse( "2000-01-01" ) );
+                movie.setSeenAt( null );
             }
         }
 

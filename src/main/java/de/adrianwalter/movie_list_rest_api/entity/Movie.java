@@ -22,7 +22,7 @@ public class Movie {
     private MovieList movieList;
 
     //	> USER_RATING
-    @Column( nullable = false )
+    @Column( nullable = true )
     private int userRating;
 
     //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
@@ -32,7 +32,7 @@ public class Movie {
 
     //	> RELEASE_YEAR {nullable}
     @Column( nullable = true )
-    private int releaseYear;
+    private Integer releaseYear;
 
     //	> ADDED TO LIST DATE TIME / Seen
     @Column( nullable = true )
@@ -80,7 +80,7 @@ public class Movie {
     }
 
 
-    public void setUserRating( int userRating ) {
+    public void setUserRating( Integer userRating ) {
         this.userRating = userRating;
     }
 
@@ -95,12 +95,12 @@ public class Movie {
     }
 
 
-    public int getReleaseYear() {
+    public Integer getReleaseYear() {
         return releaseYear;
     }
 
 
-    public void setReleaseYear( int releaseYear ) {
+    public void setReleaseYear( Integer releaseYear ) {
         this.releaseYear = releaseYear;
     }
 
