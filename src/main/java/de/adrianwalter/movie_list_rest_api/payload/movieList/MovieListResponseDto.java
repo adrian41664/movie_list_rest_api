@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.payload;
+package de.adrianwalter.movie_list_rest_api.payload.movieList;
 
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import lombok.Data;

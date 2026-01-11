@@ -1,9 +1,9 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.payload.UserShortResponseDto;
-import de.adrianwalter.movie_list_rest_api.payload.UserUpdateDto;
+import de.adrianwalter.movie_list_rest_api.payload.user.UserShortResponseDto;
+import de.adrianwalter.movie_list_rest_api.payload.user.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
-import de.adrianwalter.movie_list_rest_api.payload.UserCreateDto;
+import de.adrianwalter.movie_list_rest_api.payload.user.UserCreateDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

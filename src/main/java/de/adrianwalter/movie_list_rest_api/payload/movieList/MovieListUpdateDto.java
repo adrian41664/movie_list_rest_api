@@ -1,6 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.payload;
-
-import jakarta.validation.constraints.NotBlank;
+package de.adrianwalter.movie_list_rest_api.payload.movieList;
 
 public class MovieListUpdateDto {
 

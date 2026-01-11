@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.payload;
+package de.adrianwalter.movie_list_rest_api.payload.user;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;

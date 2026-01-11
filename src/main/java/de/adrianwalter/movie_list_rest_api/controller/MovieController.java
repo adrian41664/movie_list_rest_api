@@ -1,13 +1,11 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.payload.*;
-import de.adrianwalter.movie_list_rest_api.service.MovieListService;
+import de.adrianwalter.movie_list_rest_api.payload.movie.MovieCreateDto;
+import de.adrianwalter.movie_list_rest_api.payload.movie.MovieResponseDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping( "/movies" )
@@ -26,9 +24,9 @@ public class MovieController {
     @PostMapping( "" )
     public ResponseEntity< MovieResponseDto > createNewMovie( @Valid @RequestBody MovieCreateDto requestBody ) {
 
-        MovieResponseDto movieList = movieService.create( requestBody );
+        MovieResponseDto movie = movieService.create( requestBody );
 
-        return ResponseEntity.ok( movieList );
+        return ResponseEntity.ok( movie );
     }
 
 
