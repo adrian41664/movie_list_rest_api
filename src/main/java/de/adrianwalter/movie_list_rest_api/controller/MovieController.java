@@ -1,7 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.payload.movie.MovieCreateDto;
-import de.adrianwalter.movie_list_rest_api.payload.movie.MovieResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

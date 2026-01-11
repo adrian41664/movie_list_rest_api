@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.service;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
-import de.adrianwalter.movie_list_rest_api.payload.movie.MovieCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateDto;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,18 +49,45 @@ public class MovieService {
     }
 
 
-    public Movie create( MovieCreateDto request ) {
+    public Movie create( MovieCreateDto movieCreateDto ) {
 
         // toDo: How to handle? Name is not unique. Movie should be unique per MovieList.
-        Optional< Movie > existingMovie = findByMovieName( request.getMovieName() );
+        // Optional< Movie > existingMovie = findByMovieName( movieCreateDto.getMovieName() );
 
-        if ( existingMovie.isPresent() ) {
-            throw new NameAlreadyExistsException();
+        Movie movie = this.mapToMovie( movieCreateDto );
+
+        long movieListId = movie.getMovieList().getMovieListId();
+        String movieName = movie.getMovieName();
+
+        if ( this.movieListHasMovieWithSameName( movieListId, movieName ) ) {
+
+            throw new NameAlreadyExistsException(
+                    "Cant create new Movie; MovieList already owns Movie with the given name" );
         }
 
-        Movie movie = new Movie();
-        movie.setMovieName( request.getMovieName() );
+//        Movie movie = new Movie();
+//        movie.setMovieName( movieCreateDto.getMovieName() );
 
-        return movieRepository.save( movie );
+        movieRepository.save( movie );
+
+        return this.mapToMovieResponseDto( movie );
+    }
+
+
+    private Movie mapToMovieResponseDto( Movie movie ) {
+
+        return null;
+    }
+
+
+    private boolean movieListHasMovieWithSameName( long movieListId, String movieName ) {
+
+        return false;
+    }
+
+
+    private Movie mapToMovie( MovieCreateDto movieCreateDto ) {
+
+        return null;
     }
 }

@@ -1,8 +1,8 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.payload.movieList.MovieListCreateDto;
-import de.adrianwalter.movie_list_rest_api.payload.movieList.MovieListResponseDto;
-import de.adrianwalter.movie_list_rest_api.payload.movieList.MovieListUpdateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

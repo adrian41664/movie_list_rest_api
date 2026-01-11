@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.payload.user;
+package de.adrianwalter.movie_list_rest_api.dto.user;
 
 
 import jakarta.validation.constraints.NotBlank;

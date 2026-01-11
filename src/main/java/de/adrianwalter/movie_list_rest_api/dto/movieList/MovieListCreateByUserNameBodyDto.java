@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.payload.movieList;
+package de.adrianwalter.movie_list_rest_api.dto.movieList;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
