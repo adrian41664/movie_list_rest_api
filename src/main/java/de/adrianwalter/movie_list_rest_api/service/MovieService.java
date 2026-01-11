@@ -69,6 +69,11 @@ public class MovieService {
             throw new NameAlreadyExistsException(
                     "Cant create new Movie; MovieList already owns Movie with the given name" );
         }
+        if ( movieName.isBlank() ) {
+
+            throw new InvalidBodyException(
+                    "Cant create new Movie; Given name is blank" );
+        }
 
         movieRepository.save( movie );
 
@@ -159,31 +164,61 @@ public class MovieService {
 
     private Movie mapToMovie( MovieCreateOneLineDto movieCreateOneLineDto ) {
 
-        Movie movie = new Movie();
-        MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
+        String[] oneLineMovieFields = this.splitAndTrim( movieCreateOneLineDto );
 
-        movie.setMovieList( movieList );
+        final int expectedFieldCount = 7;
 
-        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( "," );
-        String[] movieFields = Arrays.stream( oneLineMovieFields )
-                .map(String::trim)
-                .toArray(String[]::new);
+        if ( oneLineMovieFields.length == expectedFieldCount ) {
 
-        movie.setUserRating( Integer.parseInt( movieFields[0] ) );
-        movie.setMovieName( movieFields[1] );
-        movie.setReleaseYear( Integer.parseInt( movieFields[2] ) );
-        movie.setGenre( movieFields[3] );
-        movie.setSeenOn( movieFields[4] );
-        movie.setUserNote( movieFields[5] );
+            Movie movie = this.mapToMovie( oneLineMovieFields );
+            MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
 
-        if ( ! movieFields[6].isBlank() ) {
+            movie.setMovieList( movieList );
 
-            movie.setSeenAt( LocalDate.parse( movieFields[6] ) );
+            return movie;
+
         } else {
 
-            movie.setSeenAt( LocalDate.now() );
+            throw new InvalidBodyException( "" );
         }
 
+    }
+
+
+    private String[] splitAndTrim( MovieCreateOneLineDto movieCreateOneLineDto ){
+        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( ";" );
+
+        return Arrays.stream( oneLineMovieFields )
+                .map( String::trim )
+                .toArray( String[]::new );
+    }
+
+    private Movie mapToMovie( String[] oneLineMovieFields ){
+
+        Movie movie = new Movie();
+
+        try {
+
+            movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
+            movie.setMovieName( oneLineMovieFields[1] );
+            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
+            movie.setGenre( oneLineMovieFields[3] );
+            movie.setSeenOn( oneLineMovieFields[4] );
+            movie.setUserNote( oneLineMovieFields[5] );
+
+            if ( !oneLineMovieFields[6].isBlank() ) {
+
+                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
+            } else {
+
+                movie.setSeenAt( LocalDate.now() );
+            }
+        } catch ( Exception e ) {
+
+            throw new InvalidBodyException( "" );
+        }
         return movie;
     }
+
+
 }

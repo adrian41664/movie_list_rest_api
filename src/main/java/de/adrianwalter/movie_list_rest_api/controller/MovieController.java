@@ -22,6 +22,7 @@ public class MovieController {
     }
 
 
+    // ToDo: in test; all three types of requestBody ok
     @PostMapping( "" )
     public ResponseEntity< MovieResponseBasicFullOwnershipDto > createNewMovie(
             @Valid @RequestBody MovieCreateSubTypeMarker requestBody ) {
