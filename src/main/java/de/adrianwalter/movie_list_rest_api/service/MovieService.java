@@ -75,9 +75,20 @@ public class MovieService {
                     "Cant create new Movie; Given name is blank" );
         }
 
+        this.keywordFieldsToUpperCase( movie );
+
         movieRepository.save( movie );
 
         return this.mapToMovieResponseDto( movie );
+    }
+
+
+    private Movie keywordFieldsToUpperCase( Movie movie ) {
+
+        movie.setSeenOn( movie.getSeenOn().toUpperCase() );
+        movie.setGenre( movie.getGenre().toUpperCase() );
+
+        return movie;
     }
 
 
@@ -185,40 +196,45 @@ public class MovieService {
     }
 
 
-    private String[] splitAndTrim( MovieCreateOneLineDto movieCreateOneLineDto ){
-        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( ";" );
+    private String[] splitAndTrim( MovieCreateOneLineDto movieCreateOneLineDto ) {
+        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( "/" );
 
         return Arrays.stream( oneLineMovieFields )
                 .map( String::trim )
                 .toArray( String[]::new );
     }
 
-    private Movie mapToMovie( String[] oneLineMovieFields ){
+
+    private Movie mapToMovie( String[] oneLineMovieFields ) {
 
         Movie movie = new Movie();
 
         try {
-
             movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
-            movie.setMovieName( oneLineMovieFields[1] );
-            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
-            movie.setGenre( oneLineMovieFields[3] );
-            movie.setSeenOn( oneLineMovieFields[4] );
-            movie.setUserNote( oneLineMovieFields[5] );
-
-            if ( !oneLineMovieFields[6].isBlank() ) {
-
-                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
-            } else {
-
-                movie.setSeenAt( LocalDate.now() );
-            }
         } catch ( Exception e ) {
-
-            throw new InvalidBodyException( "" );
+            movie.setUserRating( -1 );
         }
+        movie.setMovieName( oneLineMovieFields[1] );
+
+        try {
+            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
+        } catch ( Exception e ) {
+            movie.setReleaseYear( -1 );
+        }
+
+        movie.setGenre( oneLineMovieFields[3] );
+        movie.setSeenOn( oneLineMovieFields[4] );
+        movie.setUserNote( oneLineMovieFields[5] );
+
+        if ( !oneLineMovieFields[6].isBlank() ) {
+            try {
+                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
+            } catch ( Exception e ) {
+                movie.setSeenAt( LocalDate.parse( "2000-01-01" ) );
+            }
+        }
+
         return movie;
     }
-
 
 }
