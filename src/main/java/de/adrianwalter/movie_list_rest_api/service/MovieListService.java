@@ -52,7 +52,7 @@ public class MovieListService {
     }
 
 
-    private MovieList findById( Long movieListId ) {
+    public MovieList findById( Long movieListId ) {
 
         MovieList movieList = movieListRepository.findByMovieListId( movieListId )
                 .orElseThrow( () -> new ResourceNotFoundException(
@@ -98,7 +98,7 @@ public class MovieListService {
     }
 
 
-    public MovieListResponseDto create( MovieListCreateDto movieListCreateDto ) {
+    public MovieListResponseDto createAndMapToResponse( MovieListCreateDto movieListCreateDto ) {
 
         MovieList movieList = this.mapToMovieList( movieListCreateDto );
 

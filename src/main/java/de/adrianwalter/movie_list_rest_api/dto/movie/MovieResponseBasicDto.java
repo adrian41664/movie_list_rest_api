@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class MovieShortResponseDto {
+public class MovieResponseBasicDto {
 
     private Long movieId;
 

@@ -27,7 +27,7 @@ public class MovieListController {
     @PostMapping( "" )
     public ResponseEntity< MovieListResponseDto > createNewMovieList( @Valid @RequestBody MovieListCreateDto requestBody ) {
 
-        MovieListResponseDto movieList = movieListService.create( requestBody );
+        MovieListResponseDto movieList = movieListService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movieList );
     }

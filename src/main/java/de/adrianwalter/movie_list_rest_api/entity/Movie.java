@@ -14,7 +14,7 @@ public class Movie {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
-    private long id;
+    private long movieId;
 
     //	> MOVIE_LIST_ID (FK)
     @ManyToOne
@@ -55,13 +55,13 @@ public class Movie {
     private MovieDetail movieDetail;
 
 
-    public long getId() {
-        return id;
+    public long getMovieId() {
+        return movieId;
     }
 
 
-    public void setId( long id ) {
-        this.id = id;
+    public void setMovieId( long movieId ) {
+        this.movieId = movieId;
     }
 
 

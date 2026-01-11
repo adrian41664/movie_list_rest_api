@@ -3,7 +3,7 @@ package de.adrianwalter.movie_list_rest_api.dto.movie;
 import lombok.Data;
 
 @Data
-public class MovieOneLineResponseDto {
+public class MovieResponseOneLineDto {
 
     String movieInformation;
 

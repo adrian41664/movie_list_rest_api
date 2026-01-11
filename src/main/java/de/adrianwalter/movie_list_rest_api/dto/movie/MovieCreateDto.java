@@ -1,21 +1,20 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 import java.time.LocalDate;
 
-@Data
-public class MovieCreateDto {
+public abstract class MovieCreateDto implements MovieCreateSubTypeMarker {
 
-    // toDo: Create more Versions (short, full, detailed)
 
     @NotNull(message = "movieListId must be valid!")
     private long movieListId;
 
-    @NotBlank
-    private String userRating;
+    @NotNull
+    private int userRating;
 
     @NotBlank
     private String movieName;
@@ -26,7 +25,7 @@ public class MovieCreateDto {
     // Integer is nullable
     private Integer releaseYear;
 
-    // should not be null, but is required as null in special cases
+    // should not be null, but is required as null in some cases
     private LocalDate seenAt;
 
     public long getMovieListId() {
@@ -37,11 +36,11 @@ public class MovieCreateDto {
         this.movieListId = movieListId;
     }
 
-    public String getUserRating() {
+    public int getUserRating() {
         return userRating;
     }
 
-    public void setUserRating( String userRating ) {
+    public void setUserRating( int userRating ) {
         this.userRating = userRating;
     }
 
@@ -76,4 +75,5 @@ public class MovieCreateDto {
     public void setSeenAt( LocalDate seenAt ) {
         this.seenAt = seenAt;
     }
+
 }

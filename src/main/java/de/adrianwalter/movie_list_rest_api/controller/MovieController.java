@@ -1,7 +1,8 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateBasicDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateSubTypeMarker;
+import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseBasicFullOwnershipDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,10 @@ public class MovieController {
 
 
     @PostMapping( "" )
-    public ResponseEntity< MovieResponseDto > createNewMovie( @Valid @RequestBody MovieCreateDto requestBody ) {
+    public ResponseEntity< MovieResponseBasicFullOwnershipDto > createNewMovie(
+            @Valid @RequestBody MovieCreateSubTypeMarker requestBody ) {
 
-        MovieResponseDto movie = movieService.create( requestBody );
+        MovieResponseBasicFullOwnershipDto movie = movieService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movie );
     }

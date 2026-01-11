@@ -5,7 +5,7 @@ import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.user.UserShortResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class UserService {
     }
 
 
-    public Page< UserShortResponseDto > UNUSED_findAll( Pageable pageable ) {
+    public Page< UserResponseShortDto > UNUSED_findAll( Pageable pageable ) {
 
         Page< User > allUsersPage = userRepository.findAll( pageable );
 
@@ -37,7 +37,7 @@ public class UserService {
     }
 
 
-    public List< UserShortResponseDto > findAll( Pageable pageable ) {
+    public List< UserResponseShortDto > findAll( Pageable pageable ) {
 
         Page< User > allUsersPage = userRepository.findAll( pageable );
 
@@ -48,7 +48,7 @@ public class UserService {
     }
 
 
-    public UserShortResponseDto findUserAndMapToShortResponse( Long userId ) {
+    public UserResponseShortDto findUserAndMapToShortResponse( Long userId ) {
 
         User user = this.findUserById( userId );
 
@@ -56,7 +56,7 @@ public class UserService {
     }
 
 
-    public UserShortResponseDto deleteByIdAndMapToShortResponse( Long userId ) {
+    public UserResponseShortDto deleteByIdAndMapToShortResponse( Long userId ) {
 
         User user = this.findUserById( userId );
 
@@ -66,7 +66,7 @@ public class UserService {
     }
 
 
-    public UserShortResponseDto update( Long userId, UserUpdateDto userUpdateDTO ) {
+    public UserResponseShortDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
         User user = this.updateUser( userId, userUpdateDTO );
 
@@ -100,9 +100,9 @@ public class UserService {
     }
 
 
-    private UserShortResponseDto mapToShortResponseDto( User user ) {
+    private UserResponseShortDto mapToShortResponseDto( User user ) {
 
-        UserShortResponseDto dto = new UserShortResponseDto();
+        UserResponseShortDto dto = new UserResponseShortDto();
         dto.setUserId( user.getUserId() );
         dto.setUserName( user.getUserName() );
 
@@ -144,7 +144,7 @@ public class UserService {
     }
 
 
-    public UserShortResponseDto create( UserCreateDto userCreateDTO ) {
+    public UserResponseShortDto create( UserCreateDto userCreateDTO ) {
 
         if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
 

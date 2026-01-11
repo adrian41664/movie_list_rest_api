@@ -1,6 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.dto.user.UserShortResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
@@ -26,19 +26,19 @@ public class UserController {
 
     // ToDo: in test; ok
     @PutMapping( "/{userId}" )
-    public ResponseEntity< UserShortResponseDto > updateUser(
+    public ResponseEntity< UserResponseShortDto > updateUser(
             @PathVariable Long userId, @RequestBody @Valid UserUpdateDto userUpdateDto ) {
 
-        UserShortResponseDto responseDto = userService.update( userId, userUpdateDto );
+        UserResponseShortDto responseDto = userService.update( userId, userUpdateDto );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: in test; ok
     @GetMapping( "" )
-    public ResponseEntity< List< UserShortResponseDto > > getAllUsers( Pageable pageable ) {
+    public ResponseEntity< List< UserResponseShortDto > > getAllUsers( Pageable pageable ) {
 
-        List< UserShortResponseDto > users = userService.findAll( pageable );
+        List< UserResponseShortDto > users = userService.findAll( pageable );
 
         return ResponseEntity.ok( users );
     }
@@ -46,49 +46,49 @@ public class UserController {
 
     // ToDo: in test; ok
     @PostMapping( "" )
-    public ResponseEntity< UserShortResponseDto > createNewUser( @Valid @RequestBody UserCreateDto requestBody ) {
+    public ResponseEntity< UserResponseShortDto > createNewUser( @Valid @RequestBody UserCreateDto requestBody ) {
 
-        UserShortResponseDto responseDto = userService.create( requestBody );
+        UserResponseShortDto responseDto = userService.create( requestBody );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: in test; ok
     @GetMapping( "/{userId}" )
-    public ResponseEntity< UserShortResponseDto > getUser( @PathVariable Long userId ) {
+    public ResponseEntity< UserResponseShortDto > getUser( @PathVariable Long userId ) {
 
-        UserShortResponseDto responseDto = userService.findUserAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.findUserAndMapToShortResponse( userId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: in test; ok
     @DeleteMapping( "/{userId}" )
-    public ResponseEntity< UserShortResponseDto > deleteUser( @PathVariable Long userId ) {
+    public ResponseEntity< UserResponseShortDto > deleteUser( @PathVariable Long userId ) {
 
-        UserShortResponseDto responseDto = userService.deleteByIdAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.deleteByIdAndMapToShortResponse( userId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: Create test
     //@GetMapping("/{userId}/details")
-    public ResponseEntity< UserShortResponseDto > getUserDetails( @PathVariable Long userId ) {
+    public ResponseEntity< UserResponseShortDto > getUserDetails( @PathVariable Long userId ) {
 
         // ToDo: Implement when Movie full implemented
         // UserShortResponseDto responseDto = userService.findByIdAndMapToDetailedResponse( userId );
 
-        UserShortResponseDto responseDto = userService.findUserAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.findUserAndMapToShortResponse( userId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: create test
     //@GetMapping("/details")
-    public ResponseEntity< List< UserShortResponseDto > > getAllUsersDetails( Pageable pageable ) {
+    public ResponseEntity< List< UserResponseShortDto > > getAllUsersDetails( Pageable pageable ) {
 
         // ToDo: Implement when Movie full implemented
-        List< UserShortResponseDto > users = userService.findAll( pageable );
+        List< UserResponseShortDto > users = userService.findAll( pageable );
 
         return ResponseEntity.ok( users );
     }
@@ -96,9 +96,9 @@ public class UserController {
 
     // ToDo: in test; ok
     // @GetMapping("")
-    public ResponseEntity< Page< UserShortResponseDto > > OLD_getAllUsers( Pageable pageable ) {
+    public ResponseEntity< Page< UserResponseShortDto > > OLD_getAllUsers( Pageable pageable ) {
 
-        Page< UserShortResponseDto > users = userService.UNUSED_findAll( pageable );
+        Page< UserResponseShortDto > users = userService.UNUSED_findAll( pageable );
 
         return ResponseEntity.ok( users );
     }
