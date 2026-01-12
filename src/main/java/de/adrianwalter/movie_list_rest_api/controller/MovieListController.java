@@ -34,6 +34,7 @@ public class MovieListController {
 
 
     // ToDo: in test; ok
+    // ToDo: Add optional sorting filters and search filters
     @GetMapping( "/{movieListId}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
 

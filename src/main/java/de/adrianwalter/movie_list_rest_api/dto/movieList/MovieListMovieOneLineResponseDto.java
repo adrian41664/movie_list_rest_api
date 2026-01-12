@@ -8,16 +8,16 @@ import java.util.List;
 @Data
 public class MovieListMovieOneLineResponseDto extends MovieListResponseDto {
 
-    private List< MovieResponseOneLineDto > movieResponseOneLineDtos;
+    private List< MovieResponseOneLineDto > movies;
 
 
-    public List< MovieResponseOneLineDto > getMovieResponseOneLineDtos() {
-        return movieResponseOneLineDtos;
+    public List< MovieResponseOneLineDto > getMovies() {
+        return movies;
     }
 
 
-    public void setMovieResponseOneLineDtos( List< MovieResponseOneLineDto > movieResponseOneLineDtos ) {
-        this.movieResponseOneLineDtos = movieResponseOneLineDtos;
+    public void setMovies( List< MovieResponseOneLineDto > movieResponseOneLineDtos ) {
+        this.movies = movieResponseOneLineDtos;
     }
 
 }

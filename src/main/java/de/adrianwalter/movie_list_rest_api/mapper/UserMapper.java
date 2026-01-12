@@ -4,7 +4,9 @@ import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.entity.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
 
     private MovieListMapper movieListMapper;

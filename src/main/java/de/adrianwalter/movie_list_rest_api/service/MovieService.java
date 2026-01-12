@@ -116,7 +116,7 @@ public class MovieService {
 
             MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
 
-            return this.movieMapper.mapToMovie( movieCreateOneLineDto, movieList, this );
+            return this.movieMapper.mapToMovie( movieCreateOneLineDto, movieList );
 
         } else {
 

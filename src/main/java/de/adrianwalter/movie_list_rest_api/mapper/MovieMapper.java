@@ -4,44 +4,19 @@ import de.adrianwalter.movie_list_rest_api.dto.movie.*;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
-import de.adrianwalter.movie_list_rest_api.service.MovieService;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
+@Component
 public class MovieMapper {
 
-    public Movie mapToMovie( String[] oneLineMovieFields ) {
 
-        Movie movie = new Movie();
+    private static final String REGEX_DIVIDER = "/";
+    private static final String FIELD_DIVIDER = " / ";
+    private static final int FIELD_COUNT = 7;
 
-        try {
-            movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
-        } catch ( Exception e ) {
-            movie.setUserRating( null );
-        }
-        movie.setMovieName( oneLineMovieFields[1] );
-
-        try {
-            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
-        } catch ( Exception e ) {
-            movie.setReleaseYear( null );
-        }
-
-        movie.setGenre( oneLineMovieFields[3] );
-        movie.setSeenOn( oneLineMovieFields[4] );
-        movie.setUserNote( oneLineMovieFields[5] );
-
-        if ( !oneLineMovieFields[6].isBlank() ) {
-            try {
-                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
-            } catch ( Exception e ) {
-                movie.setSeenAt( null );
-            }
-        }
-
-        return movie;
-    }
 
     public MovieResponseOneLineDto mapToMovieOneLineResponseDto( Movie movie ) {
 
@@ -51,14 +26,20 @@ public class MovieMapper {
 
         // "Rating / Titel / ReleaseYear / Genre / Streamer / UserNote / SeenDate: 2023-11-13"
 
-        String divider = " / ";
+        // ToDo: Delete -1 test
+        String releaseYear = ( movie.getReleaseYear() == null || movie.getReleaseYear() == -1 ) ?
+                "" : movie.getReleaseYear().toString();
+
+        String seenAt = movie.getSeenAt() == null ? "" : movie.getSeenAt().toString();
+
+
         String movieInformation = String.valueOf( movie.getUserRating() );
-        movieInformation +=  divider + movie.getMovieName();
-        movieInformation +=  divider + movie.getReleaseYear();
-        movieInformation +=  divider + movie.getGenre();
-        movieInformation +=  divider + movie.getSeenOn();
-        movieInformation +=  divider + movie.getUserNote();
-        movieInformation +=  divider + movie.getSeenAt();
+        movieInformation += FIELD_DIVIDER + movie.getMovieName();
+        movieInformation += FIELD_DIVIDER + releaseYear;
+        movieInformation += FIELD_DIVIDER + movie.getGenre();
+        movieInformation += FIELD_DIVIDER + movie.getSeenOn();
+        movieInformation += FIELD_DIVIDER + movie.getUserNote();
+        movieInformation += FIELD_DIVIDER + seenAt;
 
         movieDto.setMovieInformation( movieInformation );
 
@@ -118,31 +99,58 @@ public class MovieMapper {
     }
 
 
-    public Movie mapToMovie( MovieCreateOneLineDto movieCreateOneLineDto, MovieList movieList, MovieService movieService ) {
+    public Movie mapToMovie( MovieCreateOneLineDto movieCreateOneLineDto, MovieList movieList ) {
 
-        String[] oneLineMovieFields = movieService.splitAndTrim( movieCreateOneLineDto );
+        String[] oneLineMovieFields = this.splitAndTrim( movieCreateOneLineDto );
 
-        final int expectedFieldCount = 7;
-
-        if ( oneLineMovieFields.length == expectedFieldCount ) {
-
-            Movie movie = mapToMovie( oneLineMovieFields );
-            // MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
-
-            movie.setMovieList( movieList );
-
-            return movie;
-
-        } else {
+        if ( oneLineMovieFields.length != FIELD_COUNT ) {
 
             throw new InvalidBodyException( "" );
+
+
+        }
+        Movie movie = mapToMovie( oneLineMovieFields );
+        movie.setMovieList( movieList );
+
+        return movie;
+    }
+
+
+    private Movie mapToMovie( String[] oneLineMovieFields ) {
+
+        Movie movie = new Movie();
+
+        try {
+            movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
+        } catch ( Exception e ) {
+            movie.setUserRating( null );
+        }
+        movie.setMovieName( oneLineMovieFields[1] );
+
+        try {
+            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
+        } catch ( Exception e ) {
+            movie.setReleaseYear( null );
         }
 
+        movie.setGenre( oneLineMovieFields[3] );
+        movie.setSeenOn( oneLineMovieFields[4] );
+        movie.setUserNote( oneLineMovieFields[5] );
+
+        if ( !oneLineMovieFields[6].isBlank() ) {
+            try {
+                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
+            } catch ( Exception e ) {
+                movie.setSeenAt( null );
+            }
+        }
+
+        return movie;
     }
 
 
     private String[] splitAndTrim( MovieCreateOneLineDto movieCreateOneLineDto ) {
-        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( "/" );
+        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( REGEX_DIVIDER );
 
         return Arrays.stream( oneLineMovieFields )
                 .map( String::trim )

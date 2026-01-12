@@ -6,12 +6,19 @@ import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class MovieListMapper {
 
     private MovieMapper movieMapper;
+
+
+    public MovieListMapper( MovieMapper movieMapper ) {
+        this.movieMapper = movieMapper;
+    }
 
 
     public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList, MovieListService movieListService ) {
@@ -26,9 +33,9 @@ public class MovieListMapper {
 
         dto.setDescription( movieList.getDescription() );
 
-        // dto.setMovies( movieList.getMovies() );
-        dto.setMovieResponseOneLineDtos( movieList.getMovies().stream()
-                .map( ( Movie movie) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
+        dto.setMovies( movieList.getMovies().
+                stream()
+                .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
                 .toList() );
 
         return dto;

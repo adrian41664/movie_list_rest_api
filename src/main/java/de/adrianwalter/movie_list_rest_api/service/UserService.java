@@ -23,13 +23,13 @@ public class UserService {
 
     @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private UserMapper userMapper;
 
 
-    public UserService( UserRepository userRepository ) {
+    public UserService( UserRepository userRepository, UserMapper userMapper ) {
 
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
 
