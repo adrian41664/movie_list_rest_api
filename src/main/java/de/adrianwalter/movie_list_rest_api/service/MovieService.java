@@ -237,4 +237,26 @@ public class MovieService {
         return movie;
     }
 
+
+    public MovieResponseOneLineDto mapToMovieOneLineResponseDto( Movie movie ) {
+
+        MovieResponseOneLineDto movieDto = new MovieResponseOneLineDto();
+
+        movieDto.setMovieId( movie.getMovieId() );
+
+        // "Rating / Titel / ReleaseYear / Genre / Streamer / UserNote / SeenDate: 2023-11-13"
+
+        String divider = " / ";
+        String movieInformation = String.valueOf( movie.getUserRating() );
+        movieInformation +=  divider + movie.getMovieName();
+        movieInformation +=  divider + movie.getReleaseYear();
+        movieInformation +=  divider + movie.getGenre();
+        movieInformation +=  divider + movie.getSeenOn();
+        movieInformation +=  divider + movie.getUserNote();
+        movieInformation +=  divider + movie.getSeenAt();
+
+        movieDto.setMovieInformation( movieInformation );
+
+        return null;
+    }
 }

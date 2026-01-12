@@ -5,7 +5,20 @@ import lombok.Data;
 @Data
 public class MovieResponseOneLineDto {
 
-    String movieInformation;
+
+    private long movieId;
+
+    private String movieInformation;
+
+
+    public long getMovieId() {
+        return movieId;
+    }
+
+
+    public void setMovieId( long movieId ) {
+        this.movieId = movieId;
+    }
 
 
     public String getMovieInformation() {

@@ -1,7 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListMovieOneLineResponseDto;
 import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
@@ -25,9 +25,9 @@ public class MovieListController {
 
     // ToDo: in test; ok
     @PostMapping( "" )
-    public ResponseEntity< MovieListResponseDto > createNewMovieList( @Valid @RequestBody MovieListCreateDto requestBody ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > createNewMovieList( @Valid @RequestBody MovieListCreateDto requestBody ) {
 
-        MovieListResponseDto movieList = movieListService.createAndMapToResponse( requestBody );
+        MovieListMovieOneLineResponseDto movieList = movieListService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movieList );
     }
@@ -35,9 +35,9 @@ public class MovieListController {
 
     // ToDo: in test; ok
     @GetMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListResponseDto > getMovieList( @PathVariable Long movieListId ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
 
-        MovieListResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
+        MovieListMovieOneLineResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
 
         return ResponseEntity.ok( movieList );
     }
@@ -46,40 +46,40 @@ public class MovieListController {
     // all lists of a certain user
     // ToDo: in test; ok
     @GetMapping( "/user/{userName}" )
-    public ResponseEntity< List< MovieListResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
+    public ResponseEntity< List< MovieListMovieOneLineResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
 
-        List< MovieListResponseDto > usersMovieListResponseDtos = movieListService.getUsersMovieLists( userName );
+        List< MovieListMovieOneLineResponseDto > usersMovieListMovieOneLineResponseDtos = movieListService.getUsersMovieLists( userName );
 
-        return ResponseEntity.ok( usersMovieListResponseDtos );
+        return ResponseEntity.ok( usersMovieListMovieOneLineResponseDtos );
     }
 
 
     // ToDo: in test; ok
     @GetMapping( "/{movieListName}/user/{userName}" )
-    public ResponseEntity< MovieListResponseDto > getMovieListByNameAndUserName(
+    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListByNameAndUserName(
             @PathVariable String userName,
             @PathVariable String movieListName ) {
 
-        MovieListResponseDto responseDto = movieListService.findByNameAndUserName( movieListName, userName );
+        MovieListMovieOneLineResponseDto responseDto = movieListService.findByNameAndUserName( movieListName, userName );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: in test; ok
     @DeleteMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
 
-        MovieListResponseDto responseDto = movieListService.deleteByIdAndMapToResponse( movieListId );
+        MovieListMovieOneLineResponseDto responseDto = movieListService.deleteByIdAndMapToResponse( movieListId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: in test; ok
     @PutMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListResponseDto > updateMovieList(
+    public ResponseEntity< MovieListMovieOneLineResponseDto > updateMovieList(
             @PathVariable Long movieListId, @RequestBody @Valid MovieListUpdateDto movieListUpdateDto ) {
 
-        MovieListResponseDto responseDto = movieListService.update( movieListId, movieListUpdateDto );
+        MovieListMovieOneLineResponseDto responseDto = movieListService.update( movieListId, movieListUpdateDto );
         return ResponseEntity.ok( responseDto );
     }
 
