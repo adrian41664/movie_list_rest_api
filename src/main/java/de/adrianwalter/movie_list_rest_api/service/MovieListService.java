@@ -1,12 +1,12 @@
 package de.adrianwalter.movie_list_rest_api.service;
 
-import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.dto.movieList.*;
+import de.adrianwalter.movie_list_rest_api.mapper.MovieListMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -22,8 +22,7 @@ public class MovieListService {
     @Autowired
     private UserService userService;
     @Autowired
-    private MovieService movieService;
-
+    private MovieListMapper movieListMapper;
 
     @Autowired
     private final MovieListRepository movieListRepository;
@@ -39,41 +38,18 @@ public class MovieListService {
     }
 
 
-    private MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
-
-        MovieListMovieOneLineResponseDto dto = new MovieListMovieOneLineResponseDto();
-
-        dto.setMovieListId( movieList.getMovieListId() );
-        dto.setMovieListName( movieList.getMovieListName() );
-
-        dto.setUserId( movieList.getUser().getUserId() );
-        dto.setUserName( movieList.getUser().getUserName() );
-
-        dto.setDescription( movieList.getDescription() );
-
-        // dto.setMovies( movieList.getMovies() );
-        dto.setMovieResponseOneLineDtos( movieList.getMovies().stream()
-                .map( ( Movie movie) -> this.movieService.mapToMovieOneLineResponseDto( movie ) )
-                .toList() );
-
-        return dto;
-    }
-
-
     public MovieList findById( Long movieListId ) {
 
-        MovieList movieList = movieListRepository.findByMovieListId( movieListId )
+        return movieListRepository.findByMovieListId( movieListId )
                 .orElseThrow( () -> new ResourceNotFoundException(
                         "cant find MovieList with ID " + movieListId ) );
-
-        return movieList;
     }
 
 
     public MovieListMovieOneLineResponseDto findByIdAndMapToResponse( Long movieListId ) {
 
         MovieList movieList = this.findById( movieListId );
-        return mapToMovieListMovieOneLineResponseDto( movieList );
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
     }
 
 
@@ -83,7 +59,7 @@ public class MovieListService {
 
         movieListRepository.deleteById( movieListId );
 
-        return mapToMovieListMovieOneLineResponseDto( movieList );
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
     }
 
 
@@ -108,7 +84,9 @@ public class MovieListService {
 
     public MovieListMovieOneLineResponseDto createAndMapToResponse( MovieListCreateDto movieListCreateDto ) {
 
-        MovieList movieList = this.mapToMovieList( movieListCreateDto );
+        User user = this.findUser( movieListCreateDto );
+
+        MovieList movieList = this.movieListMapper.mapToMovieList( movieListCreateDto, user );
 
         long userId = movieList.getUser().getUserId();
         String newMovieListName = movieList.getMovieListName();
@@ -121,21 +99,7 @@ public class MovieListService {
 
         movieListRepository.save( movieList );
 
-        return this.mapToMovieListMovieOneLineResponseDto( movieList );
-    }
-
-
-    private MovieList mapToMovieList( MovieListCreateDto movieListCreateDto ) {
-
-        User user = this.findUser( movieListCreateDto );
-
-        MovieList movieList = new MovieList();
-
-        movieList.setUser( user );
-        movieList.setMovieListName( movieListCreateDto.getMovieListName() );
-        movieList.setDescription( movieListCreateDto.getDescription() );
-
-        return movieList;
+        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
     }
 
 
@@ -159,7 +123,7 @@ public class MovieListService {
 
         User user = this.userService.findUserById( userId );
 
-        return mapToResponseDtoLists( user.getMovieLists() );
+        return movieListMapper.mapToResponseDtoLists( user.getMovieLists(), this );
     }
 
 
@@ -167,19 +131,7 @@ public class MovieListService {
 
         User user = this.userService.findUserByName( userName );
 
-        return mapToResponseDtoLists( user.getMovieLists() );
-    }
-
-
-    private List< MovieListMovieOneLineResponseDto > mapToResponseDtoLists( List< MovieList > movieLists ) {
-
-        // ToDo: Expect nested-JSON issue, if Movies of each MovieList is not longer empty
-        // ToDo: Create specific DTO [?] cause every MovieList repeats UserName und UserId
-
-        return movieLists
-                .stream()
-                .map( ( MovieList movieList ) -> this.mapToMovieListMovieOneLineResponseDto( movieList ) )
-                .toList();
+        return movieListMapper.mapToResponseDtoLists( user.getMovieLists(), this );
     }
 
 
@@ -189,7 +141,7 @@ public class MovieListService {
 
             MovieList movieList = this.findMovieListByNameAndUserName( movieListName, userName );
 
-            return this.mapToMovieListMovieOneLineResponseDto( movieList );
+            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
 
         } else {
 
@@ -206,7 +158,7 @@ public class MovieListService {
             System.out.print( "User is existing" );
             MovieList movieList = this.findMovieListByUserIdAndMovieListName( movieListName, userId );
 
-            return this.mapToMovieListMovieOneLineResponseDto( movieList );
+            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
 
         } else {
 
@@ -235,7 +187,7 @@ public class MovieListService {
         MovieList movieList = this.updateMovieList( movieListId, movieListUpdateDto );
         this.movieListRepository.save( movieList );
 
-        return this.mapToMovieListMovieOneLineResponseDto( movieList );
+        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
     }
 
 
@@ -243,27 +195,37 @@ public class MovieListService {
 
         MovieList movieList = this.findById( movieListId );
 
-        if ( !movieListUpdateDto.getMovieListName().isBlank() ) {
+        String newMovieListName = movieListUpdateDto.getMovieListName();
 
-            long userId = movieList.getUser().getUserId();
+        if ( ! newMovieListName.isBlank() ) {
 
-            if ( this.userHasMovieListWithName( userId, movieListUpdateDto.getMovieListName() ) ) {
+            this.changeNameIfNotExisting( movieList, newMovieListName );
 
-                throw new NameAlreadyExistsException(
-                        "Cant change name of MovieList; User already owns MovieList with the given name" );
-            } else {
-
-                movieList.setMovieListName( movieListUpdateDto.getMovieListName() );
-            }
         } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
 
             movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
+
         } else {
 
             throw new InvalidBodyException();
         }
 
         return movieList;
+    }
+
+
+    void changeNameIfNotExisting( MovieList movieList, String movieListName ) {
+
+        long userId = movieList.getUser().getUserId();
+
+        if ( this.userHasMovieListWithName( userId, movieListName ) ) {
+
+            throw new NameAlreadyExistsException(
+                    "Cant change name of MovieList; User already owns MovieList with the given name" );
+        } else {
+
+            movieList.setMovieListName( movieListName );
+        }
     }
 
 }

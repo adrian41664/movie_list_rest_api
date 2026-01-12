@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping( "" )
     public ResponseEntity< UserResponseShortDto > createNewUser( @Valid @RequestBody UserCreateDto requestBody ) {
 
-        UserResponseShortDto responseDto = userService.create( requestBody );
+        UserResponseShortDto responseDto = userService.createAndMapToShortResponse( requestBody );
         return ResponseEntity.ok( responseDto );
     }
 

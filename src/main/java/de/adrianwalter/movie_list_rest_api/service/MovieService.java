@@ -6,13 +6,13 @@ import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
+import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -23,6 +23,9 @@ public class MovieService {
 
     @Autowired
     private MovieListService movieListService;
+
+    @Autowired
+    private MovieMapper movieMapper;
 
 
     public MovieService( MovieRepository movieRepository ) {
@@ -79,7 +82,7 @@ public class MovieService {
 
         movieRepository.save( movie );
 
-        return this.mapToMovieResponseDto( movie );
+        return this.movieMapper.mapToMovieResponseDto( movie );
     }
 
 
@@ -89,30 +92,6 @@ public class MovieService {
         movie.setGenre( movie.getGenre().toUpperCase() );
 
         return movie;
-    }
-
-
-    private MovieResponseBasicFullOwnershipDto mapToMovieResponseDto( Movie movie ) {
-
-        MovieResponseBasicFullOwnershipDto responseDto = new MovieResponseBasicFullOwnershipDto();
-
-        responseDto.setMovieId( movie.getMovieId() );
-        responseDto.setMovieName( movie.getMovieName() );
-
-        responseDto.setUserRating( movie.getUserRating() );
-        responseDto.setReleaseYear( movie.getReleaseYear() );
-        responseDto.setGenre( movie.getGenre() );
-        responseDto.setSeenOn( movie.getSeenOn() );
-        responseDto.setSeenAt( movie.getSeenAt() );
-        responseDto.setUserNote( movie.getUserNote() );
-
-        responseDto.setMovieListId( movie.getMovieList().getMovieListId() );
-        responseDto.setMovieListName( movie.getMovieList().getMovieListName() );
-
-        responseDto.setUserId( movie.getMovieList().getUser().getUserId() );
-        responseDto.setUserName( movie.getMovieList().getUser().getUserName() );
-
-        return responseDto;
     }
 
 
@@ -129,11 +108,15 @@ public class MovieService {
 
         if ( movieCreateSubTypeDto instanceof MovieCreateDto movieCreateDto ) {
 
-            return this.mapToMovie( movieCreateDto );
+            MovieList movieList = this.movieListService.findById( movieCreateDto.getMovieListId() );
+
+            return this.movieMapper.mapToMovie( movieCreateDto, movieList );
 
         } else if ( movieCreateSubTypeDto instanceof MovieCreateOneLineDto movieCreateOneLineDto ) {
 
-            return this.mapToMovie( movieCreateOneLineDto );
+            MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
+
+            return this.movieMapper.mapToMovie( movieCreateOneLineDto, movieList, this );
 
         } else {
 
@@ -143,120 +126,4 @@ public class MovieService {
     }
 
 
-    private Movie mapToMovie( MovieCreateDto movieCreateDto ) {
-
-        Movie movie = new Movie();
-
-        MovieList movieList = this.movieListService.findById( movieCreateDto.getMovieListId() );
-
-        movie.setMovieList( movieList );
-        movie.setUserRating( movieCreateDto.getUserRating() );
-        movie.setMovieName( movieCreateDto.getMovieName() );
-        movie.setSeenOn( movieCreateDto.getSeenOn() );
-        movie.setReleaseYear( movieCreateDto.getReleaseYear() );
-
-        if ( movieCreateDto.getSeenAt() != null ) {
-
-            movie.setSeenAt( movieCreateDto.getSeenAt() );
-        } else {
-
-            movie.setSeenAt( LocalDate.now() );
-        }
-
-        if ( movieCreateDto instanceof MovieCreateCompleteDto movieCreateCompleteDto ) {
-
-            movie.setGenre( movieCreateCompleteDto.getGenre() );
-            movie.setUserNote( movieCreateCompleteDto.getUserNote() );
-        }
-
-        return movie;
-    }
-
-
-    private Movie mapToMovie( MovieCreateOneLineDto movieCreateOneLineDto ) {
-
-        String[] oneLineMovieFields = this.splitAndTrim( movieCreateOneLineDto );
-
-        final int expectedFieldCount = 7;
-
-        if ( oneLineMovieFields.length == expectedFieldCount ) {
-
-            Movie movie = this.mapToMovie( oneLineMovieFields );
-            MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
-
-            movie.setMovieList( movieList );
-
-            return movie;
-
-        } else {
-
-            throw new InvalidBodyException( "" );
-        }
-
-    }
-
-
-    private String[] splitAndTrim( MovieCreateOneLineDto movieCreateOneLineDto ) {
-        String[] oneLineMovieFields = movieCreateOneLineDto.getMovieInformation().split( "/" );
-
-        return Arrays.stream( oneLineMovieFields )
-                .map( String::trim )
-                .toArray( String[]::new );
-    }
-
-
-    private Movie mapToMovie( String[] oneLineMovieFields ) {
-
-        Movie movie = new Movie();
-
-        try {
-            movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
-        } catch ( Exception e ) {
-            movie.setUserRating( null );
-        }
-        movie.setMovieName( oneLineMovieFields[1] );
-
-        try {
-            movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
-        } catch ( Exception e ) {
-            movie.setReleaseYear( null );
-        }
-
-        movie.setGenre( oneLineMovieFields[3] );
-        movie.setSeenOn( oneLineMovieFields[4] );
-        movie.setUserNote( oneLineMovieFields[5] );
-
-        if ( !oneLineMovieFields[6].isBlank() ) {
-            try {
-                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
-            } catch ( Exception e ) {
-                movie.setSeenAt( null );
-            }
-        }
-
-        return movie;
-    }
-
-
-    public MovieResponseOneLineDto mapToMovieOneLineResponseDto( Movie movie ) {
-
-        MovieResponseOneLineDto movieDto = new MovieResponseOneLineDto();
-
-        movieDto.setMovieId( movie.getMovieId() );
-
-        // "Rating / Titel / ReleaseYear / Genre / Streamer / UserNote / SeenDate: 2023-11-13"
-
-        String divider = " / ";
-        String movieInformation = String.valueOf( movie.getUserRating() );
-        movieInformation +=  divider + movie.getMovieName();
-        movieInformation +=  divider + movie.getReleaseYear();
-        movieInformation +=  divider + movie.getGenre();
-        movieInformation +=  divider + movie.getSeenOn();
-        movieInformation +=  divider + movie.getUserNote();
-        movieInformation +=  divider + movie.getSeenAt();
-
-        movieDto.setMovieInformation( movieInformation );
-
-        return null;
-    }
 }

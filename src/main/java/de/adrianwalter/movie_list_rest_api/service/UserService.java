@@ -7,7 +7,9 @@ import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserUpdateDto;
+import de.adrianwalter.movie_list_rest_api.mapper.UserMapper;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
 
 
     public UserService( UserRepository userRepository ) {
@@ -33,7 +37,7 @@ public class UserService {
 
         Page< User > allUsersPage = userRepository.findAll( pageable );
 
-        return allUsersPage.map( ( User user ) -> this.mapToShortResponseDto( user ) );
+        return allUsersPage.map( ( User user ) -> this.userMapper.mapToShortResponseDto( user ) );
     }
 
 
@@ -43,7 +47,7 @@ public class UserService {
 
         return allUsersPage.getContent()
                 .stream()
-                .map( ( User user ) -> this.mapToShortResponseDto( user ) )
+                .map( ( User user ) -> this.userMapper.mapToShortResponseDto( user ) )
                 .collect( Collectors.toList() );
     }
 
@@ -52,7 +56,7 @@ public class UserService {
 
         User user = this.findUserById( userId );
 
-        return mapToShortResponseDto( user );
+        return userMapper.mapToShortResponseDto( user );
     }
 
 
@@ -62,7 +66,7 @@ public class UserService {
 
         userRepository.deleteById( userId );
 
-        return this.mapToShortResponseDto( user );
+        return this.userMapper.mapToShortResponseDto( user );
     }
 
 
@@ -72,43 +76,34 @@ public class UserService {
 
         userRepository.save( user );
 
-        return this.mapToShortResponseDto( user );
+        return this.userMapper.mapToShortResponseDto( user );
 
     }
 
-    private User updateUser( Long userId, UserUpdateDto userUpdateDTO ){
 
-        User user = this.findUserById( userId );
+    private User updateUser( Long userId, UserUpdateDto userUpdateDto ) {
 
-        if ( !userUpdateDTO.getUserName().isBlank() ) {
-
-            String newUserName = userUpdateDTO.getUserName();
-
-            if ( this.userIsExisting( newUserName ) ) {
-
-                throw new NameAlreadyExistsException( "User with the name " + newUserName + " already exists!" );
-            }
-
-            user.setUserName( userUpdateDTO.getUserName() );
-
-        } else {
+        if ( userUpdateDto.getUserName().isBlank() ) {
 
             throw new InvalidBodyException();
         }
+
+        User user = this.findUserById( userId );
+        this.mapToUserIfNameNotExisting( user, userUpdateDto );
 
         return user;
     }
 
 
-    private UserResponseShortDto mapToShortResponseDto( User user ) {
+    private User mapToUserIfNameNotExisting( User user, UserUpdateDto userUpdateDto ) {
 
-        UserResponseShortDto dto = new UserResponseShortDto();
-        dto.setUserId( user.getUserId() );
-        dto.setUserName( user.getUserName() );
+        if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
 
-        return dto;
+            throw new NameAlreadyExistsException( "User with the name " + userUpdateDto.getUserName() + " already exists!" );
+        }
+
+        return this.userMapper.mapToUser( user, userUpdateDto );
     }
-
 
 
     public User findUserById( long userId ) {
@@ -144,19 +139,18 @@ public class UserService {
     }
 
 
-    public UserResponseShortDto create( UserCreateDto userCreateDTO ) {
+    public UserResponseShortDto createAndMapToShortResponse( UserCreateDto userCreateDTO ) {
 
         if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
 
             throw new NameAlreadyExistsException();
         }
 
-        User user = new User();
-        user.setUserName( userCreateDTO.getUserName() );
+        User user = this.userMapper.mapToUser( userCreateDTO );
 
         userRepository.save( user );
 
-        return this.mapToShortResponseDto( user );
+        return this.userMapper.mapToShortResponseDto( user );
     }
 
 
