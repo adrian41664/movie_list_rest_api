@@ -1,12 +1,6 @@
-package de.adrianwalter.movie_list_rest_api.dto.movie;
+package de.adrianwalter.movie_list_rest_api.dto.moviebatch;
 
-import lombok.Data;
-
-@Data
-public class MovieResponseOneLineDto {
-
-
-    // private long movieId;
+public class MovieBatchCreateOneLineDto {
 
     private String movieInformation;
 

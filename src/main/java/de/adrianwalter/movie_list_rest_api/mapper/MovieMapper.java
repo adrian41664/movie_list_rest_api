@@ -1,6 +1,9 @@
 package de.adrianwalter.movie_list_rest_api.mapper;
 
 import de.adrianwalter.movie_list_rest_api.dto.movie.*;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateCompleteDto;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateOneLineDto;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
@@ -22,11 +25,10 @@ public class MovieMapper {
 
         MovieResponseOneLineDto movieDto = new MovieResponseOneLineDto();
 
-        movieDto.setMovieId( movie.getMovieId() );
-
         // "Rating / Titel / ReleaseYear / Genre / Streamer / UserNote / SeenDate: 2023-11-13"
 
         // ToDo: Delete -1 test
+        // ToDo: Optional verwenden
         String releaseYear = ( movie.getReleaseYear() == null || movie.getReleaseYear() == -1 ) ?
                 "" : movie.getReleaseYear().toString();
 
@@ -81,6 +83,7 @@ public class MovieMapper {
         movie.setSeenOn( movieCreateDto.getSeenOn() );
         movie.setReleaseYear( movieCreateDto.getReleaseYear() );
 
+        // @ToDo:Optional verwenden
         if ( movieCreateDto.getSeenAt() != null ) {
 
             movie.setSeenAt( movieCreateDto.getSeenAt() );
@@ -107,7 +110,6 @@ public class MovieMapper {
 
             throw new InvalidBodyException( "" );
 
-
         }
         Movie movie = mapToMovie( oneLineMovieFields );
         movie.setMovieList( movieList );
@@ -116,7 +118,7 @@ public class MovieMapper {
     }
 
 
-    private Movie mapToMovie( String[] oneLineMovieFields ) {
+    public Movie mapToMovie( String[] oneLineMovieFields ) {
 
         Movie movie = new Movie();
 
@@ -155,5 +157,44 @@ public class MovieMapper {
         return Arrays.stream( oneLineMovieFields )
                 .map( String::trim )
                 .toArray( String[]::new );
+    }
+
+
+    Movie mapToMovie( MovieBatchCreateDto movieBatchCreateDto, MovieList movieList ) {
+
+        Movie movie = new Movie();
+
+        movie.setMovieList( movieList );
+        movie.setUserRating( movieBatchCreateDto.getUserRating() );
+        movie.setMovieName( movieBatchCreateDto.getMovieName() );
+        movie.setSeenOn( movieBatchCreateDto.getSeenOn() );
+        movie.setReleaseYear( movieBatchCreateDto.getReleaseYear() );
+
+        // @ToDo:Optional verwenden
+        if ( movieBatchCreateDto.getSeenAt() != null ) {
+
+            movie.setSeenAt( movieBatchCreateDto.getSeenAt() );
+        } else {
+
+            movie.setSeenAt( LocalDate.now() );
+        }
+
+        if ( movieBatchCreateDto instanceof MovieBatchCreateCompleteDto movieBatchCreateCompleteDto ) {
+
+            movie.setGenre( movieBatchCreateCompleteDto.getGenre() );
+            movie.setUserNote( movieBatchCreateCompleteDto.getUserNote() );
+        }
+
+        return movie;
+    }
+
+
+    Movie mapToMovie( MovieBatchCreateOneLineDto movieBatchCreateOneLineDto, MovieList movieList, MovieBatchMapper movieBatchMapper ) {
+
+        MovieCreateOneLineDto movieCreateOneLineDto = new MovieCreateOneLineDto();
+        movieCreateOneLineDto.setMovieListId( movieList.getMovieListId() );
+        movieCreateOneLineDto.setMovieInformation( movieBatchCreateOneLineDto.getMovieInformation() );
+
+        return mapToMovie( movieCreateOneLineDto, movieList );
     }
 }

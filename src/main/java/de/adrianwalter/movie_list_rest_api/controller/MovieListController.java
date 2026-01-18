@@ -1,8 +1,8 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListMovieOneLineResponseDto;
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListUpdateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListMovieOneLineResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListUpdateDto;
 import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,13 @@ public class MovieListController {
 
 
     // ToDo: in test; ok
-    // ToDo: Add optional sorting filters and search filters
+    /* ToDo: Add optional sorting filters and search filters
+
+        Filter:
+        - Detailed or OneLineMovies
+        - Sorting for every field value
+        - Search for every field value (show only Thrillers for Example)
+     */
     @GetMapping( "/{movieListId}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
 

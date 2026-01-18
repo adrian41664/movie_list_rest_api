@@ -1,7 +1,7 @@
 package de.adrianwalter.movie_list_rest_api.mapper;
 
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.movieList.MovieListMovieOneLineResponseDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListCreateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListMovieOneLineResponseDto;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;

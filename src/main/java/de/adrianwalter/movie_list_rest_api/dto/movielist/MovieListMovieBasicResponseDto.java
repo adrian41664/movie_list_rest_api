@@ -1,7 +1,6 @@
-package de.adrianwalter.movie_list_rest_api.dto.movieList;
+package de.adrianwalter.movie_list_rest_api.dto.movielist;
 
 import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseBasicDto;
-import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import lombok.Data;
 
 import java.util.List;

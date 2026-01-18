@@ -1,12 +1,13 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateBasicDto;
-import de.adrianwalter.movie_list_rest_api.dto.movie.MovieCreateSubTypeMarker;
-import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseBasicFullOwnershipDto;
+import de.adrianwalter.movie_list_rest_api.dto.movie.*;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateSubTypeMarker;
 import de.adrianwalter.movie_list_rest_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping( "/movies" )
@@ -30,6 +31,16 @@ public class MovieController {
         MovieResponseBasicFullOwnershipDto movie = movieService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movie );
+    }
+
+
+    @PostMapping( "/batch" )
+    public ResponseEntity< List< MovieResponseOneLineDto > > createNewMovies(
+            @Valid @RequestBody MovieBatchCreateSubTypeMarker requestBody ) {
+
+        List< MovieResponseOneLineDto > movies = movieService.createAndMapToResponse( requestBody );
+
+        return ResponseEntity.ok( movies );
     }
 
 

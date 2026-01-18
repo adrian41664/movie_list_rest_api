@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.dto.movieList;
+package de.adrianwalter.movie_list_rest_api.dto.movielist;
 
 public abstract class MovieListResponseDto {
 

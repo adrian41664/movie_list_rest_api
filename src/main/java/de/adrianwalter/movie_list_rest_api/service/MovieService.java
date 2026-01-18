@@ -1,11 +1,13 @@
 package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.dto.movie.*;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.*;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
+import de.adrianwalter.movie_list_rest_api.mapper.MovieBatchMapper;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +28,9 @@ public class MovieService {
 
     @Autowired
     private MovieMapper movieMapper;
+
+    @Autowired
+    private MovieBatchMapper movieBatchMapper;
 
 
     public MovieService( MovieRepository movieRepository ) {
@@ -60,9 +65,7 @@ public class MovieService {
     }
 
 
-    public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
-
-        Movie movie = this.mapToMovie( movieCreateSubType );
+    private Movie createMovie( Movie movie ) {
 
         long movieListId = movie.getMovieList().getMovieListId();
         String movieName = movie.getMovieName();
@@ -82,15 +85,34 @@ public class MovieService {
 
         movieRepository.save( movie );
 
-        return this.movieMapper.mapToMovieResponseDto( movie );
+        return movie;
+    }
+
+
+    public Movie createMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
+
+        Movie movie = this.mapToMovie( movieCreateSubType );
+
+        return this.createMovie( movie );
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
+
+        Movie newMovie = this.createMovie( movieCreateSubType );
+
+        return this.movieMapper.mapToMovieResponseDto( newMovie );
     }
 
 
     private Movie keywordFieldsToUpperCase( Movie movie ) {
 
-        movie.setSeenOn( movie.getSeenOn().toUpperCase() );
-        movie.setGenre( movie.getGenre().toUpperCase() );
-
+        if ( movie.getSeenOn() != null ) {
+            movie.setSeenOn( movie.getSeenOn().toUpperCase() );
+        }
+        if ( movie.getGenre() != null ) {
+            movie.setGenre( movie.getGenre().toUpperCase() );
+        }
         return movie;
     }
 
@@ -126,4 +148,25 @@ public class MovieService {
     }
 
 
+    public List< MovieResponseOneLineDto > createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
+
+        if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
+
+            MovieList movieList = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
+
+            List< Movie > movies =
+                    this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieList ).stream()
+                            .map( this::createMovie )
+                            .toList();
+
+            List< MovieResponseOneLineDto > oneLineDtos = movies.stream().
+                    map( this.movieMapper::mapToMovieOneLineResponseDto )
+                    .toList();
+
+            return oneLineDtos;
+        } else {
+
+            throw new InvalidBodyException( "Body is invalid!" );
+        }
+    }
 }
