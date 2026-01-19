@@ -9,7 +9,7 @@ public class MovieResponseBasicDto {
 
     private Long movieId;
 
-    private String movieName;
+    private String movieTitle;
 
     private int userRating;
     private Integer releaseYear;
@@ -29,13 +29,13 @@ public class MovieResponseBasicDto {
     }
 
 
-    public String getMovieName() {
-        return movieName;
+    public String getMovieTitle() {
+        return movieTitle;
     }
 
 
-    public void setMovieName( String movieName ) {
-        this.movieName = movieName;
+    public void setMovieTitle( String movieTitle ) {
+        this.movieTitle = movieTitle;
     }
 
 

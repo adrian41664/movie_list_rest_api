@@ -67,17 +67,17 @@ public class MovieService {
     }
 
 
-    public Movie createMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
+    public Movie createAndSaveMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
 
         Movie movie = this.mapToMovie( movieCreateSubType );
 
-        return this.createMovie( movie );
+        return this.createAndSaveMovie( movie );
     }
 
 
     public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
 
-        Movie newMovie = this.createMovie( movieCreateSubType );
+        Movie newMovie = this.createAndSaveMovie( movieCreateSubType );
 
         return this.movieMapper.mapToMovieResponseDto( newMovie );
     }
@@ -88,17 +88,15 @@ public class MovieService {
 
         if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
 
-            MovieList movieList = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
+            MovieList movieListToAddTo = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
 
-            List< Movie > movies = this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieList ).stream()
-                    .map( this::createMovie )
-                    .toList();
-
-            List< MovieResponseOneLineDto > oneLineDtos = movies.stream()
+            List< MovieResponseOneLineDto > oneLineResponses =
+                    this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieListToAddTo ).stream()
+                    .map( this::createAndSaveMovie )
                     .map( this.movieMapper::mapToMovieOneLineResponseDto )
                     .toList();
 
-            return mapToMovieResponseBatchCreateOneLineDtos( movieList, oneLineDtos );
+            return mapToMovieResponseBatchCreateOneLineDtos( movieListToAddTo.getMovieListId(), oneLineResponses );
 
         } else {
 
@@ -108,10 +106,10 @@ public class MovieService {
     }
 
 
-    private Movie createMovie( Movie movie ) {
+    private Movie createAndSaveMovie( Movie movie ) {
 
         long movieListId = movie.getMovieList().getMovieListId();
-        String movieName = movie.getMovieName();
+        String movieName = movie.getMovieTitle();
 
         if ( this.movieListHasMovieWithSameName( movieListId, movieName ) ) {
 
@@ -175,11 +173,11 @@ public class MovieService {
 
 
     private MovieResponseBatchCreateOneLineDtos mapToMovieResponseBatchCreateOneLineDtos(
-            @NonNull MovieList movieList,
+            long movieListId,
             @NonNull List< MovieResponseOneLineDto > oneLineDtos ) {
 
         MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
-        movieResponseBatch.setMovieListId( movieList.getMovieListId() );
+        movieResponseBatch.setMovieListId( movieListId );
         movieResponseBatch.setMovies( oneLineDtos );
 
         return movieResponseBatch;

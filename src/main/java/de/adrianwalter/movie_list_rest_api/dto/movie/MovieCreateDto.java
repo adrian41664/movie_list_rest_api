@@ -1,7 +1,5 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,7 +15,7 @@ public abstract class MovieCreateDto implements MovieCreateSubTypeMarker {
     private int userRating;
 
     @NotBlank
-    private String movieName;
+    private String movieTitle;
 
     // String is nullable
     private String seenOn;
@@ -44,12 +42,12 @@ public abstract class MovieCreateDto implements MovieCreateSubTypeMarker {
         this.userRating = userRating;
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getMovieTitle() {
+        return movieTitle;
     }
 
-    public void setMovieName( String movieName ) {
-        this.movieName = movieName;
+    public void setMovieTitle( String movieTitle ) {
+        this.movieTitle = movieTitle;
     }
 
     public String getSeenOn() {

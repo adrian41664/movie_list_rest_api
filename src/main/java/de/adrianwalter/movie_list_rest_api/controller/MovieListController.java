@@ -41,6 +41,28 @@ public class MovieListController {
         - Sorting for every field value
         - Search for every field value (show only Thrillers for Example)
      */
+    @GetMapping( "/{movieListId}/search" )
+    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListSearch(
+            @PathVariable Long movieListId,
+            @RequestParam( required = false ) String name,
+            @RequestParam( required = false ) int rating,
+            @RequestParam( required = false ) int releaseYear ,
+            @RequestParam( required = false ) String seenOn,
+            @RequestParam( required = false ) String userNote,
+            @RequestParam( required = false ) String genre,
+            @RequestParam( defaultValue = "seenAt" ) String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection
+            ) {
+
+        MovieListMovieOneLineResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
+
+
+
+
+        return ResponseEntity.ok( movieList );
+    }
+
+
     @GetMapping( "/{movieListId}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
 

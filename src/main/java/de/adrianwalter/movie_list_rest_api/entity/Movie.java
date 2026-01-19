@@ -28,7 +28,7 @@ public class Movie {
     //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
     @NotBlank
     @Column( unique = false )
-    private String movieName;
+    private String movieTitle;
 
     //	> RELEASE_YEAR {nullable}
     @Column( nullable = true )
@@ -85,13 +85,13 @@ public class Movie {
     }
 
 
-    public String getMovieName() {
-        return movieName;
+    public String getMovieTitle() {
+        return movieTitle;
     }
 
 
-    public void setMovieName( String movieName ) {
-        this.movieName = movieName;
+    public void setMovieTitle( String movieTitle ) {
+        this.movieTitle = movieTitle;
     }
 
 

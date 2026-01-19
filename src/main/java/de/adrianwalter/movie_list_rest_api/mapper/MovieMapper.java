@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Component
 public class MovieMapper {
@@ -37,7 +36,7 @@ public class MovieMapper {
 
 
         String movieInformation = String.valueOf( movie.getUserRating() );
-        movieInformation += FIELD_DIVIDER + movie.getMovieName();
+        movieInformation += FIELD_DIVIDER + movie.getMovieTitle();
         movieInformation += FIELD_DIVIDER + releaseYear;
         movieInformation += FIELD_DIVIDER + movie.getGenre();
         movieInformation += FIELD_DIVIDER + movie.getSeenOn();
@@ -55,7 +54,7 @@ public class MovieMapper {
         MovieResponseBasicFullOwnershipDto responseDto = new MovieResponseBasicFullOwnershipDto();
 
         responseDto.setMovieId( movie.getMovieId() );
-        responseDto.setMovieName( movie.getMovieName() );
+        responseDto.setMovieTitle( movie.getMovieTitle() );
 
         responseDto.setUserRating( movie.getUserRating() );
         responseDto.setReleaseYear( movie.getReleaseYear() );
@@ -80,7 +79,7 @@ public class MovieMapper {
 
         movie.setMovieList( movieList );
         movie.setUserRating( movieCreateDto.getUserRating() );
-        movie.setMovieName( movieCreateDto.getMovieName() );
+        movie.setMovieTitle( movieCreateDto.getMovieTitle() );
         movie.setSeenOn( movieCreateDto.getSeenOn() );
         movie.setReleaseYear( movieCreateDto.getReleaseYear() );
 
@@ -123,7 +122,7 @@ public class MovieMapper {
         } catch ( Exception e ) {
             movie.setUserRating( null );
         }
-        movie.setMovieName( oneLineMovieFields[1] );
+        movie.setMovieTitle( oneLineMovieFields[1] );
 
         try {
             movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
@@ -162,7 +161,7 @@ public class MovieMapper {
 
         movie.setMovieList( movieList );
         movie.setUserRating( movieBatchCreateDto.getUserRating() );
-        movie.setMovieName( movieBatchCreateDto.getMovieName() );
+        movie.setMovieTitle( movieBatchCreateDto.getMovieTitle() );
         movie.setSeenOn( movieBatchCreateDto.getSeenOn() );
         movie.setReleaseYear( movieBatchCreateDto.getReleaseYear() );
 
