@@ -189,7 +189,9 @@ public class MovieMapper {
     }
 
 
-    Movie mapToMovie( MovieBatchCreateOneLineDto movieBatchCreateOneLineDto, MovieList movieList, MovieBatchMapper movieBatchMapper ) {
+    Movie mapToMovie( MovieBatchCreateOneLineDto movieBatchCreateOneLineDto, MovieList movieList ) {
+
+        System.out.println(" MovieMapper, mapToMovie(), 192 ");
 
         MovieCreateOneLineDto movieCreateOneLineDto = new MovieCreateOneLineDto();
         movieCreateOneLineDto.setMovieListId( movieList.getMovieListId() );

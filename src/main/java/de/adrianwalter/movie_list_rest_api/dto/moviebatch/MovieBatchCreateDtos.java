@@ -6,7 +6,7 @@ public abstract class MovieBatchCreateDtos<T> implements MovieBatchCreateSubType
 
     private long movieListId;
 
-    private List<T> movieCreateDtos;
+    private List<T> movieTypes;
 
 
     public long getMovieListId() {
@@ -19,12 +19,12 @@ public abstract class MovieBatchCreateDtos<T> implements MovieBatchCreateSubType
     }
 
 
-    public List< T > getMovieCreateDtos() {
-        return movieCreateDtos;
+    public List< T > getMovieTypes() {
+        return movieTypes;
     }
 
 
-    public void setMovieCreateDtos( List< T > movieCreateDtos ) {
-        this.movieCreateDtos = movieCreateDtos;
+    public void setMovieTypes( List< T > movieCreateDtos ) {
+        this.movieTypes = movieCreateDtos;
     }
 }

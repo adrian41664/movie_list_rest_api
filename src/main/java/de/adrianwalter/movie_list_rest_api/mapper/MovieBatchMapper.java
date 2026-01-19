@@ -14,23 +14,33 @@ public class MovieBatchMapper {
     private MovieMapper movieMapper;
 
 
+    public MovieBatchMapper( MovieMapper movieMapper ) {
+        this.movieMapper = movieMapper;
+    }
+
+
     public List< Movie > mapToMovies( MovieBatchCreateDtos<?> movieBatchCreateDtos, MovieList movieList ) {
+
+        System.out.println(" MovieBatchMapper, mapToMovies(), 19 ");
+
 
         if ( movieBatchCreateDtos instanceof MovieBatchCreateOneLineDtos movieBatchCreateOneLineDtos ) {
 
-            return movieBatchCreateOneLineDtos.getMovieCreateDtos().stream()
-                    .map( batchOneLineDto -> this.movieMapper.mapToMovie( batchOneLineDto, movieList, this ) )
+            System.out.println(" instanceof MovieBatchCreateOneLineDtos ");
+
+            return movieBatchCreateOneLineDtos.getMovieTypes().stream()
+                    .map( batchOneLineDto -> this.movieMapper.mapToMovie( batchOneLineDto, movieList ) )
                     .toList();
 
         } else if ( movieBatchCreateDtos instanceof MovieBatchCreateBasicDtos movieBatchCreateBasicDtos ) {
 
-            return movieBatchCreateBasicDtos.getMovieCreateDtos().stream()
+            return movieBatchCreateBasicDtos.getMovieTypes().stream()
                     .map( batchBasicDto -> this.movieMapper.mapToMovie( batchBasicDto, movieList ) )
                     .toList();
 
         } else if ( movieBatchCreateDtos instanceof MovieBatchCreateCompleteDtos movieBatchCreateCompleteDtos ) {
 
-            return movieBatchCreateCompleteDtos.getMovieCreateDtos().stream()
+            return movieBatchCreateCompleteDtos.getMovieTypes().stream()
                     .map( batchCompleteDto -> this.movieMapper.mapToMovie( batchCompleteDto, movieList ) )
                     .toList();
 

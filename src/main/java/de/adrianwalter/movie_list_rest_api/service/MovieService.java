@@ -10,6 +10,7 @@ import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieBatchMapper;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +66,7 @@ public class MovieService {
     }
 
 
+    @Transactional
     private Movie createMovie( Movie movie ) {
 
         long movieListId = movie.getMovieList().getMovieListId();
@@ -149,6 +151,8 @@ public class MovieService {
 
 
     public List< MovieResponseOneLineDto > createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
+
+        System.out.println(" MovieService, createAndMapToResponse(), 155 ");
 
         if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
 

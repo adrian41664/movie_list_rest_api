@@ -38,6 +38,8 @@ public class MovieController {
     public ResponseEntity< List< MovieResponseOneLineDto > > createNewMovies(
             @Valid @RequestBody MovieBatchCreateSubTypeMarker requestBody ) {
 
+        System.out.println(" MovieController, createNewMovies(), 41 ");
+
         List< MovieResponseOneLineDto > movies = movieService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movies );

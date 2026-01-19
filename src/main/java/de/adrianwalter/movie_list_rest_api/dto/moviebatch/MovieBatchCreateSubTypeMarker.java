@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         use = JsonTypeInfo.Id.NAME, property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = MovieBatchCreateOneLineDto.class, name = "oneLine"),
-        @JsonSubTypes.Type(value = MovieBatchCreateBasicDto.class, name = "basic"),
-        @JsonSubTypes.Type(value = MovieBatchCreateCompleteDto.class, name = "complete")
+        @JsonSubTypes.Type(value = MovieBatchCreateOneLineDtos.class, name = "oneLine"),
+        @JsonSubTypes.Type(value = MovieBatchCreateBasicDtos.class, name = "basic"),
+        @JsonSubTypes.Type(value = MovieBatchCreateCompleteDtos.class, name = "complete")
 })
 
 public interface MovieBatchCreateSubTypeMarker {
