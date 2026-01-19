@@ -1,12 +1,16 @@
 package de.adrianwalter.movie_list_rest_api.dto.moviebatch;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public abstract class MovieBatchCreateDtos<T> implements MovieBatchCreateSubTypeMarker {
 
+    @NotNull
     private long movieListId;
 
-    private List<T> movieTypes;
+    @NotNull
+    private List<T> movies;
 
 
     public long getMovieListId() {
@@ -19,12 +23,12 @@ public abstract class MovieBatchCreateDtos<T> implements MovieBatchCreateSubType
     }
 
 
-    public List< T > getMovieTypes() {
-        return movieTypes;
+    public List< T > getMovies() {
+        return movies;
     }
 
 
-    public void setMovieTypes( List< T > movieCreateDtos ) {
-        this.movieTypes = movieCreateDtos;
+    public void setMovies( List< T > movieCreateDtos ) {
+        this.movies = movieCreateDtos;
     }
 }

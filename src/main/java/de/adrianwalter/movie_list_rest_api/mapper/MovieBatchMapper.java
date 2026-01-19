@@ -19,23 +19,23 @@ public class MovieBatchMapper {
     }
 
 
-    public List< Movie > mapToMovies( MovieBatchCreateDtos<?> movieBatchCreateDtos, MovieList movieList ) {
+    public List< Movie > mapToMovies( MovieBatchCreateDtos< ? > movieBatchCreateDtos, MovieList movieList ) {
 
         if ( movieBatchCreateDtos instanceof MovieBatchCreateOneLineDtos movieBatchCreateOneLineDtos ) {
 
-            return movieBatchCreateOneLineDtos.getMovieTypes().stream()
+            return movieBatchCreateOneLineDtos.getMovies().stream()
                     .map( batchOneLineDto -> this.movieMapper.mapToMovie( batchOneLineDto, movieList ) )
                     .toList();
 
         } else if ( movieBatchCreateDtos instanceof MovieBatchCreateBasicDtos movieBatchCreateBasicDtos ) {
 
-            return movieBatchCreateBasicDtos.getMovieTypes().stream()
+            return movieBatchCreateBasicDtos.getMovies().stream()
                     .map( batchBasicDto -> this.movieMapper.mapToMovie( batchBasicDto, movieList ) )
                     .toList();
 
         } else if ( movieBatchCreateDtos instanceof MovieBatchCreateCompleteDtos movieBatchCreateCompleteDtos ) {
 
-            return movieBatchCreateCompleteDtos.getMovieTypes().stream()
+            return movieBatchCreateCompleteDtos.getMovies().stream()
                     .map( batchCompleteDto -> this.movieMapper.mapToMovie( batchCompleteDto, movieList ) )
                     .toList();
 
@@ -45,21 +45,4 @@ public class MovieBatchMapper {
         }
     }
 
-
-//        public List< Movie > mapToMovies ( MovieBatchCreateCompleteDtos movieBatchCreateCompleteDtos, MovieList
-//        movieList ){
-//
-//            return movieBatchCreateCompleteDtos.getMovieCreateDtos().stream()
-//                    .map( batchOneLineDto -> this.mapToMovie( batchOneLineDto, movieList ) )
-//                    .toList();
-//        }
-//
-//
-//        public List< Movie > mapToMovies ( MovieBatchCreateOneLineDtos movieBatchCreateOneLineDtos, MovieList movieList )
-//        {
-//
-//            return movieBatchCreateOneLineDtos.getMovieCreateDtos().stream()
-//                    .map( batchOneLineDto -> this.mapToMovie( batchOneLineDto, movieList ) )
-//                    .toList();
-//        }
-    }
+}

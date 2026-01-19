@@ -35,6 +35,7 @@ public class MovieController {
     }
 
 
+    // ToDo: in test; all three types of requestBody ok
     @PostMapping( "/batch" )
     public ResponseEntity< MovieResponseBatchCreateOneLineDtos > createNewMovies(
             @Valid @RequestBody MovieBatchCreateSubTypeMarker requestBody ) {

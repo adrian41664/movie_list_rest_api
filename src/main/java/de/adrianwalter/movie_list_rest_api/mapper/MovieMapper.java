@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Component
 public class MovieMapper {
@@ -83,14 +84,9 @@ public class MovieMapper {
         movie.setSeenOn( movieCreateDto.getSeenOn() );
         movie.setReleaseYear( movieCreateDto.getReleaseYear() );
 
-        // @ToDo:Optional verwenden
-        if ( movieCreateDto.getSeenAt() != null ) {
+        LocalDate seenAt = movieCreateDto.getSeenAt();
+        movie.setSeenAt(seenAt != null ? seenAt : LocalDate.now());
 
-            movie.setSeenAt( movieCreateDto.getSeenAt() );
-        } else {
-
-            movie.setSeenAt( LocalDate.now() );
-        }
 
         if ( movieCreateDto instanceof MovieCreateCompleteDto movieCreateCompleteDto ) {
 
@@ -170,14 +166,8 @@ public class MovieMapper {
         movie.setSeenOn( movieBatchCreateDto.getSeenOn() );
         movie.setReleaseYear( movieBatchCreateDto.getReleaseYear() );
 
-        // @ToDo:Optional verwenden
-        if ( movieBatchCreateDto.getSeenAt() != null ) {
-
-            movie.setSeenAt( movieBatchCreateDto.getSeenAt() );
-        } else {
-
-            movie.setSeenAt( LocalDate.now() );
-        }
+        LocalDate seenAt = movieBatchCreateDto.getSeenAt();
+        movie.setSeenAt(seenAt != null ? seenAt : LocalDate.now());
 
         if ( movieBatchCreateDto instanceof MovieBatchCreateCompleteDto movieBatchCreateCompleteDto ) {
 

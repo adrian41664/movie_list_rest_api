@@ -11,6 +11,7 @@ import de.adrianwalter.movie_list_rest_api.mapper.MovieBatchMapper;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +67,46 @@ public class MovieService {
     }
 
 
+    public Movie createMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
+
+        Movie movie = this.mapToMovie( movieCreateSubType );
+
+        return this.createMovie( movie );
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
+
+        Movie newMovie = this.createMovie( movieCreateSubType );
+
+        return this.movieMapper.mapToMovieResponseDto( newMovie );
+    }
+
+
+    @Transactional
+    public MovieResponseBatchCreateOneLineDtos createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
+
+        if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
+
+            MovieList movieList = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
+
+            List< Movie > movies = this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieList ).stream()
+                    .map( this::createMovie )
+                    .toList();
+
+            List< MovieResponseOneLineDto > oneLineDtos = movies.stream()
+                    .map( this.movieMapper::mapToMovieOneLineResponseDto )
+                    .toList();
+
+            return mapToMovieResponseBatchCreateOneLineDtos( movieList, oneLineDtos );
+
+        } else {
+
+            throw new InvalidBodyException( "Body is invalid!" );
+        }
+
+    }
+
 
     private Movie createMovie( Movie movie ) {
 
@@ -91,31 +132,15 @@ public class MovieService {
     }
 
 
-    public Movie createMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
+    private void keywordFieldsToUpperCase( Movie movie ) {
 
-        Movie movie = this.mapToMovie( movieCreateSubType );
+        Optional.ofNullable( movie.getSeenOn() )
+                .map( String::toUpperCase )
+                .ifPresent( movie::setSeenOn );
 
-        return this.createMovie( movie );
-    }
-
-
-    public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
-
-        Movie newMovie = this.createMovie( movieCreateSubType );
-
-        return this.movieMapper.mapToMovieResponseDto( newMovie );
-    }
-
-
-    private Movie keywordFieldsToUpperCase( Movie movie ) {
-
-        if ( movie.getSeenOn() != null ) {
-            movie.setSeenOn( movie.getSeenOn().toUpperCase() );
-        }
-        if ( movie.getGenre() != null ) {
-            movie.setGenre( movie.getGenre().toUpperCase() );
-        }
-        return movie;
+        Optional.ofNullable( movie.getGenre() )
+                .map( String::toUpperCase )
+                .ifPresent( movie::setGenre );
     }
 
 
@@ -146,35 +171,17 @@ public class MovieService {
 
             throw new InvalidBodyException( "Body is invalid!" );
         }
-
     }
 
 
-    @Transactional
-    public MovieResponseBatchCreateOneLineDtos createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
+    private MovieResponseBatchCreateOneLineDtos mapToMovieResponseBatchCreateOneLineDtos(
+            @NonNull MovieList movieList,
+            @NonNull List< MovieResponseOneLineDto > oneLineDtos ) {
 
-        if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
+        MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
+        movieResponseBatch.setMovieListId( movieList.getMovieListId() );
+        movieResponseBatch.setMovies( oneLineDtos );
 
-            MovieList movieList = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
-
-            List< Movie > movies =
-                    this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieList ).stream()
-                            .map( this::createMovie )
-                            .toList();
-
-            List< MovieResponseOneLineDto > oneLineDtos = movies.stream().
-                    map( this.movieMapper::mapToMovieOneLineResponseDto )
-                    .toList();
-
-            // @ToDo: Create own mapper method
-            MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
-            movieResponseBatch.setMovieListId(  movieList.getMovieListId() );
-            movieResponseBatch.setMovieTypes( oneLineDtos );
-
-            return movieResponseBatch;
-        } else {
-
-            throw new InvalidBodyException( "Body is invalid!" );
-        }
+        return movieResponseBatch;
     }
 }
