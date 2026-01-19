@@ -152,8 +152,6 @@ public class MovieService {
 
     public List< MovieResponseOneLineDto > createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
 
-        System.out.println(" MovieService, createAndMapToResponse(), 155 ");
-
         if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
 
             MovieList movieList = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );

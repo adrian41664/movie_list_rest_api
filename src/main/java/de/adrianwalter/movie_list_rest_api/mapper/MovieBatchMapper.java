@@ -21,12 +21,7 @@ public class MovieBatchMapper {
 
     public List< Movie > mapToMovies( MovieBatchCreateDtos<?> movieBatchCreateDtos, MovieList movieList ) {
 
-        System.out.println(" MovieBatchMapper, mapToMovies(), 19 ");
-
-
         if ( movieBatchCreateDtos instanceof MovieBatchCreateOneLineDtos movieBatchCreateOneLineDtos ) {
-
-            System.out.println(" instanceof MovieBatchCreateOneLineDtos ");
 
             return movieBatchCreateOneLineDtos.getMovieTypes().stream()
                     .map( batchOneLineDto -> this.movieMapper.mapToMovie( batchOneLineDto, movieList ) )

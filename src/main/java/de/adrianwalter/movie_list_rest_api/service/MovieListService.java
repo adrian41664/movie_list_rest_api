@@ -155,14 +155,12 @@ public class MovieListService {
 
         if ( this.userService.userIsExisting( userId ) ) {
 
-            System.out.print( "User is existing" );
             MovieList movieList = this.findMovieListByUserIdAndMovieListName( movieListName, userId );
 
             return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
 
         } else {
 
-            System.out.print( "User is not existing" );
             throw new ResourceNotFoundException( "cant find UserId " + userId );
         }
     }
