@@ -63,7 +63,7 @@ public class MovieService {
 
 
     public Optional< Movie > findByMovieName( String movieName ) {
-        return movieRepository.findByMovieName( movieName );
+        return movieRepository.findByMovieTitle( movieName );
     }
 
 
@@ -145,7 +145,7 @@ public class MovieService {
     private boolean movieListHasMovieWithSameName( long movieListId, String movieName ) {
 
         Optional< Movie > movieNameSearch = movieRepository
-                .findByMovieList_MovieListIdAndMovieName( movieListId, movieName );
+                .findByMovieList_MovieListIdAndMovieTitle( movieListId, movieName );
 
         return movieNameSearch.isPresent();
     }
