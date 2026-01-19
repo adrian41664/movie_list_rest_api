@@ -44,19 +44,21 @@ public class MovieListController {
     @GetMapping( "/{movieListId}/search" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListSearch(
             @PathVariable Long movieListId,
-            @RequestParam( required = false ) String name,
-            @RequestParam( required = false ) int rating,
-            @RequestParam( required = false ) int releaseYear ,
+            @RequestParam( required = false ) String title,
+            @RequestParam( required = false ) boolean isRated,
+            @RequestParam( required = false ) int minRating,
+            @RequestParam( required = false ) int maxRating,
+            @RequestParam( required = false ) int year,
+            @RequestParam( required = false ) int minYear,
+            @RequestParam( required = false ) int maxYear,
             @RequestParam( required = false ) String seenOn,
-            @RequestParam( required = false ) String userNote,
+            @RequestParam( required = false ) String userNoteKeyword,
             @RequestParam( required = false ) String genre,
             @RequestParam( defaultValue = "seenAt" ) String sortBy,
             @RequestParam(defaultValue = "ASC") String sortDirection
             ) {
 
         MovieListMovieOneLineResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
-
-
 
 
         return ResponseEntity.ok( movieList );
