@@ -66,7 +66,7 @@ public class MovieService {
     }
 
 
-    @Transactional
+
     private Movie createMovie( Movie movie ) {
 
         long movieListId = movie.getMovieList().getMovieListId();
@@ -150,7 +150,8 @@ public class MovieService {
     }
 
 
-    public List< MovieResponseOneLineDto > createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
+    @Transactional
+    public MovieResponseBatchCreateOneLineDtos createAndMapToResponse( MovieBatchCreateSubTypeMarker movieBatchCreateSubTypeDtos ) {
 
         if ( movieBatchCreateSubTypeDtos instanceof MovieBatchCreateDtos< ? > movieBatchCreateDtos ) {
 
@@ -165,7 +166,12 @@ public class MovieService {
                     map( this.movieMapper::mapToMovieOneLineResponseDto )
                     .toList();
 
-            return oneLineDtos;
+            // @ToDo: Create own mapper method
+            MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
+            movieResponseBatch.setMovieListId(  movieList.getMovieListId() );
+            movieResponseBatch.setMovieTypes( oneLineDtos );
+
+            return movieResponseBatch;
         } else {
 
             throw new InvalidBodyException( "Body is invalid!" );

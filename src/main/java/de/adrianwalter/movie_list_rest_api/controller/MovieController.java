@@ -2,6 +2,7 @@ package de.adrianwalter.movie_list_rest_api.controller;
 
 import de.adrianwalter.movie_list_rest_api.dto.movie.*;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateSubTypeMarker;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieResponseBatchCreateOneLineDtos;
 import de.adrianwalter.movie_list_rest_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,10 @@ public class MovieController {
 
 
     @PostMapping( "/batch" )
-    public ResponseEntity< List< MovieResponseOneLineDto > > createNewMovies(
+    public ResponseEntity< MovieResponseBatchCreateOneLineDtos > createNewMovies(
             @Valid @RequestBody MovieBatchCreateSubTypeMarker requestBody ) {
 
-        List< MovieResponseOneLineDto > movies = movieService.createAndMapToResponse( requestBody );
+        MovieResponseBatchCreateOneLineDtos movies = movieService.createAndMapToResponse( requestBody );
 
         return ResponseEntity.ok( movies );
     }
