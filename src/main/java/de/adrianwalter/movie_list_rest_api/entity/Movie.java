@@ -23,7 +23,7 @@ public class Movie {
 
     //	> USER_RATING
     @Column( nullable = true )
-    private int userRating;
+    private Integer userRating;
 
     //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
     @NotBlank
@@ -60,11 +60,6 @@ public class Movie {
     }
 
 
-    public void setMovieId( long movieId ) {
-        this.movieId = movieId;
-    }
-
-
     public MovieList getMovieList() {
         return movieList;
     }
@@ -75,7 +70,7 @@ public class Movie {
     }
 
 
-    public int getUserRating() {
+    public Integer getUserRating() {
         return userRating;
     }
 
