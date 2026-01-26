@@ -5,7 +5,6 @@ import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListMovieOneLineRe
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.service.MovieListService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class MovieListMapper {
     }
 
 
-    public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList, MovieListService movieListService ) {
+    public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
 
         MovieListMovieOneLineResponseDto dto = new MovieListMovieOneLineResponseDto();
 
@@ -54,14 +53,14 @@ public class MovieListMapper {
     }
 
 
-    public List< MovieListMovieOneLineResponseDto > mapToResponseDtoLists( List< MovieList > movieLists, MovieListService movieListService ) {
+    public List< MovieListMovieOneLineResponseDto > mapToOneLineResponseDtoLists( List< MovieList > movieLists ) {
 
         // ToDo: Expect nested-JSON issue, if Movies of each MovieList is not longer empty
         // ToDo: Create specific DTO [?] cause every MovieList repeats UserName und UserId
 
         return movieLists
                 .stream()
-                .map( ( MovieList movieList ) -> mapToMovieListMovieOneLineResponseDto( movieList, movieListService ) )
+                .map( ( MovieList movieList ) -> this.mapToMovieListMovieOneLineResponseDto( movieList ) )
                 .toList();
     }
 }

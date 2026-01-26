@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.service;
+package de.adrianwalter.movie_list_rest_api.service.movielist;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
@@ -9,6 +9,7 @@ import de.adrianwalter.movie_list_rest_api.dto.movielist.*;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieListMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
+import de.adrianwalter.movie_list_rest_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,25 +47,25 @@ public class MovieListService {
     }
 
 
-    public MovieListMovieOneLineResponseDto findByIdAndMapToResponse( Long movieListId ) {
+    public MovieListMovieOneLineResponseDto findByIdCompact( Long movieListId ) {
 
         MovieList movieList = this.findById( movieListId );
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
-    public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
+    public MovieListMovieOneLineResponseDto mapToCompact( MovieList movieList ) {
 
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 
-    public MovieListMovieOneLineResponseDto deleteByIdAndMapToResponse( Long movieListId ) {
+    public MovieListMovieOneLineResponseDto deleteById( Long movieListId ) {
 
         MovieList movieList = this.findById( movieListId );
 
         movieListRepository.deleteById( movieListId );
 
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 
@@ -87,7 +88,7 @@ public class MovieListService {
     }
 
 
-    public MovieListMovieOneLineResponseDto createAndMapToResponse( MovieListCreateDto movieListCreateDto ) {
+    public MovieListMovieOneLineResponseDto create( MovieListCreateDto movieListCreateDto ) {
 
         User user = this.findUser( movieListCreateDto );
 
@@ -104,7 +105,7 @@ public class MovieListService {
 
         movieListRepository.save( movieList );
 
-        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 
@@ -124,19 +125,19 @@ public class MovieListService {
 
 
     // ToDo: delete
-    public List< MovieListMovieOneLineResponseDto > getUsersMovieLists( long userId ) {
+    public List< MovieListMovieOneLineResponseDto > findByUserName( long userId ) {
 
         User user = this.userService.findUserById( userId );
 
-        return movieListMapper.mapToResponseDtoLists( user.getMovieLists(), this );
+        return movieListMapper.mapToOneLineResponseDtoLists( user.getMovieLists() );
     }
 
 
-    public List< MovieListMovieOneLineResponseDto > getUsersMovieLists( String userName ) {
+    public List< MovieListMovieOneLineResponseDto > findByUserName( String userName ) {
 
         User user = this.userService.findUserByName( userName );
 
-        return movieListMapper.mapToResponseDtoLists( user.getMovieLists(), this );
+        return movieListMapper.mapToOneLineResponseDtoLists( user.getMovieLists() );
     }
 
 
@@ -146,7 +147,7 @@ public class MovieListService {
 
             MovieList movieList = this.findMovieListByNameAndUserName( movieListName, userName );
 
-            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
 
         } else {
 
@@ -162,7 +163,7 @@ public class MovieListService {
 
             MovieList movieList = this.findMovieListByUserIdAndMovieListName( movieListName, userId );
 
-            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
 
         } else {
 
@@ -190,7 +191,7 @@ public class MovieListService {
         MovieList movieList = this.updateMovieList( movieListId, movieListUpdateDto );
         this.movieListRepository.save( movieList );
 
-        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 

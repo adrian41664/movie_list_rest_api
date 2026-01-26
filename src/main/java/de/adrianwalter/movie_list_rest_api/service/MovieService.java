@@ -10,6 +10,7 @@ import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieBatchMapper;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
+import de.adrianwalter.movie_list_rest_api.service.movielist.MovieListService;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;

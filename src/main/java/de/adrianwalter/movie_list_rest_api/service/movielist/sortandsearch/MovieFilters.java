@@ -1,4 +1,4 @@
-package de.adrianwalter.movie_list_rest_api.sortandsearch;
+package de.adrianwalter.movie_list_rest_api.service.movielist.sortandsearch;
 
 public class MovieFilters {
 
