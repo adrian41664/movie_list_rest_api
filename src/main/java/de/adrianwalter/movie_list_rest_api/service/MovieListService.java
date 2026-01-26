@@ -52,6 +52,11 @@ public class MovieListService {
         return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
     }
 
+    public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
+
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList, this );
+    }
+
 
     public MovieListMovieOneLineResponseDto deleteByIdAndMapToResponse( Long movieListId ) {
 
