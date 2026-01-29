@@ -12,6 +12,7 @@ import de.adrianwalter.movie_list_rest_api.mapper.MovieMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import de.adrianwalter.movie_list_rest_api.service.movielist.MovieListService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,12 +42,12 @@ public class MovieService {
     }
 
 
-    public Page< Movie > findAll( Pageable pageable ) {
+    private Page< Movie > findAll( Pageable pageable ) {
         return movieRepository.findAll( pageable );
     }
 
 
-    public Movie findById( Long id ) {
+    private Movie findById( Long id ) {
 
         Optional< Movie > movie = movieRepository.findById( id );
 
@@ -58,12 +59,12 @@ public class MovieService {
     }
 
 
-    public void deleteById( Long id ) {
+    private void deleteById( Long id ) {
         movieRepository.deleteById( id );
     }
 
 
-    public Optional< Movie > findByMovieName( String movieName ) {
+    private Optional< Movie > findByMovieName( String movieName ) {
         return movieRepository.findByMovieTitle( movieName );
     }
 
@@ -93,9 +94,9 @@ public class MovieService {
 
             List< MovieResponseOneLineDto > oneLineResponses =
                     this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieListToAddTo ).stream()
-                    .map( this::createAndSaveMovie )
-                    .map( this.movieMapper::mapToMovieOneLineResponseDto )
-                    .toList();
+                            .map( this::createAndSaveMovie )
+                            .map( this.movieMapper::mapToMovieOneLineResponseDto )
+                            .toList();
 
             return mapToMovieResponseBatchCreateOneLineDtos( movieListToAddTo.getMovieListId(), oneLineResponses );
 
@@ -182,5 +183,23 @@ public class MovieService {
         movieResponseBatch.setMovies( oneLineDtos );
 
         return movieResponseBatch;
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto update( Long movieId, @Valid MovieUpdateDto movieUpdateDto ) {
+
+
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto findMovie( Long movieId ) {
+
+
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto delete( Long movieId ) {
+
+
     }
 }
