@@ -52,7 +52,7 @@ public class UserService {
     }
 
 
-    public UserResponseShortDto findUserAndMapToShortResponse( Long userId ) {
+    public UserResponseShortDto findUserDetails( Long userId ) {
 
         User user = this.findUserById( userId );
 
@@ -60,7 +60,7 @@ public class UserService {
     }
 
 
-    public UserResponseShortDto deleteByIdAndMapToShortResponse( Long userId ) {
+    public UserResponseShortDto deleteById( Long userId ) {
 
         User user = this.findUserById( userId );
 
@@ -139,7 +139,7 @@ public class UserService {
     }
 
 
-    public UserResponseShortDto createAndMapToShortResponse( UserCreateDto userCreateDTO ) {
+    public UserResponseShortDto create( UserCreateDto userCreateDTO ) {
 
         if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
 

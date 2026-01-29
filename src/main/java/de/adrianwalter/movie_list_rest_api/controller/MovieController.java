@@ -46,50 +46,5 @@ public class MovieController {
     }
 
 
-//    @GetMapping( "/{movieId}" )
-//    public ResponseEntity< MovieListResponseDto > getMovieList( @PathVariable Long movieListId ) {
-//
-//        MovieListResponseDto movieList = movieListService.findByIdAndMapToResponse( movieListId );
-//
-//        return ResponseEntity.ok( movieList );
-//    }
-
-
-    // all movies of a certain user
-//    @GetMapping( "/user/{userName}" )
-//    public ResponseEntity< List< MovieResponseDto > > getMoviesOfUser( @PathVariable String userName ) {
-//
-//        List< MovieResponseDto > usersMovieResponseDtos = movieService.getUsersMovies( userName );
-//
-//        return ResponseEntity.ok( usersMovieResponseDtos );
-//    }
-
-
-//    @PutMapping( "/{movieId}" )
-//    public ResponseEntity< MovieResponseDto > updateMovie(
-//            @PathVariable Long movieId, @RequestBody @Valid MovieUpdateDto movieUpdateDto ) {
-//
-//        MovieResponseDto responseDto = movieListService.update( movieListId, movieListUpdateDto );
-//        return ResponseEntity.ok( responseDto );
-//    }
-
-
-//    @PutMapping( "/{movieName}/movie-list/{movieListName}/user/{userName}" )
-//    public ResponseEntity< MovieResponseDto > updateMovie(
-//            @PathVariable Long movieId, @RequestBody @Valid MovieUpdateDto movieUpdateDto ) {
-//
-//        MovieResponseDto responseDto = movieListService.update( movieListId, movieListUpdateDto );
-//        return ResponseEntity.ok( responseDto );
-//    }
-
-
-//    @DeleteMapping( "/{movieId}" )
-//    public ResponseEntity< MovieResponseDto > deleteMovie( @PathVariable Long movieId ) {
-//
-//        MovieResponseDto responseDto = movieService.deleteByIdAndMapToResponse( movieId );
-//        return ResponseEntity.ok( responseDto );
-//    }
-
-
 }
 

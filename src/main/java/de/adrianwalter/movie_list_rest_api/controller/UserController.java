@@ -48,7 +48,8 @@ public class UserController {
     @PostMapping( "" )
     public ResponseEntity< UserResponseShortDto > createNewUser( @Valid @RequestBody UserCreateDto requestBody ) {
 
-        UserResponseShortDto responseDto = userService.createAndMapToShortResponse( requestBody );
+        UserResponseShortDto responseDto = userService.create( requestBody );
+
         return ResponseEntity.ok( responseDto );
     }
 
@@ -57,7 +58,8 @@ public class UserController {
     @GetMapping( "/{userId}" )
     public ResponseEntity< UserResponseShortDto > getUser( @PathVariable Long userId ) {
 
-        UserResponseShortDto responseDto = userService.findUserAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.findUserDetails( userId );
+
         return ResponseEntity.ok( responseDto );
     }
 
@@ -66,39 +68,29 @@ public class UserController {
     @DeleteMapping( "/{userId}" )
     public ResponseEntity< UserResponseShortDto > deleteUser( @PathVariable Long userId ) {
 
-        UserResponseShortDto responseDto = userService.deleteByIdAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.deleteById( userId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: Create test
-    //@GetMapping("/{userId}/details")
+    // @GetMapping("/{userId}/details")
     public ResponseEntity< UserResponseShortDto > getUserDetails( @PathVariable Long userId ) {
 
-        // ToDo: Implement when Movie full implemented
-        // UserShortResponseDto responseDto = userService.findByIdAndMapToDetailedResponse( userId );
+        // ToDo: Implement when Movie full implemented: User with all MovieLists
 
-        UserResponseShortDto responseDto = userService.findUserAndMapToShortResponse( userId );
+        UserResponseShortDto responseDto = userService.findUserDetails( userId );
         return ResponseEntity.ok( responseDto );
     }
 
 
     // ToDo: create test
-    //@GetMapping("/details")
+    // @GetMapping("/details")
     public ResponseEntity< List< UserResponseShortDto > > getAllUsersDetails( Pageable pageable ) {
 
-        // ToDo: Implement when Movie full implemented
+        // ToDo: Implement when Movie full implemented: All Users with all their MovieLists
+
         List< UserResponseShortDto > users = userService.findAll( pageable );
-
-        return ResponseEntity.ok( users );
-    }
-
-
-    // ToDo: in test; ok
-    // @GetMapping("")
-    public ResponseEntity< Page< UserResponseShortDto > > OLD_getAllUsers( Pageable pageable ) {
-
-        Page< UserResponseShortDto > users = userService.UNUSED_findAll( pageable );
 
         return ResponseEntity.ok( users );
     }
