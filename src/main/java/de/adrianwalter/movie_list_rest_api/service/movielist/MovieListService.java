@@ -10,6 +10,8 @@ import de.adrianwalter.movie_list_rest_api.mapper.MovieListMapper;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
 import de.adrianwalter.movie_list_rest_api.service.UserService;
+import de.adrianwalter.movie_list_rest_api.service.movielist.sortandsearch.MovieFilter;
+import de.adrianwalter.movie_list_rest_api.service.movielist.sortandsearch.MovieListSortAndSearchService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,18 @@ public class MovieListService {
 
     private final UserRepository userRepository;
 
+    @Autowired
+    private MovieListSortAndSearchService sortAndSearchService;
+
+
 
     @Autowired
-    public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository ) {
+    public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository,
+                             MovieListSortAndSearchService sortAndSearchService ) {
 
         this.movieListRepository = movieListRepository;
         this.userRepository = userRepository;
+        this.sortAndSearchService = sortAndSearchService;
     }
 
 
@@ -232,4 +240,26 @@ public class MovieListService {
         }
     }
 
+
+    public MovieListMovieOneLineResponseDto findByIdSortAndSearch(
+            Long movieListId, String title, Boolean isRated, Integer minRating, Integer maxRating, Integer year,
+            Integer minYear, Integer maxYear, String genre, String seenOn, String userNoteKeyword, String sortBy,
+            Boolean ascending ) {
+
+        MovieList movieList = this.findById( movieListId );
+
+        // createFilter
+        MovieFilter filter = sortAndSearchService.buildFilter(
+                title, isRated, minRating, maxRating, year, minYear, maxYear, genre, seenOn, userNoteKeyword
+        );
+
+        // filtering and sorting
+        movieList.setMovies( sortAndSearchService.filterAndSort(
+                movieList.getMovies(), filter, sortBy, ascending
+        ) );
+
+
+        return this.mapToCompact( movieList );
+
+    }
 }

@@ -19,17 +19,11 @@ import java.util.List;
 public class MovieListController {
 
     private final MovieListService movieListService;
-    @Autowired
-    private MovieListSortAndSearchService sortAndSearchService;
 
 
-    public MovieListController( MovieListService movieListService,
-                                MovieListSortAndSearchService sortAndSearchService ) {
+    public MovieListController( MovieListService movieListService ) {
 
         this.movieListService = movieListService;
-
-        // @ToDo: move SortAndSearchService into movieListService
-        this.sortAndSearchService = sortAndSearchService;
     }
 
 
@@ -38,9 +32,10 @@ public class MovieListController {
     public ResponseEntity< MovieListMovieOneLineResponseDto > createNewMovieList(
             @Valid @RequestBody MovieListCreateDto requestBody ) {
 
+        //@ToDo: Create StubResponse and return it
+
         MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.create( requestBody );
 
-        //@ToDo: Create StubResponse and return it
         return ResponseEntity.ok( oneLineMovieList );
     }
 
@@ -60,58 +55,37 @@ public class MovieListController {
             @RequestParam( required = false ) String seenOn,
             @RequestParam( required = false ) String userNoteKeyword,
             @RequestParam( defaultValue = "title" ) String sortBy,
-            @RequestParam( defaultValue = "true" ) Boolean ascending,
-            @RequestParam( required = false, defaultValue = "false" ) boolean detailed ) {
+            @RequestParam( defaultValue = "true" ) Boolean ascending ) {
 
-        // @ToDo:
-        // movieListService.findByIdFilteredDetails -> MapToDetailedResponse
-        // movieListService.findByIdFilteredCompact -> MapToOneLineResponse
+        // @ToDo: create and implement optional detailed response
 
         // List to search in and/or filter
-        MovieList movieList = movieListService.findById( movieListId );
 
-        // createFilter
-        MovieFilter filter = sortAndSearchService.buildFilter(
-                title, isRated, minRating, maxRating, year, minYear, maxYear, genre, seenOn, userNoteKeyword
-        );
-
-        // filtering and sorting
-        movieList.setMovies( sortAndSearchService.filterAndSort(
-                movieList.getMovies(),
-                filter,
+        MovieListMovieOneLineResponseDto movieList = movieListService.findByIdSortAndSearch(
+                movieListId,
+                title,
+                isRated,
+                minRating,
+                maxRating,
+                year,
+                minYear,
+                maxYear,
+                genre,
+                seenOn,
+                userNoteKeyword,
                 sortBy,
-                ascending
-        ) );
+                ascending );
 
-
-        MovieListMovieOneLineResponseDto oneLineMovieList =
-                movieListService.mapToCompact( movieList );
-
-        if ( detailed ) {
-
-            // @ToDo
-            return ResponseEntity.ok( oneLineMovieList );
-        }
-
-        return ResponseEntity.ok( oneLineMovieList );
+        return ResponseEntity.ok( movieList );
     }
 
 
     @GetMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList(
-            @PathVariable Long movieListId,
-            @RequestParam( required = false, defaultValue = "false" ) boolean detailed ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
 
-        // @ToDo:
-        //  movieListService.findByIdCompact -> MapToOneLineResponse
+        // @ToDo: create and implement optional detailed response
 
         MovieListMovieOneLineResponseDto mappedMovieList = movieListService.findByIdCompact( movieListId );
-
-        if ( detailed ) {
-
-            // @ToDo
-            return ResponseEntity.ok( mappedMovieList );
-        }
 
         return ResponseEntity.ok( mappedMovieList );
     }
@@ -120,22 +94,13 @@ public class MovieListController {
     // all lists of a certain user
     // ToDo: in test; ok
     @GetMapping( "/user/{userName}" )
-    public ResponseEntity< List< MovieListMovieOneLineResponseDto > > getMovieListsOfUser(
-            @PathVariable String userName,
-            @RequestParam( required = false, defaultValue = "false" ) boolean detailed ) {
+    public ResponseEntity< List< MovieListMovieOneLineResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
 
-        // @ToDo:
-        // movieListService.findByUserNameCompact -> MapToOneLineResponses
-        // movieListService.findByUserNameDetails -> MapToStubResponses
+        // @ToDo: Create MovieListStub as response
+        // @ToDo: create and implement optional detailed response
 
         List< MovieListMovieOneLineResponseDto > usersOneLineMovieLists = movieListService.findByUserName( userName );
 
-        if ( detailed ) {
-
-            return ResponseEntity.ok( usersOneLineMovieLists );
-        }
-
-        // @ToDo: Create MovieListStub as response
         return ResponseEntity.ok( usersOneLineMovieLists );
     }
 
@@ -144,23 +109,14 @@ public class MovieListController {
     @GetMapping( "/{movieListName}/user/{userName}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListByNameAndUserName(
             @PathVariable String userName,
-            @PathVariable String movieListName,
-            @RequestParam( required = false, defaultValue = "false" ) boolean detailed ) {
+            @PathVariable String movieListName ) {
 
-        // @ToDo:
-        // movieListService.findByNameAndUserNameCompact -> MapToOneLineResponses
-        // movieListService.findByNameAndUserNameDetails -> MapToDetailledResponses
-
+        // @ToDo create and implement optional detailed response
 
         MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.findByNameAndUserName(
                 movieListName, userName
         );
 
-        if ( detailed ) {
-
-            // @ToDo
-            return null;
-        }
 
         return ResponseEntity.ok( oneLineMovieList );
     }
@@ -170,10 +126,8 @@ public class MovieListController {
     @DeleteMapping( "/{movieListId}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
 
-        MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.deleteById(
-                movieListId
-        );
-        
+        MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.deleteById( movieListId );
+
         return ResponseEntity.ok( oneLineMovieList );
     }
 
@@ -183,9 +137,7 @@ public class MovieListController {
     public ResponseEntity< MovieListMovieOneLineResponseDto > updateMovieList(
             @PathVariable Long movieListId, @RequestBody @Valid MovieListUpdateDto movieListUpdateDto ) {
 
-        MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.update(
-                movieListId, movieListUpdateDto
-        );
+        MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.update( movieListId, movieListUpdateDto );
 
         // @ToDo: Create MovieListStub as response
         return ResponseEntity.ok( oneLineMovieList );
