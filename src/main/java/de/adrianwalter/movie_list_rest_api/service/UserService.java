@@ -72,34 +72,25 @@ public class UserService {
 
     public UserResponseShortDto update( Long userId, UserUpdateDto userUpdateDTO ) {
 
-        User user = this.updateUser( userId, userUpdateDTO );
+        User user = this.findUserById( userId );
+        User updatedUser = this.updateUserFields( user, userUpdateDto );
 
-        userRepository.save( user );
+        userRepository.save( updatedUser );
 
-        return this.userMapper.mapToShortResponseDto( user );
+        return this.userMapper.mapToShortResponseDto( updatedUser );
 
     }
 
 
-    private User updateUser( Long userId, UserUpdateDto userUpdateDto ) {
+    private User updateUserFields( User user, UserUpdateDto userUpdateDto ) {
 
         if ( userUpdateDto.getUserName().isBlank() ) {
 
             throw new InvalidBodyException();
         }
+        else if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
 
-        User user = this.findUserById( userId );
-        this.mapToUserIfNameNotExisting( user, userUpdateDto );
-
-        return user;
-    }
-
-
-    private User mapToUserIfNameNotExisting( User user, UserUpdateDto userUpdateDto ) {
-
-        if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
-
-            throw new NameAlreadyExistsException( "User with the name " + userUpdateDto.getUserName() + " already exists!" );
+            throw new NameAlreadyExistsException( "User with name " + userUpdateDto.getUserName() + " already exists!" );
         }
 
         return this.userMapper.mapToUser( user, userUpdateDto );

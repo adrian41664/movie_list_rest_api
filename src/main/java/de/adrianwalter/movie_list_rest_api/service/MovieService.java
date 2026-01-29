@@ -188,7 +188,24 @@ public class MovieService {
 
     public MovieResponseBasicFullOwnershipDto update( Long movieId, @Valid MovieUpdateDto movieUpdateDto ) {
 
+        Movie movie = this.findById( movieId );
+        Movie updatedMovie = this.updateMovieFields( movie, movieUpdateDto );
 
+        movieRepository.save( updatedMovie );
+
+        return this.movieMapper.mapToMovieResponseDto( updatedMovie );
+    }
+
+
+    private Movie updateMovieFields( Movie movie, @Valid MovieUpdateDto movieUpdateDto ) {
+
+        if( this.movieListHasMovieWithSameName( movie.getMovieList().getMovieListId(), movie.getMovieTitle() ) ) {
+
+            throw new NameAlreadyExistsException( "Movie with title " + movieUpdateDto.getMovieTitle() +
+                    " already exists on MovieList " +  movie.getMovieList().getMovieListName() );
+        }
+
+        return this.movieMapper.mapToMovie( movie, movieUpdateDto );
     }
 
 

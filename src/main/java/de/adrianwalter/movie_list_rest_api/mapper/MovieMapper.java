@@ -7,6 +7,7 @@ import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateOneLin
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -84,7 +85,7 @@ public class MovieMapper {
         movie.setReleaseYear( movieCreateDto.getReleaseYear() );
 
         LocalDate seenAt = movieCreateDto.getSeenAt();
-        movie.setSeenAt(seenAt != null ? seenAt : LocalDate.now());
+        movie.setSeenAt( seenAt != null ? seenAt : LocalDate.now() );
 
 
         if ( movieCreateDto instanceof MovieCreateCompleteDto movieCreateCompleteDto ) {
@@ -166,7 +167,7 @@ public class MovieMapper {
         movie.setReleaseYear( movieBatchCreateDto.getReleaseYear() );
 
         LocalDate seenAt = movieBatchCreateDto.getSeenAt();
-        movie.setSeenAt(seenAt != null ? seenAt : LocalDate.now());
+        movie.setSeenAt( seenAt != null ? seenAt : LocalDate.now() );
 
         if ( movieBatchCreateDto instanceof MovieBatchCreateCompleteDto movieBatchCreateCompleteDto ) {
 
@@ -185,5 +186,33 @@ public class MovieMapper {
         movieCreateOneLineDto.setMovieInformation( movieBatchCreateOneLineDto.getMovieInformation() );
 
         return mapToMovie( movieCreateOneLineDto, movieList );
+    }
+
+
+    public Movie mapToMovie( Movie movie, @Valid MovieUpdateDto movieUpdateDto ) {
+
+        if ( movieUpdateDto.getUserRating() != null ) {
+            movie.setUserRating( movieUpdateDto.getUserRating() );
+        }
+        if ( movieUpdateDto.getMovieTitle() != null && !movieUpdateDto.getMovieTitle().isBlank() ) {
+            movie.setMovieTitle( movieUpdateDto.getMovieTitle() );
+        }
+        if ( movieUpdateDto.getReleaseYear() != null ) {
+            movie.setReleaseYear( movieUpdateDto.getReleaseYear() );
+        }
+        if ( movieUpdateDto.getSeenAt() != null ) {
+            movie.setSeenAt( movieUpdateDto.getSeenAt() );
+        }
+        if ( movieUpdateDto.getSeenOn() != null && !movieUpdateDto.getSeenOn().isBlank() ) {
+            movie.setSeenOn( movieUpdateDto.getSeenOn() );
+        }
+        if ( movieUpdateDto.getUserNote() != null && !movieUpdateDto.getUserNote().isBlank() ) {
+            movie.setUserNote( movieUpdateDto.getUserNote() );
+        }
+        if ( movieUpdateDto.getGenre() != null && !movieUpdateDto.getGenre().isBlank() ) {
+            movie.setGenre( movieUpdateDto.getGenre() );
+        }
+
+        return movie;
     }
 }
