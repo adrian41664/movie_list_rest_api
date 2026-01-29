@@ -69,17 +69,17 @@ public class MovieService {
     }
 
 
-    public Movie createAndSaveMovie( MovieCreateSubTypeMarker movieCreateSubType ) {
+    public Movie createAndSave( MovieCreateSubTypeMarker movieCreateSubType ) {
 
         Movie movie = this.mapToMovie( movieCreateSubType );
 
-        return this.createAndSaveMovie( movie );
+        return this.createAndSave( movie );
     }
 
 
     public MovieResponseBasicFullOwnershipDto createAndMapToResponse( MovieCreateSubTypeMarker movieCreateSubType ) {
 
-        Movie newMovie = this.createAndSaveMovie( movieCreateSubType );
+        Movie newMovie = this.createAndSave( movieCreateSubType );
 
         return this.movieMapper.mapToMovieResponseDto( newMovie );
     }
@@ -94,7 +94,7 @@ public class MovieService {
 
             List< MovieResponseOneLineDto > oneLineResponses =
                     this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieListToAddTo ).stream()
-                            .map( this::createAndSaveMovie )
+                            .map( this::createAndSave )
                             .map( this.movieMapper::mapToMovieOneLineResponseDto )
                             .toList();
 
@@ -108,7 +108,7 @@ public class MovieService {
     }
 
 
-    private Movie createAndSaveMovie( Movie movie ) {
+    private Movie createAndSave( Movie movie ) {
 
         long movieListId = movie.getMovieList().getMovieListId();
         String movieName = movie.getMovieTitle();
@@ -174,6 +174,7 @@ public class MovieService {
     }
 
 
+    // @ToDo: Move to MovieMapper
     private MovieResponseBatchCreateOneLineDtos mapToMovieResponseBatchCreateOneLineDtos(
             long movieListId,
             @NonNull List< MovieResponseOneLineDto > oneLineDtos ) {
@@ -189,23 +190,11 @@ public class MovieService {
     public MovieResponseBasicFullOwnershipDto update( Long movieId, @Valid MovieUpdateDto movieUpdateDto ) {
 
         Movie movie = this.findById( movieId );
-        Movie updatedMovie = this.updateMovieFields( movie, movieUpdateDto );
+        Movie updatedMovie = this.movieMapper.mapToMovie( movie, movieUpdateDto );
 
-        movieRepository.save( updatedMovie );
+        this.createAndSave( updatedMovie );
 
         return this.movieMapper.mapToMovieResponseDto( updatedMovie );
-    }
-
-
-    private Movie updateMovieFields( Movie movie, @Valid MovieUpdateDto movieUpdateDto ) {
-
-        if( this.movieListHasMovieWithSameName( movie.getMovieList().getMovieListId(), movie.getMovieTitle() ) ) {
-
-            throw new NameAlreadyExistsException( "Movie with title " + movieUpdateDto.getMovieTitle() +
-                    " already exists on MovieList " +  movie.getMovieList().getMovieListName() );
-        }
-
-        return this.movieMapper.mapToMovie( movie, movieUpdateDto );
     }
 
 
