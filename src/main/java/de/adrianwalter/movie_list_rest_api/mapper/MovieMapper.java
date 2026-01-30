@@ -4,14 +4,17 @@ import de.adrianwalter.movie_list_rest_api.dto.movie.*;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateCompleteDto;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateDto;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateOneLineDto;
+import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieResponseBatchCreateOneLineDtos;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class MovieMapper {
@@ -214,5 +217,17 @@ public class MovieMapper {
         }
 
         return movie;
+    }
+
+
+    public MovieResponseBatchCreateOneLineDtos mapToMovieResponseBatchCreateOneLineDtos(
+            long movieListId,
+            @NonNull List< MovieResponseOneLineDto > oneLineDtos ) {
+
+        MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
+        movieResponseBatch.setMovieListId( movieListId );
+        movieResponseBatch.setMovies( oneLineDtos );
+
+        return movieResponseBatch;
     }
 }

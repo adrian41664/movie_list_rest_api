@@ -36,7 +36,6 @@ public class MovieListService {
     private MovieListSortAndSearchService sortAndSearchService;
 
 
-
     @Autowired
     public MovieListService( MovieListRepository movieListRepository, UserRepository userRepository,
                              MovieListSortAndSearchService sortAndSearchService ) {
@@ -52,92 +51,6 @@ public class MovieListService {
         return movieListRepository.findByMovieListId( movieListId )
                 .orElseThrow( () -> new ResourceNotFoundException(
                         "cant find MovieList with ID " + movieListId ) );
-    }
-
-
-    public MovieListMovieOneLineResponseDto findByIdCompact( Long movieListId ) {
-
-        MovieList movieList = this.findById( movieListId );
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
-    }
-
-    public MovieListMovieOneLineResponseDto mapToCompact( MovieList movieList ) {
-
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
-    }
-
-
-    public MovieListMovieOneLineResponseDto deleteById( Long movieListId ) {
-
-        MovieList movieList = this.findById( movieListId );
-
-        movieListRepository.deleteById( movieListId );
-
-        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
-    }
-
-
-    private boolean userHasMovieListWithName( long userId, String movieListName ) {
-
-        Optional< MovieList > movieListSearch = movieListRepository
-                .findByUser_UserIdAndMovieListName( userId, movieListName );
-
-        return movieListSearch.isPresent();
-    }
-
-
-    // ToDo: delete
-    private boolean userHasMovieListWithName( String userName, String movieListName ) {
-
-        Optional< MovieList > movieListSearch = movieListRepository
-                .findByUser_UserNameAndMovieListName( userName, movieListName );
-
-        return movieListSearch.isPresent();
-    }
-
-
-    public MovieListMovieOneLineResponseDto create( MovieListCreateDto movieListCreateDto ) {
-
-        User user = this.findUser( movieListCreateDto );
-
-        MovieList movieList = this.movieListMapper.mapToMovieList( movieListCreateDto, user );
-
-        long userId = movieList.getUser().getUserId();
-        String newMovieListName = movieList.getMovieListName();
-
-        if ( this.userHasMovieListWithName( userId, newMovieListName ) ) {
-
-            throw new NameAlreadyExistsException(
-                    "Cant create new MovieList; User already owns MovieList with the given name" );
-        }
-
-        movieListRepository.save( movieList );
-
-        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
-    }
-
-
-    private User findUser( MovieListCreateDto movieListCreateDto ) {
-
-        if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDto ) {
-
-            return this.userService.findUserByName( nameDto.getUserName() );
-
-        } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
-
-            return this.userService.findUserById( idDto.getUserId() );
-        }
-
-        throw new InvalidBodyException( "Body is invalid!" );
-    }
-
-
-    // ToDo: delete
-    public List< MovieListMovieOneLineResponseDto > findByUserName( long userId ) {
-
-        User user = this.userService.findUserById( userId );
-
-        return movieListMapper.mapToOneLineResponseDtoLists( user.getMovieLists() );
     }
 
 
@@ -164,36 +77,6 @@ public class MovieListService {
     }
 
 
-    // ToDo: delete
-    public MovieListMovieOneLineResponseDto findByNameAndUserId( String movieListName, long userId ) {
-
-        if ( this.userService.userIsExisting( userId ) ) {
-
-            MovieList movieList = this.findMovieListByUserIdAndMovieListName( movieListName, userId );
-
-            return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
-
-        } else {
-
-            throw new ResourceNotFoundException( "cant find UserId " + userId );
-        }
-    }
-
-
-    private MovieList findMovieListByNameAndUserName( String movieListName, String userName ) {
-
-        return this.movieListRepository.findByUser_UserNameAndMovieListName( userName, movieListName )
-                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
-    }
-
-
-    private MovieList findMovieListByUserIdAndMovieListName( String movieListName, long userId ) {
-
-        return this.movieListRepository.findByUser_UserIdAndMovieListName( userId, movieListName )
-                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
-    }
-
-
     public MovieListMovieOneLineResponseDto update( Long movieListId, @Valid MovieListUpdateDto movieListUpdateDto ) {
 
         MovieList movieList = this.updateMovieList( movieListId, movieListUpdateDto );
@@ -203,41 +86,47 @@ public class MovieListService {
     }
 
 
-    private MovieList updateMovieList( Long movieListId, @Valid MovieListUpdateDto movieListUpdateDto ) {
+    public MovieListMovieOneLineResponseDto findByIdCompact( Long movieListId ) {
 
         MovieList movieList = this.findById( movieListId );
-
-        String newMovieListName = movieListUpdateDto.getMovieListName();
-
-        if ( ! newMovieListName.isBlank() ) {
-
-            this.changeNameIfNotExisting( movieList, newMovieListName );
-
-        } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
-
-            movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
-
-        } else {
-
-            throw new InvalidBodyException();
-        }
-
-        return movieList;
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 
-    void changeNameIfNotExisting( MovieList movieList, String movieListName ) {
+    public MovieListMovieOneLineResponseDto mapToCompact( MovieList movieList ) {
+
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
+    }
+
+
+    public MovieListMovieOneLineResponseDto deleteById( Long movieListId ) {
+
+        MovieList movieList = this.findById( movieListId );
+
+        movieListRepository.deleteById( movieList.getMovieListId() );
+
+        return movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
+    }
+
+
+    public MovieListMovieOneLineResponseDto create( MovieListCreateDto movieListCreateDto ) {
+
+        User user = this.findUser( movieListCreateDto );
+
+        MovieList movieList = this.movieListMapper.mapToMovieList( movieListCreateDto, user );
 
         long userId = movieList.getUser().getUserId();
+        String newMovieListName = movieList.getMovieListName();
 
-        if ( this.userHasMovieListWithName( userId, movieListName ) ) {
+        if ( this.userHasMovieListWithName( userId, newMovieListName ) ) {
 
             throw new NameAlreadyExistsException(
-                    "Cant change name of MovieList; User already owns MovieList with the given name" );
-        } else {
-
-            movieList.setMovieListName( movieListName );
+                    "Cant create new MovieList; User already owns MovieList with the given name" );
         }
+
+        movieListRepository.save( movieList );
+
+        return this.movieListMapper.mapToMovieListMovieOneLineResponseDto( movieList );
     }
 
 
@@ -262,4 +151,75 @@ public class MovieListService {
         return this.mapToCompact( movieList );
 
     }
+
+
+    private boolean userHasMovieListWithName( long userId, String movieListName ) {
+
+        Optional< MovieList > movieListSearch = movieListRepository
+                .findByUser_UserIdAndMovieListName( userId, movieListName );
+
+        return movieListSearch.isPresent();
+    }
+
+
+    private User findUser( MovieListCreateDto movieListCreateDto ) {
+
+        if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDto ) {
+
+            return this.userService.findUserByName( nameDto.getUserName() );
+
+        } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
+
+            return this.userService.findUserById( idDto.getUserId() );
+        }
+
+        throw new InvalidBodyException( "Body is invalid!" );
+    }
+
+
+    private MovieList findMovieListByNameAndUserName( String movieListName, String userName ) {
+
+        return this.movieListRepository.findByUser_UserNameAndMovieListName( userName, movieListName )
+                .orElseThrow( () -> new ResourceNotFoundException( "cant find MovieListName " + movieListName ) );
+    }
+
+
+    private MovieList updateMovieList( Long movieListId, @Valid MovieListUpdateDto movieListUpdateDto ) {
+
+        MovieList movieList = this.findById( movieListId );
+
+        String newMovieListName = movieListUpdateDto.getMovieListName();
+
+        if ( !newMovieListName.isBlank() ) {
+
+            this.changeNameIfNotExisting( movieList, newMovieListName );
+
+        } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
+
+            movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
+
+        } else {
+
+            throw new InvalidBodyException();
+        }
+
+        return movieList;
+    }
+
+
+    private void changeNameIfNotExisting( MovieList movieList, String movieListName ) {
+
+        long userId = movieList.getUser().getUserId();
+
+        if ( this.userHasMovieListWithName( userId, movieListName ) ) {
+
+            throw new NameAlreadyExistsException(
+                    "Cant change name of MovieList; User already owns MovieList with the given name" );
+        } else {
+
+            movieList.setMovieListName( movieListName );
+        }
+    }
+
+
 }

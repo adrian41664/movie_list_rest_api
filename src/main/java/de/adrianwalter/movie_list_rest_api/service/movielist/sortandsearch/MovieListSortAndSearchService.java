@@ -18,12 +18,12 @@ public class MovieListSortAndSearchService {
             String sortBy,
             boolean ascending ) {
 
-        Stream< Movie > stream = movies.stream();
+        Stream< Movie > movieStream = movies.stream();
 
         // apply filter
         if ( filter != null ) {
 
-            stream = stream.filter( filter::matches );
+            movieStream = movieStream.filter( filter::matches );
         }
 
         // apply sorting
@@ -33,11 +33,11 @@ public class MovieListSortAndSearchService {
 
             if ( comparator != null ) {
 
-                stream = stream.sorted( ascending ? comparator : comparator.reversed() );
+                movieStream = movieStream.sorted( ascending ? comparator : comparator.reversed() );
             }
         }
 
-        return stream.collect( Collectors.toList() );
+        return movieStream.collect( Collectors.toList() );
     }
 
 

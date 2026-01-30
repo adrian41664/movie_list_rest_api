@@ -33,14 +33,6 @@ public class UserService {
     }
 
 
-    public Page< UserResponseShortDto > UNUSED_findAll( Pageable pageable ) {
-
-        Page< User > allUsersPage = userRepository.findAll( pageable );
-
-        return allUsersPage.map( ( User user ) -> this.userMapper.mapToShortResponseDto( user ) );
-    }
-
-
     public List< UserResponseShortDto > findAll( Pageable pageable ) {
 
         Page< User > allUsersPage = userRepository.findAll( pageable );
@@ -64,13 +56,13 @@ public class UserService {
 
         User user = this.findUserById( userId );
 
-        userRepository.deleteById( userId );
+        userRepository.deleteById( user.getUserId() );
 
         return this.userMapper.mapToShortResponseDto( user );
     }
 
 
-    public UserResponseShortDto update( Long userId, UserUpdateDto userUpdateDTO ) {
+    public UserResponseShortDto update( Long userId, UserUpdateDto userUpdateDto ) {
 
         User user = this.findUserById( userId );
         User updatedUser = this.updateUserFields( user, userUpdateDto );
@@ -80,22 +72,6 @@ public class UserService {
         return this.userMapper.mapToShortResponseDto( updatedUser );
 
     }
-
-
-    private User updateUserFields( User user, UserUpdateDto userUpdateDto ) {
-
-        if ( userUpdateDto.getUserName().isBlank() ) {
-
-            throw new InvalidBodyException();
-        }
-        else if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
-
-            throw new NameAlreadyExistsException( "User with name " + userUpdateDto.getUserName() + " already exists!" );
-        }
-
-        return this.userMapper.mapToUser( user, userUpdateDto );
-    }
-
 
     public User findUserById( long userId ) {
 
@@ -122,14 +98,6 @@ public class UserService {
     }
 
 
-    public boolean userIsExisting( long userId ) {
-
-        Optional< User > existingUser = userRepository.findByUserId( userId );
-
-        return existingUser.isPresent();
-    }
-
-
     public UserResponseShortDto create( UserCreateDto userCreateDTO ) {
 
         if ( this.userIsExisting( userCreateDTO.getUserName() ) ) {
@@ -142,6 +110,21 @@ public class UserService {
         userRepository.save( user );
 
         return this.userMapper.mapToShortResponseDto( user );
+    }
+
+
+    private User updateUserFields( User user, UserUpdateDto userUpdateDto ) {
+
+        if ( userUpdateDto.getUserName().isBlank() ) {
+
+            throw new InvalidBodyException();
+        }
+        else if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
+
+            throw new NameAlreadyExistsException( "User with name " + userUpdateDto.getUserName() + " already exists!" );
+        }
+
+        return this.userMapper.mapToUser( user, userUpdateDto );
     }
 
 

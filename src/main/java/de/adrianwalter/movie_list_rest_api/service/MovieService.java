@@ -13,10 +13,7 @@ import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import de.adrianwalter.movie_list_rest_api.service.movielist.MovieListService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,36 +39,9 @@ public class MovieService {
     }
 
 
-    private Page< Movie > findAll( Pageable pageable ) {
-        return movieRepository.findAll( pageable );
-    }
-
-
-    private Movie findById( Long id ) {
-
-        Optional< Movie > movie = movieRepository.findById( id );
-
-        if ( movie.isEmpty() ) {
-            throw new ResourceNotFoundException();
-        }
-
-        return movie.get();
-    }
-
-
-    private void deleteById( Long id ) {
-        movieRepository.deleteById( id );
-    }
-
-
-    private Optional< Movie > findByMovieName( String movieName ) {
-        return movieRepository.findByMovieTitle( movieName );
-    }
-
-
     public Movie createAndSave( MovieCreateSubTypeMarker movieCreateSubType ) {
 
-        Movie movie = this.mapToMovie( movieCreateSubType );
+        Movie movie = this.mapSubtypeToMovie( movieCreateSubType );
 
         return this.createAndSave( movie );
     }
@@ -98,13 +68,49 @@ public class MovieService {
                             .map( this.movieMapper::mapToMovieOneLineResponseDto )
                             .toList();
 
-            return mapToMovieResponseBatchCreateOneLineDtos( movieListToAddTo.getMovieListId(), oneLineResponses );
+            return movieMapper.mapToMovieResponseBatchCreateOneLineDtos( movieListToAddTo.getMovieListId(), oneLineResponses );
 
         } else {
 
             throw new InvalidBodyException( "Body is invalid!" );
         }
+    }
 
+
+    public MovieResponseBasicFullOwnershipDto update( Long movieId, @Valid MovieUpdateDto movieUpdateDto ) {
+
+        Movie movie = this.findById( movieId );
+        Movie updatedMovie = this.movieMapper.mapToMovie( movie, movieUpdateDto );
+
+        this.createAndSave( updatedMovie );
+
+        return this.movieMapper.mapToMovieResponseDto( updatedMovie );
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto findMovie( Long movieId ) {
+
+        Movie movie = this.findMovieById( movieId );
+
+        return this.movieMapper.mapToMovieResponseDto( movie );
+    }
+
+
+    public MovieResponseBasicFullOwnershipDto delete( Long movieId ) {
+
+        Movie movie = this.findById( movieId );
+
+        this.movieRepository.deleteById( movie.getMovieId() );
+
+        return this.movieMapper.mapToMovieResponseDto( movie );
+    }
+
+
+    private Movie findById( Long movieId ) {
+
+        return movieRepository.findById( movieId )
+                .orElseThrow( () -> new ResourceNotFoundException(
+                        "cant find Movie with ID " + movieId ) );
     }
 
 
@@ -153,19 +159,20 @@ public class MovieService {
     }
 
 
-    private Movie mapToMovie( MovieCreateSubTypeMarker movieCreateSubTypeDto ) {
+    private Movie mapSubtypeToMovie( MovieCreateSubTypeMarker movieCreateSubTypeDto ) {
 
         if ( movieCreateSubTypeDto instanceof MovieCreateDto movieCreateDto ) {
 
-            MovieList movieList = this.movieListService.findById( movieCreateDto.getMovieListId() );
-
-            return this.movieMapper.mapToMovie( movieCreateDto, movieList );
+            return this.movieMapper.mapToMovie(
+                    movieCreateDto,
+                    this.movieListService.findById( movieCreateDto.getMovieListId() ) );
 
         } else if ( movieCreateSubTypeDto instanceof MovieCreateOneLineDto movieCreateOneLineDto ) {
 
-            MovieList movieList = this.movieListService.findById( movieCreateOneLineDto.getMovieListId() );
-
-            return this.movieMapper.mapToMovie( movieCreateOneLineDto, movieList );
+            return this.movieMapper.mapToMovie(
+                    movieCreateOneLineDto,
+                    this.movieListService.findById( movieCreateOneLineDto.getMovieListId() )
+            );
 
         } else {
 
@@ -174,38 +181,12 @@ public class MovieService {
     }
 
 
-    // @ToDo: Move to MovieMapper
-    private MovieResponseBatchCreateOneLineDtos mapToMovieResponseBatchCreateOneLineDtos(
-            long movieListId,
-            @NonNull List< MovieResponseOneLineDto > oneLineDtos ) {
+    private Movie findMovieById( long movieId ) {
 
-        MovieResponseBatchCreateOneLineDtos movieResponseBatch = new MovieResponseBatchCreateOneLineDtos();
-        movieResponseBatch.setMovieListId( movieListId );
-        movieResponseBatch.setMovies( oneLineDtos );
-
-        return movieResponseBatch;
+        return this.movieRepository.findById( movieId )
+                .orElseThrow( () -> new ResourceNotFoundException(
+                        "cant find Movie with ID " + movieId ) );
     }
 
 
-    public MovieResponseBasicFullOwnershipDto update( Long movieId, @Valid MovieUpdateDto movieUpdateDto ) {
-
-        Movie movie = this.findById( movieId );
-        Movie updatedMovie = this.movieMapper.mapToMovie( movie, movieUpdateDto );
-
-        this.createAndSave( updatedMovie );
-
-        return this.movieMapper.mapToMovieResponseDto( updatedMovie );
-    }
-
-
-    public MovieResponseBasicFullOwnershipDto findMovie( Long movieId ) {
-
-        // @ToDo: implement
-    }
-
-
-    public MovieResponseBasicFullOwnershipDto delete( Long movieId ) {
-
-        // @ToDo: implement
-    }
 }
