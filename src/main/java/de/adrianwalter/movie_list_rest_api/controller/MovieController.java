@@ -20,13 +20,11 @@ public class MovieController {
 
 
     private final MovieService movieService;
-    private final UserService userService;
 
 
-    public MovieController( MovieService movieService, UserService userService ) {
+    public MovieController( MovieService movieService ) {
 
         this.movieService = movieService;
-        this.userService = userService;
     }
 
 
@@ -51,15 +49,6 @@ public class MovieController {
         return ResponseEntity.ok( movies );
     }
 
-
-    // ToDo: in test
-    @GetMapping( "" )
-    public ResponseEntity< List< UserResponseShortDto > > getAllUsers( Pageable pageable ) {
-
-        List< UserResponseShortDto > users = userService.findAll( pageable );
-
-        return ResponseEntity.ok( users );
-    }
 
 
     // ToDo: test
