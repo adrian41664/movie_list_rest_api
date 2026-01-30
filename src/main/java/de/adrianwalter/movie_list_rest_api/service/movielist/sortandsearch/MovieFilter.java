@@ -9,10 +9,12 @@ public interface MovieFilter {
     boolean matches( Movie movie );
 
     default MovieFilter and( MovieFilter other ) {
+
         return movie -> this.matches( movie ) && other.matches( movie );
     }
 
     default MovieFilter or( MovieFilter other ) {
+
         return movie -> this.matches( movie ) || other.matches( movie );
     }
 }

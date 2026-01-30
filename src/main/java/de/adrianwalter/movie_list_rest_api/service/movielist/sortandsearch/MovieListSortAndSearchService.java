@@ -22,13 +22,17 @@ public class MovieListSortAndSearchService {
 
         // apply filter
         if ( filter != null ) {
+
             stream = stream.filter( filter::matches );
         }
 
         // apply sorting
         if ( sortBy != null && !sortBy.isEmpty() ) {
+
             Comparator< Movie > comparator = getComparator( sortBy );
+
             if ( comparator != null ) {
+
                 stream = stream.sorted( ascending ? comparator : comparator.reversed() );
             }
         }
@@ -39,12 +43,14 @@ public class MovieListSortAndSearchService {
 
     // Overloaded "default" method
     public List< Movie > filterAndSort( List< Movie > movies, MovieFilter filter ) {
+
         return filterAndSort( movies, filter, "title", true );
     }
 
 
     // Comparator based on Movie field names
     private Comparator< Movie > getComparator( String sortBy ) {
+
         return switch ( sortBy.toLowerCase() ) {
 
             case "title" -> Comparator.comparing(
@@ -90,7 +96,8 @@ public class MovieListSortAndSearchService {
         }
         if ( year != null ) {
             filter = filter.and( MovieFilters.byYear( year ) );
-        } else if ( minYear != null || maxYear != null ) {
+        }
+        else if ( minYear != null || maxYear != null ) {
             filter = filter.and( MovieFilters.byYearRange( minYear, maxYear ) );
         }
         if ( genre != null && !genre.isEmpty() ) {
