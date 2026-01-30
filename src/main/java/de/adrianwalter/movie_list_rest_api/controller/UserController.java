@@ -18,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
+
     public UserController( UserService userService ) {
 
         this.userService = userService;
@@ -69,6 +70,7 @@ public class UserController {
     public ResponseEntity< UserResponseShortDto > deleteUser( @PathVariable Long userId ) {
 
         UserResponseShortDto responseDto = userService.deleteById( userId );
+
         return ResponseEntity.ok( responseDto );
     }
 
@@ -77,9 +79,10 @@ public class UserController {
     // @GetMapping("/{userId}/details")
     public ResponseEntity< UserResponseShortDto > getUserDetails( @PathVariable Long userId ) {
 
-        // ToDo: Implement when Movie full implemented: User with all MovieLists
+        // ToDo: Implement when Movie full implemented: User with all MovieLists, UserResponseDto
 
         UserResponseShortDto responseDto = userService.findUserDetails( userId );
+
         return ResponseEntity.ok( responseDto );
     }
 
@@ -88,7 +91,7 @@ public class UserController {
     // @GetMapping("/details")
     public ResponseEntity< List< UserResponseShortDto > > getAllUsersDetails( Pageable pageable ) {
 
-        // ToDo: Implement when Movie full implemented: All Users with all their MovieLists
+        // ToDo: Implement when Movie full implemented: All Users with all their MovieLists, UserResponseDto
 
         List< UserResponseShortDto > users = userService.findAll( pageable );
 
