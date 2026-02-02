@@ -169,7 +169,7 @@ public class UserController {
     @PostMapping( "" )
     public ResponseEntity< UserResponseShortDto > createNewUser(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "New username to create a new user",
+                    description = "New username to create a new user. Must be unique.",
                     required = true,
                     content = @Content( schema = @Schema( implementation = UserCreateDto.class ) )
             )

@@ -1,8 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.controller;
 
-import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListCreateDto;
-import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListMovieOneLineResponseDto;
-import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListUpdateDto;
+import de.adrianwalter.movie_list_rest_api.dto.movielist.*;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserUpdateDto;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
@@ -24,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag( name = "movie-lists", description = "Manage Users Movie-Lists" )
+@Tag( name = "movie-lists", description = "Manage users movie-Lists. " +
+        "Please note: Some endpoints do not yet offer the final intended functionality " +
+        "or their functions may change in the future." )
 @RestController
 @RequestMapping( "/movie-lists" )
 public class MovieListController {
@@ -54,20 +54,23 @@ public class MovieListController {
             @ApiResponse(
                     responseCode = "409",
                     description = "Conflict - User already owns a movie-list with the given name",
-                    content = @Content(schema = @Schema(hidden = true))
+                    content = @Content( schema = @Schema( hidden = true ) )
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
-                    content = @Content(schema = @Schema(hidden = true))
+                    content = @Content( schema = @Schema( hidden = true ) )
             )
     } )
     @PostMapping( "" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > createNewMovieList(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Create a new movie-list for a given user. User can be given by name or ID",
+                    description = "Create a new movie-list for a given user. User can be given by name or ID via 'type'" +
+                            "-key and must be either 'byName' or 'byId'",
                     required = true,
-                    content = @Content( schema = @Schema( implementation = MovieListCreateDto.class ) ) )
+                    content = @Content(
+                            schema = @Schema( oneOf = { MovieListCreateByUserIdBodyDto.class,
+                                    MovieListCreateByUserNameBodyDto.class } ) ) )
             @Valid @RequestBody MovieListCreateDto requestBody ) {
 
         //@ToDo: Create StubResponse and return it
@@ -78,63 +81,62 @@ public class MovieListController {
     }
 
 
-
     @Operation(
             summary = "Filter and search movies in a given movie list",
             description = "Search and filter movies within a specific movie list using various optional criteria"
     )
-    @ApiResponses(value = {
+    @ApiResponses( value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Search results retrieved successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = MovieListMovieOneLineResponseDto.class))
+                            schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "Movie list not found",
-                    content = @Content(schema = @Schema(hidden = true))
+                    content = @Content( schema = @Schema( hidden = true ) )
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
-                    content = @Content(schema = @Schema(hidden = true))
+                    content = @Content( schema = @Schema( hidden = true ) )
             )
-    })
+    } )
     @GetMapping( "/{movieListId}/search" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListSearch(
 
-            @Parameter(description = "ID of the movie list", required = true, example = "1")
+            @Parameter( description = "ID of the movie list", required = true, example = "1" )
             @PathVariable Long movieListId,
-            @Parameter(description = "Filter by movie title (partial match)", example = "Matrix")
+            @Parameter( description = "Filter by movie title (partial match)", example = "Matrix" )
             @RequestParam( required = false ) String title,
-            @Parameter(description = "Filter by user rating status (rating equals zero or greater)", example = "true")
+            @Parameter( description = "Filter by user rating status (rating equals zero or greater)", example = "true" )
             @RequestParam( required = false ) Boolean isRated,
-            @Parameter(description = "Filter by minimum rating", example = "3")
+            @Parameter( description = "Filter by minimum rating", example = "3" )
             @RequestParam( required = false ) Integer minRating,
-            @Parameter(description = "Filter by maximum rating", example = "7")
+            @Parameter( description = "Filter by maximum rating", example = "7" )
             @RequestParam( required = false ) Integer maxRating,
-            @Parameter(description = "Filter by specific year", example = "1999")
+            @Parameter( description = "Filter by specific year", example = "1999" )
             @RequestParam( required = false ) Integer year,
-            @Parameter(description = "Filter by minimum release year", example = "2000")
+            @Parameter( description = "Filter by minimum release year", example = "2000" )
             @RequestParam( required = false ) Integer minYear,
-            @Parameter(description = "Filter by maximum release year", example = "2010")
+            @Parameter( description = "Filter by maximum release year", example = "2010" )
             @RequestParam( required = false ) Integer maxYear,
-            @Parameter(description = "Filter by genre (partial match)", example = "Thriller")
+            @Parameter( description = "Filter by genre (partial match)", example = "Thriller" )
             @RequestParam( required = false ) String genre,
-            @Parameter(description = "Filter by streaming platform (partial match)", example = "Prime")
+            @Parameter( description = "Filter by streaming platform (partial match)", example = "Prime" )
             @RequestParam( required = false ) String seenOn,
-            @Parameter(description = "Search in user notes (partial match)", example = "terrific")
+            @Parameter( description = "Search in user notes (partial match)", example = "terrific" )
             @RequestParam( required = false ) String userNoteKeyword,
             @Parameter(
-                    description = "Sort field",
+                    description = "Sort by movie attribute",
                     example = "user-rating",
-                    schema = @Schema(allowableValues = {"title, rating OR user-rating, year OR release-year, genre, date"})
+                    schema = @Schema( allowableValues = { "title, rating OR user-rating, year OR release-year, genre, date" } )
             )
             @RequestParam( defaultValue = "title" ) String sortBy,
-            @Parameter(description = "Sort direction (true = ascending, false = descending)", example = "true")
+            @Parameter( description = "Sort direction (true = ascending, false = descending)", example = "true" )
             @RequestParam( defaultValue = "true" ) Boolean ascending ) {
 
         // @ToDo: create and implement optional detailed response
@@ -160,8 +162,30 @@ public class MovieListController {
     }
 
 
+    @Operation( summary = "Get a movie-list by ID" )
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Movie-list retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class ) )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found - No movie-list with given ID",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            )
+    } )
     @GetMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList( @PathVariable Long movieListId ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieList(
+            @Parameter( description = "ID of movie-list to retrieve", required = true )
+            @PathVariable Long movieListId ) {
 
         // @ToDo: create and implement optional detailed response
 
@@ -171,10 +195,31 @@ public class MovieListController {
     }
 
 
-    // all lists of a certain user
-    // ToDo: in test; ok
+    @Operation( summary = "Get all movie-list of user by username" )
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of movie-lists retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(
+                                    schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class ) ) )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found - No user with given name",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            )
+    } )
     @GetMapping( "/user/{userName}" )
-    public ResponseEntity< List< MovieListMovieOneLineResponseDto > > getMovieListsOfUser( @PathVariable String userName ) {
+    public ResponseEntity< List< MovieListMovieOneLineResponseDto > > getMovieListsOfUser(
+            @Parameter( description = "Name of user to retrieve", required = true )
+            @PathVariable String userName ) {
 
         // @ToDo: Create MovieListStub as response
         // @ToDo: create and implement optional detailed response
@@ -185,10 +230,32 @@ public class MovieListController {
     }
 
 
-    // ToDo: in test; ok
+    @Operation( summary = "Get a movie-list of user by its name and username" )
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Movie-list retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(
+                                    schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class ) ) )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found - No user or movie-list with given name",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            )
+    } )
     @GetMapping( "/{movieListName}/user/{userName}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > getMovieListByNameAndUserName(
+            @Parameter( description = "Name of user to retrieve movie-list from", required = true )
             @PathVariable String userName,
+            @Parameter( description = "Name of the movie-list to retrieve", required = true )
             @PathVariable String movieListName ) {
 
         // @ToDo create and implement optional detailed response
@@ -202,9 +269,28 @@ public class MovieListController {
     }
 
 
-    // ToDo: in test; ok
+    @Operation( summary = "Delete a movie-list by ID" )
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Movie-list deleted successfully",
+                    content = @Content( schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class ) )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found - No movie-list with given ID",
+                    content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(hidden = true))
+            )
+    } )
     @DeleteMapping( "/{movieListId}" )
-    public ResponseEntity< MovieListMovieOneLineResponseDto > deleteMovieList( @PathVariable Long movieListId ) {
+    public ResponseEntity< MovieListMovieOneLineResponseDto > deleteMovieList(
+            @Parameter( description = "ID of movie-list to delete", required = true )
+            @PathVariable Long movieListId ) {
 
         MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.deleteById( movieListId );
 
@@ -212,10 +298,45 @@ public class MovieListController {
     }
 
 
-    // ToDo: in test; ok
+    @Operation(
+            summary = "Update a movie-list",
+            description = "Change the name of the movie-list or change its description. Name must be unique."
+    )
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully applied changes",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema( implementation = MovieListMovieOneLineResponseDto.class )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not Found - No movie-list with given ID",
+                    content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict - Name is already taken",
+                    content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(hidden = true))
+            )
+    } )
     @PutMapping( "/{movieListId}" )
     public ResponseEntity< MovieListMovieOneLineResponseDto > updateMovieList(
-            @PathVariable Long movieListId, @RequestBody @Valid MovieListUpdateDto movieListUpdateDto ) {
+            @Parameter( description = "ID of movie-list to update", required = true )
+            @PathVariable Long movieListId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "New name of the movie-list or new description. Name must be unique. " +
+                            "An empty value leads to no change.",
+                    required = true,
+                    content = @Content( schema = @Schema( implementation = MovieListUpdateDto.class ) ) )
+            @RequestBody @Valid MovieListUpdateDto movieListUpdateDto ) {
 
         MovieListMovieOneLineResponseDto oneLineMovieList = movieListService.update( movieListId, movieListUpdateDto );
 
