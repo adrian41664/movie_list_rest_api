@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag( name = "Users", description = "Manage Users" )
 @RestController
 @RequestMapping( "/users" )
-@Tag( name = "Users", description = "Manage Users" )
 public class UserController {
 
     private final UserService userService;
@@ -63,8 +63,6 @@ public class UserController {
                     content = @Content(schema = @Schema(hidden = true))
             )
     } )
-
-
     @PutMapping( "/{userId}" )
     public ResponseEntity< UserResponseShortDto > updateUser(
             @Parameter( description = "ID of user to update", required = true )
@@ -276,3 +274,5 @@ public class UserController {
 
 
 }
+
+

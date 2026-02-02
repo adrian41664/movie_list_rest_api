@@ -57,17 +57,21 @@ public class MovieListSortAndSearchService {
                     Movie::getMovieTitle,
                     Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
             );
-            case "rating", "userrating" -> Comparator.comparing(
+            case "rating", "user-rating" -> Comparator.comparing(
                     Movie::getUserRating,
                     Comparator.nullsLast( Comparator.naturalOrder() )
             );
-            case "year", "releaseyear" -> Comparator.comparing(
+            case "year", "release-year" -> Comparator.comparing(
                     Movie::getReleaseYear,
                     Comparator.nullsLast( Comparator.naturalOrder() )
             );
             case "genre" -> Comparator.comparing(
                     Movie::getGenre,
                     Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
+            );
+            case "date" -> Comparator.comparing(
+                    Movie::getSeenAt,
+                    Comparator.nullsLast( Comparator.naturalOrder() )
             );
             default -> null;
         };
