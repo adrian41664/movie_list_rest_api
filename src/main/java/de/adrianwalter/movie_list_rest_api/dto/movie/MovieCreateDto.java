@@ -15,7 +15,7 @@ public abstract class MovieCreateDto implements MovieCreateSubTypeMarker {
 
     @Schema( description = "Id of the movie-list to which this movie should be added", example = "1" )
     @NotNull( message = "movieListId must be valid!" )
-    private long movieListId;
+    private Long movieListId;
 
     @Schema( description = "User-rating of a movie", example = "4" )
     @NotNull

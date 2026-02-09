@@ -13,7 +13,7 @@ public abstract class MovieBatchCreateDtos< T > implements MovieBatchCreateSubTy
 
     @Schema( description = "Unique identifier", example = "1", accessMode = Schema.AccessMode.READ_ONLY )
     @NotNull
-    private long movieListId;
+    private Long movieListId;
 
     @Schema( description = "List of movie-objects to create" )
     @NotNull

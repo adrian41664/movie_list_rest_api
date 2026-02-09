@@ -20,7 +20,7 @@ public class Movie {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
     @Setter( AccessLevel.NONE )
-    private long movieId;
+    private Long movieId;
 
     @Schema( description = "Id of the movie-list at which this movie is listed", example = "1" )
     @ManyToOne

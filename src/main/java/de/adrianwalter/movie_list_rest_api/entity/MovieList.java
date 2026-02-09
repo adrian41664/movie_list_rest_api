@@ -21,7 +21,7 @@ public class MovieList {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
     @Setter( AccessLevel.NONE )
-    private long movieListId;
+    private Long movieListId;
 
     @Schema( description = "List of movies" )
     @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL )

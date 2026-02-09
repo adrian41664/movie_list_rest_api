@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class MovieResponseBasicDto {
 
     @Schema( description = "Id of the movie-list at which this movie is listed", example = "1" )
-    private Long movieId;
+    private long movieId;
 
     @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     private String movieTitle;

@@ -9,7 +9,7 @@ import lombok.Setter;
 public abstract class MovieListResponseDto {
 
     @Schema( description = "Unique identifier", example = "1", accessMode = Schema.AccessMode.READ_ONLY )
-    private Long movieListId;
+    private long movieListId;
 
     @Schema( description = "Unique name (per user) of the movie-list", example = "Movies last year" )
     private String movieListName;

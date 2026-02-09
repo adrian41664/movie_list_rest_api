@@ -16,7 +16,7 @@ public class MovieDetail {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
     @Setter( AccessLevel.NONE )
-    private long id;
+    private Long id;
 
     @OneToOne
     private Movie movie;

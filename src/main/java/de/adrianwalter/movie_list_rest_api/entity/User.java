@@ -21,7 +21,7 @@ public class User {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
     @Setter( AccessLevel.NONE )
-    private long userId;
+    private Long userId;
 
     @Schema( description = "Unique name of a user", example = "User123" )
     @NotBlank

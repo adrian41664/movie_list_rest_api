@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MovieResponseBasicFullOwnershipDto extends MovieResponseBasicDto {
 
     @Schema( description = "Id of the movie-list at which this movie is listed", example = "1" )
-    private Long movieListId;
+    private long movieListId;
 
     @Schema( description = "Unique name (per user) of the movie-list at which this movie is listed",
             example = "Movies last year" )
