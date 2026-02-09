@@ -1,102 +1,40 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Schema( description = "DTO to respond a single movie with basic details" )
+@Getter
+@Setter
 public class MovieResponseBasicDto {
 
-    private Long movieId;
+    @Schema( description = "Id of the movie-list at which this movie is listed", example = "1" )
+    private long movieId;
 
+    @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     private String movieTitle;
 
-    private int userRating;
+    @Schema( description = "User-rating of a movie", example = "4" )
+    private Integer userRating;
+
+    @Schema( description = "Release year of a movie", example = "2001" )
     private Integer releaseYear;
+
+    @Schema( description = "Platform on which the movie was watched", example = "Prime" )
     private String seenOn;
+
+    @Schema( description = "Text field for user notes", example = "Terrific movie that i should recommend to XY" )
     private String userNote;
+
+    @Schema( description = "The genre(s) of the movie", example = "Horror, Thriller" )
     private String genre;
+
+    @Schema( description = "Date on which the movie was watched", example = "2026-09-02" )
     private LocalDate seenAt;
-
-
-    public Long getMovieId() {
-        return movieId;
-    }
-
-
-    public void setMovieId( Long movieId ) {
-        this.movieId = movieId;
-    }
-
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-
-    public void setMovieTitle( String movieTitle ) {
-        this.movieTitle = movieTitle;
-    }
-
-
-    public int getUserRating() {
-        return userRating;
-    }
-
-
-    public void setUserRating( int userRating ) {
-        this.userRating = userRating;
-    }
-
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-
-    public void setReleaseYear( Integer releaseYear ) {
-        this.releaseYear = releaseYear;
-    }
-
-
-    public String getSeenOn() {
-        return seenOn;
-    }
-
-
-    public void setSeenOn( String seenOn ) {
-        this.seenOn = seenOn;
-    }
-
-
-    public String getUserNote() {
-        return userNote;
-    }
-
-
-    public void setUserNote( String userNote ) {
-        this.userNote = userNote;
-    }
-
-
-    public String getGenre() {
-        return genre;
-    }
-
-
-    public void setGenre( String genre ) {
-        this.genre = genre;
-    }
-
-
-    public LocalDate getSeenAt() {
-        return seenAt;
-    }
-
-
-    public void setSeenAt( LocalDate seenAt ) {
-        this.seenAt = seenAt;
-    }
-
 
 }

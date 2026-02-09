@@ -4,20 +4,24 @@ import de.adrianwalter.movie_list_rest_api.dto.movie.MovieResponseOneLineDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Schema( description = "Movie-list entity" )
+@Schema( description = "MovieList entity" )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Data
 public class MovieList {
 
     @Schema( description = "Unique identifier", example = "1", accessMode = Schema.AccessMode.READ_ONLY )
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
-    private long movieListId;
+    @Setter( AccessLevel.NONE )
+    private Long movieListId;
 
     @Schema( description = "List of movies" )
     @OneToMany( mappedBy = "movieList", cascade = CascadeType.ALL )
@@ -35,54 +39,5 @@ public class MovieList {
     @Schema( description = "Description of the movie-list", example = "all movies watched at home last year" )
     private String description;
 
-
-    public long getMovieListId() {
-        return movieListId;
-    }
-
-
-    public void setMovieListId( long movieListId ) {
-        this.movieListId = movieListId;
-    }
-
-
-    public User getUser() {
-        return user;
-    }
-
-
-    public void setUser( User user ) {
-        this.user = user;
-    }
-
-
-    public List< Movie > getMovies() {
-        return movies;
-    }
-
-
-    public void setMovies( List< Movie > movies ) {
-        this.movies = movies;
-    }
-
-
-    public String getMovieListName() {
-        return movieListName;
-    }
-
-
-    public void setMovieListName( String movieListName ) {
-        this.movieListName = movieListName;
-    }
-
-
-    public String getDescription() {
-        return description;
-    }
-
-
-    public void setDescription( String description ) {
-        this.description = description;
-    }
 
 }

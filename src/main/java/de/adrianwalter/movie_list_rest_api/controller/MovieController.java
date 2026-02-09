@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag( name = "movies", description = "Manage movies. " +
-        "Please note: Some endpoints do not yet offer the final intended functionality " +
-        "or their functions may change in the future." )
+@Tag( name = "movies", description = "Manage movies " )
 @RestController
 @RequestMapping( "/movies" )
 public class MovieController {

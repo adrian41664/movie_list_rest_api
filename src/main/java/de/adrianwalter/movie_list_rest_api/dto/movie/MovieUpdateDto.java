@@ -1,38 +1,42 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
-import de.adrianwalter.movie_list_rest_api.entity.MovieDetail;
-import de.adrianwalter.movie_list_rest_api.entity.MovieList;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Schema( description = "DTO for updating a movie's information" )
+@Setter
+@Getter
 public class MovieUpdateDto {
 
-    //	> USER_RATING
+    @Schema( description = "User-rating of a movie", example = "4" )
     @Column( nullable = true )
     private Integer userRating;
 
-    //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
+    @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     @Column( unique = false )
     private String movieTitle;
 
-    //	> RELEASE_YEAR {nullable}
+    @Schema( description = "Release year of a movie", example = "2001" )
     @Column( nullable = true )
     private Integer releaseYear;
 
-    //	> ADDED TO LIST DATE TIME / Seen
+    @Schema( description = "Date on which the movie was watched", example = "2026-09-02" )
     @Column( nullable = true )
     private LocalDate seenAt;
 
-    //	> PLATFORM (SEEN ON) {nullable}
+    @Schema( description = "Platform on which the movie was watched", example = "Prime" )
     @Column( nullable = true )
     private String seenOn;
 
-    //	> USER NOTE {nullable} text field for user
+    @Schema( description = "Text field for user notes", example = "Terrific movie that i should recommend to XY" )
     @Column( nullable = true )
     private String userNote;
 
+    @Schema( description = "The genre(s) of the movie", example = "Horror, Thriller" )
     @Column( nullable = true )
     private String genre;
 
@@ -41,75 +45,5 @@ public class MovieUpdateDto {
     // @OneToOne( optional = true )
     // @JoinColumn( nullable = true )
     // private MovieDetail movieDetail;
-
-
-    public Integer getUserRating() {
-        return userRating;
-    }
-
-
-    public void setUserRating( Integer userRating ) {
-        this.userRating = userRating;
-    }
-
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-
-    public void setMovieTitle( String movieTitle ) {
-        this.movieTitle = movieTitle;
-    }
-
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-
-    public void setReleaseYear( Integer releaseYear ) {
-        this.releaseYear = releaseYear;
-    }
-
-
-    public LocalDate getSeenAt() {
-        return seenAt;
-    }
-
-
-    public void setSeenAt( LocalDate seenAt ) {
-        this.seenAt = seenAt;
-    }
-
-
-    public String getSeenOn() {
-        return seenOn;
-    }
-
-
-    public void setSeenOn( String seenOn ) {
-        this.seenOn = seenOn;
-    }
-
-
-    public String getUserNote() {
-        return userNote;
-    }
-
-
-    public void setUserNote( String userNote ) {
-        this.userNote = userNote;
-    }
-
-
-    public String getGenre() {
-        return genre;
-    }
-
-
-    public void setGenre( String genre ) {
-        this.genre = genre;
-    }
 
 }

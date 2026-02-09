@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME, property = "type"
 )
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = MovieBatchCreateOneLineDtos.class, name = "oneLine"),
-        @JsonSubTypes.Type(value = MovieBatchCreateBasicDtos.class, name = "basic"),
-        @JsonSubTypes.Type(value = MovieBatchCreateCompleteDtos.class, name = "complete")
-})
+@JsonSubTypes( {
+        @JsonSubTypes.Type( value = MovieBatchCreateOneLineDtos.class, name = "oneLine" ),
+        @JsonSubTypes.Type( value = MovieBatchCreateBasicDtos.class, name = "basic" ),
+        @JsonSubTypes.Type( value = MovieBatchCreateCompleteDtos.class, name = "complete" )
+} )
 
 public interface MovieBatchCreateSubTypeMarker {
 }

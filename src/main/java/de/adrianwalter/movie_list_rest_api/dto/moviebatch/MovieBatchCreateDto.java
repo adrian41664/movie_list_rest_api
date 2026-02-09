@@ -1,65 +1,33 @@
 package de.adrianwalter.movie_list_rest_api.dto.moviebatch;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 public abstract class MovieBatchCreateDto {
 
+    @Schema( description = "User-rating of a movie", example = "4" )
     @NotNull
     private int userRating;
 
+    @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     @NotBlank
     private String movieTitle;
 
-    // String is nullable
+    @Schema( description = "Platform on which the movie was watched", example = "Prime" )
     private String seenOn;
 
-    // Integer is nullable
+    @Schema( description = "Release year of a movie", example = "2001" )
     private Integer releaseYear;
 
-    // should not be null, but is required as null in some cases
+    @Schema( description = "Date on which the movie was watched", example = "2026-09-02" )
     private LocalDate seenAt;
 
-    public int getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating( int userRating ) {
-        this.userRating = userRating;
-    }
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-    public void setMovieTitle( String movieTitle ) {
-        this.movieTitle = movieTitle;
-    }
-
-    public String getSeenOn() {
-        return seenOn;
-    }
-
-    public void setSeenOn( String seenOn ) {
-        this.seenOn = seenOn;
-    }
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear( Integer releaseYear ) {
-        this.releaseYear = releaseYear;
-    }
-
-    public LocalDate getSeenAt() {
-        return seenAt;
-    }
-
-    public void setSeenAt( LocalDate seenAt ) {
-        this.seenAt = seenAt;
-    }
 
 }
