@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public abstract class MovieCreateDto implements MovieCreateSubTypeMarker {
 
 
-    @NotNull(message = "movieListId must be valid!")
+    @NotNull( message = "movieListId must be valid!" )
     private long movieListId;
 
     @NotNull

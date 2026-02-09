@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode( callSuper = true )
 public class MovieCreateCompleteDto extends MovieCreateDto {
 
-    private String type = "complete";
+    private final String type = "complete";
 
     private String userNote;
     private String genre;

@@ -1,12 +1,13 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
-import de.adrianwalter.movie_list_rest_api.entity.MovieDetail;
-import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 public class MovieUpdateDto {
 
     //	> USER_RATING
@@ -42,74 +43,5 @@ public class MovieUpdateDto {
     // @JoinColumn( nullable = true )
     // private MovieDetail movieDetail;
 
-
-    public Integer getUserRating() {
-        return userRating;
-    }
-
-
-    public void setUserRating( Integer userRating ) {
-        this.userRating = userRating;
-    }
-
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-
-    public void setMovieTitle( String movieTitle ) {
-        this.movieTitle = movieTitle;
-    }
-
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-
-    public void setReleaseYear( Integer releaseYear ) {
-        this.releaseYear = releaseYear;
-    }
-
-
-    public LocalDate getSeenAt() {
-        return seenAt;
-    }
-
-
-    public void setSeenAt( LocalDate seenAt ) {
-        this.seenAt = seenAt;
-    }
-
-
-    public String getSeenOn() {
-        return seenOn;
-    }
-
-
-    public void setSeenOn( String seenOn ) {
-        this.seenOn = seenOn;
-    }
-
-
-    public String getUserNote() {
-        return userNote;
-    }
-
-
-    public void setUserNote( String userNote ) {
-        this.userNote = userNote;
-    }
-
-
-    public String getGenre() {
-        return genre;
-    }
-
-
-    public void setGenre( String genre ) {
-        this.genre = genre;
-    }
 
 }

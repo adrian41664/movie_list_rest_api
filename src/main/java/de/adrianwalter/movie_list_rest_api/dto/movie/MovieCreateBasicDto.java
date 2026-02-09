@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode( callSuper = true )
 public class MovieCreateBasicDto extends MovieCreateDto {
 
-    private String type = "basic";
+    private final String type = "basic";
 }

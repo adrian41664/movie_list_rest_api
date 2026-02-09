@@ -1,12 +1,14 @@
 package de.adrianwalter.movie_list_rest_api.dto.moviebatch;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class MovieBatchCreateOneLineDtos extends MovieBatchCreateDtos<MovieBatchCreateOneLineDto>
+@Getter
+@Setter
+@EqualsAndHashCode( callSuper = true )
+public class MovieBatchCreateOneLineDtos extends MovieBatchCreateDtos< MovieBatchCreateOneLineDto >
         implements MovieBatchCreateSubTypeMarker {
 
-    private String type = "oneLine";
-
-
+    private final String type = "oneLine";
 }

@@ -1,22 +1,11 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MovieResponseOneLineDto {
 
-
-    // private long movieId;
-
     private String movieInformation;
-
-
-    public String getMovieInformation() {
-        return movieInformation;
-    }
-
-
-    public void setMovieInformation( String movieInformation ) {
-        this.movieInformation = movieInformation;
-    }
 }

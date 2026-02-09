@@ -1,19 +1,25 @@
 package de.adrianwalter.movie_list_rest_api.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Schema( description = "Movie entity" )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Data
 public class Movie {
 
     //  > MOVIE_ID (PK)
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = "id", unique = true )
+    @Setter( AccessLevel.NONE )
     private long movieId;
 
     //	> MOVIE_LIST_ID (FK)
@@ -54,99 +60,5 @@ public class Movie {
     @JoinColumn( nullable = true )
     private MovieDetail movieDetail;
 
-
-    public long getMovieId() {
-        return movieId;
-    }
-
-
-    public MovieList getMovieList() {
-        return movieList;
-    }
-
-
-    public void setMovieList( MovieList movieList ) {
-        this.movieList = movieList;
-    }
-
-
-    public Integer getUserRating() {
-        return userRating;
-    }
-
-
-    public void setUserRating( Integer userRating ) {
-        this.userRating = userRating;
-    }
-
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-
-    public void setMovieTitle( String movieTitle ) {
-        this.movieTitle = movieTitle;
-    }
-
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-
-    public void setReleaseYear( Integer releaseYear ) {
-        this.releaseYear = releaseYear;
-    }
-
-
-    public LocalDate getSeenAt() {
-        return seenAt;
-    }
-
-
-    public void setSeenAt( LocalDate seenAt ) {
-        this.seenAt = seenAt;
-    }
-
-
-    public String getSeenOn() {
-        return seenOn;
-    }
-
-
-    public void setSeenOn( String seenOn ) {
-        this.seenOn = seenOn;
-    }
-
-
-    public String getUserNote() {
-        return userNote;
-    }
-
-
-    public void setUserNote( String userNote ) {
-        this.userNote = userNote;
-    }
-
-
-    public MovieDetail getMovieDetail() {
-        return movieDetail;
-    }
-
-
-    public void setMovieDetail( MovieDetail movieDetail ) {
-        this.movieDetail = movieDetail;
-    }
-
-
-    public String getGenre() {
-        return genre;
-    }
-
-
-    public void setGenre( String genre ) {
-        this.genre = genre;
-    }
 
 }
