@@ -23,11 +23,7 @@ Implementing comprehensive test coverage to enable confident refactoring and ear
 The application needs a MySQL-Database. Start one using Docker:
 
 ```bash
-<<<<<<< HEAD
 docker run --name movie-list-db -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_DATABASE=movie_list -p 3307:3306 -d mysql:9.4.0
-=======
-docker run --name movie-list-db -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_DATABASE=movie_list_db -p 3307:3306 -d mysql:9.4.0
->>>>>>> feature/createMovieListEndpoints
 ```
 
 ### API Documentation
