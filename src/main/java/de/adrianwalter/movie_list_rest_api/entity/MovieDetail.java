@@ -46,48 +46,4 @@ public class MovieDetail {
     @Column( nullable = true )
     private String castNames;
 
-
-    public void setMovieLength( int movieLength ) {
-        this.movieLength = movieLength;
-    }
-
-
-    public void setMovie( Movie movie ) {
-        this.movie = movie;
-    }
-
-
-    public void setId( long id ) {
-        this.id = id;
-    }
-
-
-    public void setSynopsis( String synopsis ) {
-        this.synopsis = synopsis;
-    }
-
-
-    public void setImdbScore( float imdbScore ) {
-        this.imdbScore = imdbScore;
-    }
-
-
-    public void setRottenTomatoesScore( int rottenTomatoesScore ) {
-        this.rottenTomatoesScore = rottenTomatoesScore;
-    }
-
-
-    public void setImdbId( String imdbId ) {
-        this.imdbId = imdbId;
-    }
-
-
-    public void setDirectorName( String directorName ) {
-        this.directorName = directorName;
-    }
-
-
-    public void setCastNames( String castNames ) {
-        this.castNames = castNames;
-    }
 }
