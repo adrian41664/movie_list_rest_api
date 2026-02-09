@@ -1,5 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.dto.moviebatch;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,19 +12,21 @@ import java.time.LocalDate;
 @Getter
 public abstract class MovieBatchCreateDto {
 
+    @Schema( description = "User-rating of a movie", example = "4" )
     @NotNull
     private int userRating;
 
+    @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     @NotBlank
     private String movieTitle;
 
-    // String is nullable
+    @Schema( description = "Platform on which the movie was watched", example = "Prime" )
     private String seenOn;
 
-    // Integer is nullable
+    @Schema( description = "Release year of a movie", example = "2001" )
     private Integer releaseYear;
 
-    // should not be null, but is required as null in some cases
+    @Schema( description = "Date on which the movie was watched", example = "2026-09-02" )
     private LocalDate seenAt;
 
 

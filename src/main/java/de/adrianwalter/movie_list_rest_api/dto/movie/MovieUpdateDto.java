@@ -1,39 +1,42 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Schema( description = "DTO for updating a movie's information" )
 @Setter
 @Getter
 public class MovieUpdateDto {
 
-    //	> USER_RATING
+    @Schema( description = "User-rating of a movie", example = "4" )
     @Column( nullable = true )
     private Integer userRating;
 
-    //	> MOVIE_NAME - must be non-unique, cause rating is tied to a single movie
+    @Schema( description = "Unique title (per movie-list) of a movie", example = "Matrix" )
     @Column( unique = false )
     private String movieTitle;
 
-    //	> RELEASE_YEAR {nullable}
+    @Schema( description = "Release year of a movie", example = "2001" )
     @Column( nullable = true )
     private Integer releaseYear;
 
-    //	> ADDED TO LIST DATE TIME / Seen
+    @Schema( description = "Date on which the movie was watched", example = "2026-09-02" )
     @Column( nullable = true )
     private LocalDate seenAt;
 
-    //	> PLATFORM (SEEN ON) {nullable}
+    @Schema( description = "Platform on which the movie was watched", example = "Prime" )
     @Column( nullable = true )
     private String seenOn;
 
-    //	> USER NOTE {nullable} text field for user
+    @Schema( description = "Text field for user notes", example = "Terrific movie that i should recommend to XY" )
     @Column( nullable = true )
     private String userNote;
 
+    @Schema( description = "The genre(s) of the movie", example = "Horror, Thriller" )
     @Column( nullable = true )
     private String genre;
 
@@ -42,6 +45,5 @@ public class MovieUpdateDto {
     // @OneToOne( optional = true )
     // @JoinColumn( nullable = true )
     // private MovieDetail movieDetail;
-
 
 }

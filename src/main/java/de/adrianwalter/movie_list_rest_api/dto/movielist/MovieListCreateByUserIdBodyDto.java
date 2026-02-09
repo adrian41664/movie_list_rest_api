@@ -8,12 +8,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@Schema( description = "DTO for the creation of a new movie-list" )
 @Getter
 @Setter
 @EqualsAndHashCode( callSuper = true )
 public class MovieListCreateByUserIdBodyDto extends MovieListCreateDto {
 
-    @Schema( description = "Type of creation.", example = "byId" )
+    @Schema( description = "Type of creation", example = "byId", accessMode = Schema.AccessMode.READ_ONLY  )
     private final String type = "byId";
 
     @Schema( description = "The ID of a user", example = "1" )

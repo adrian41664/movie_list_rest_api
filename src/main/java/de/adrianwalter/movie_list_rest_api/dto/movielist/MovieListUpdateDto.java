@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+@Schema( description = "DTO to change description or name of a movie-list" )
 @Setter
 @Getter
 public class MovieListUpdateDto {

@@ -29,7 +29,7 @@ public class User {
     private String userName;
 
     @Schema( description = "movie lists a user" )
-    // movieLists is a List of Lists containing Movie-Objects
+    // movieLists is a List of Lists (!) containing Movie-Objects
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL )
     private List< MovieList > movieLists;
 

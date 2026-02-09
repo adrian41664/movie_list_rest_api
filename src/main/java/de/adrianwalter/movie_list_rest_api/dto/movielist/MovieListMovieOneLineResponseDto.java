@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.List;
 
+@Schema( description = "DTO for responding multiple movies in a compact and readable way" )
 @Getter
 @Setter
 @EqualsAndHashCode( callSuper = true )
