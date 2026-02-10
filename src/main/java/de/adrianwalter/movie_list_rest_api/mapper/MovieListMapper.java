@@ -19,7 +19,6 @@ public class MovieListMapper {
         this.movieMapper = movieMapper;
     }
 
-
     public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
 
         MovieListMovieOneLineResponseDto dto = new MovieListMovieOneLineResponseDto();
@@ -32,11 +31,12 @@ public class MovieListMapper {
 
         dto.setDescription( movieList.getDescription() );
 
-        dto.setMovies( movieList.getMovies().
-                stream()
-                .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
-                .toList() );
-
+        if( movieList.getMovies() != null ) {
+            dto.setMovies( movieList.getMovies().
+                    stream()
+                    .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
+                    .toList() );
+        }
         return dto;
     }
 
