@@ -50,6 +50,11 @@ public class MovieListController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found - No user with the given name or ID",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
                     responseCode = "409",
                     description = "Conflict - User already owns a movie-list with the given name",
                     content = @Content( schema = @Schema( hidden = true ) )

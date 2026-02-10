@@ -1,11 +1,8 @@
 package de.adrianwalter.movie_list_rest_api.dto.movie;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
 @Schema( description = "DTO to respond a single movie with basic details" )

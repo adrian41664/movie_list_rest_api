@@ -27,7 +27,4 @@ public class MovieResponseBasicFullOwnershipDto extends MovieResponseBasicDto {
     private String userName;
 
 
-    public MovieResponseBasicFullOwnershipDto() {
-    }
-
 }

@@ -32,11 +32,12 @@ public class MovieListMapper {
 
         dto.setDescription( movieList.getDescription() );
 
-        dto.setMovies( movieList.getMovies().
-                stream()
-                .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
-                .toList() );
-
+        if( ! movieList.getMovies().isEmpty() ) {
+            dto.setMovies( movieList.getMovies().
+                    stream()
+                    .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
+                    .toList() );
+        }
         return dto;
     }
 
