@@ -19,7 +19,6 @@ public class MovieListMapper {
         this.movieMapper = movieMapper;
     }
 
-
     public MovieListMovieOneLineResponseDto mapToMovieListMovieOneLineResponseDto( MovieList movieList ) {
 
         MovieListMovieOneLineResponseDto dto = new MovieListMovieOneLineResponseDto();
@@ -32,7 +31,7 @@ public class MovieListMapper {
 
         dto.setDescription( movieList.getDescription() );
 
-        if( ! movieList.getMovies().isEmpty() ) {
+        if( movieList.getMovies() != null ) {
             dto.setMovies( movieList.getMovies().
                     stream()
                     .map( ( Movie movie ) -> this.movieMapper.mapToMovieOneLineResponseDto( movie ) )
