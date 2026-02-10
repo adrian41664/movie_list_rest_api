@@ -59,6 +59,11 @@ public class MovieController {
                     content = @Content( schema = @Schema( hidden = true ) )
             ),
             @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity - The request was well-formed but had semantic errors",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
                     content = @Content( schema = @Schema( hidden = true ) )
@@ -107,6 +112,11 @@ public class MovieController {
             @ApiResponse(
                     responseCode = "409",
                     description = "Conflict - Movie-list already contains one or more movies with the given names",
+                    content = @Content( schema = @Schema( hidden = true ) )
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Unprocessable Entity - The request was well-formed but had semantic errors",
                     content = @Content( schema = @Schema( hidden = true ) )
             ),
             @ApiResponse(
