@@ -63,6 +63,9 @@
 
 
         <dependency>
+            <!-- Problem with dependency, assumed to be not relevant, because of no XML usage in project;
+            ignored warning -->
+            <!-- https://www.mend.io/vulnerability-database/CVE-2026-24400?utm_source=Jetbrains -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
