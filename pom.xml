@@ -30,8 +30,8 @@
         <java.version>17</java.version>
     </properties>
 
-    <dependencies>
 
+    <dependencies>
 
         <dependency>
             <!-- Problem with dependency, assumed to be not exploitable; ignored warning -->
@@ -40,6 +40,13 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.8.14</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
         </dependency>
 
 
@@ -68,6 +75,22 @@
             <!-- https://www.mend.io/vulnerability-database/CVE-2026-24400?utm_source=Jetbrains -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <!-- Problem with dependency, assumed to be not relevant, because the scope is testing only -->
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <version>1.19.3</version>
             <scope>test</scope>
         </dependency>
 

@@ -29,6 +29,7 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     // -------------------------
     // POST /users
     // -------------------------
