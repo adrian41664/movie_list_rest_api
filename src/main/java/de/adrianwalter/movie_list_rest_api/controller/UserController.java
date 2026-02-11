@@ -156,6 +156,11 @@ public class UserController {
                     content = @Content( schema = @Schema( implementation = UserResponseShortDto.class ) )
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request - Problem with the syntax of the body",
+                    content = @Content( schema = @Schema( implementation = UserResponseShortDto.class ) )
+            ),
+            @ApiResponse(
                     responseCode = "409",
                     description = "Conflict - Username is already taken",
                     content = @Content(schema = @Schema(hidden = true))
