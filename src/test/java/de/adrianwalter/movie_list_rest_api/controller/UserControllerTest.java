@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 @WebMvcTest( controllers = UserController.class )
 class UserControllerTest {
 
+    // Web-Layer-Tests only!
+
     @Autowired
     MockMvc mockMvc;
 
