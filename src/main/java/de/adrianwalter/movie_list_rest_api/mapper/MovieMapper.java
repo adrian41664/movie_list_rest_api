@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 public class MovieMapper {
@@ -122,6 +123,15 @@ public class MovieMapper {
 
         Movie movie = new Movie();
 
+        if ( oneLineMovieFields[1].isBlank() ||
+                oneLineMovieFields[3].isBlank() ||
+                oneLineMovieFields[4].isBlank() ||
+                oneLineMovieFields[5].isBlank() ||
+                oneLineMovieFields[6].isBlank() ) {
+
+            throw new BadRequestException();
+        }
+
         try {
             movie.setUserRating( Integer.parseInt( oneLineMovieFields[0] ) );
         } catch ( Exception e ) {
@@ -129,6 +139,7 @@ public class MovieMapper {
         }
         movie.setMovieTitle( oneLineMovieFields[1] );
 
+        // field 2 / MovieReleaseYear
         try {
             movie.setReleaseYear( Integer.parseInt( oneLineMovieFields[2] ) );
         } catch ( Exception e ) {
@@ -139,12 +150,10 @@ public class MovieMapper {
         movie.setSeenOn( oneLineMovieFields[4] );
         movie.setUserNote( oneLineMovieFields[5] );
 
-        if ( !oneLineMovieFields[6].isBlank() ) {
-            try {
-                movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
-            } catch ( Exception e ) {
-                movie.setSeenAt( null );
-            }
+        try {
+            movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );
+        } catch ( Exception e ) {
+            movie.setSeenAt( null );
         }
 
         return movie;

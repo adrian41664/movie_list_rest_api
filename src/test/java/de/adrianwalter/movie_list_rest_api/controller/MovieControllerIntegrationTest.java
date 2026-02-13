@@ -314,6 +314,44 @@ class MovieControllerIntegrationTest {
         }
 
         @Test
+        @DisplayName( "One movie in batch has no name | return code 400" )
+        void createMovieBatch_whenOneMovieNoName_shouldReturnBadRequestCode() {
+
+            // Arrange - create user, movie-list and first movie
+            MovieListMovieOneLineResponseDto movieList = createUserAndMovieList();
+
+            MovieCreateBasicDto firstMovie = new MovieCreateBasicDto();
+            firstMovie.setMovieListId( movieList.getMovieListId() );
+            firstMovie.setMovieTitle( "The Matrix" );
+            firstMovie.setReleaseYear( 1999 );
+            restTemplate.postForEntity( "/movies", firstMovie, MovieResponseBasicFullOwnershipDto.class );
+
+            // Act - try to create batch with duplicate name
+            MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
+            batchRequest.setMovieListId( movieList.getMovieListId() );
+
+            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+
+            MovieBatchCreateOneLineDto batchMovie1 = new MovieBatchCreateOneLineDto();
+            batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / Sci-Fi / Netflix / Great movie / 2024-01-15" );
+
+            batchList.add( batchMovie1 );
+
+            MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
+            batchMovie2.setMovieInformation( "9 // 2010 / Thriller / Prime / Mind-bending / 2024-02-20" );
+
+            batchList.add( batchMovie2 );
+
+            batchRequest.setMovies( batchList );
+
+            ResponseEntity< String > response =
+                    restTemplate.postForEntity( "/movies/batch", batchRequest, String.class );
+
+            // Assert
+            assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
+        }
+
+        @Test
         @DisplayName( "One movie name already exists in batch | return code 409" )
         void createMovieBatch_whenOneNameInUse_shouldReturnConflictCode() {
 
