@@ -2,6 +2,7 @@ package de.adrianwalter.movie_list_rest_api.service.movielist;
 
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.entity.User;
+import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
@@ -188,11 +189,9 @@ public class MovieListService {
 
         MovieList movieList = this.findById( movieListId );
 
-        String newMovieListName = movieListUpdateDto.getMovieListName();
+        if ( !movieListUpdateDto.getMovieListName().isBlank() ) {
 
-        if ( !newMovieListName.isBlank() ) {
-
-            this.changeNameIfNotExisting( movieList, newMovieListName );
+            this.changeNameIfNotExisting( movieList, movieListUpdateDto.getMovieListName() );
 
         } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
 
@@ -200,7 +199,7 @@ public class MovieListService {
 
         } else {
 
-            throw new InvalidBodyException();
+            throw new BadRequestException();
         }
 
         return movieList;

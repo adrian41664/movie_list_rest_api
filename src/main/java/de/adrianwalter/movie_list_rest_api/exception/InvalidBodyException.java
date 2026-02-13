@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InvalidBodyException extends RuntimeException {
 
     /* @toDo: Implement validation logic for JSON-Bodys.
+
+    is this still to do???
+
     Exception currently never gets thrown but a DefaultHandlerExceptionResolver.
     Response is
         {

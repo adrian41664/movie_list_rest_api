@@ -340,7 +340,7 @@ public class MovieListController {
             @Parameter( description = "ID of movie-list to update", required = true )
             @PathVariable Long movieListId,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "New name of the movie-list or new description. Name must be unique. " +
+                    description = "New name of the movie-list or new description or both. Name must be unique. " +
                             "An empty value leads to no change.",
                     required = true,
                     content = @Content( schema = @Schema( implementation = MovieListUpdateDto.class ) ) )

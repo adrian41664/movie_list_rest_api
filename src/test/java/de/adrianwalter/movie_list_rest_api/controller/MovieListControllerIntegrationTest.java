@@ -391,8 +391,8 @@ class MovieListControllerIntegrationTest {
     class UpdateMovieListTests {
 
         @Test
-        @DisplayName( "Update movie-list successful | return code 200" )
-        void putMovieList_whenMovieListExists_shouldReturnOkCode() {
+        @DisplayName( "Update movie-list successful with name and description | return code 200" )
+        void putMovieList_whenMovieListExists_whenNewNameAndDescription_shouldReturnOkCode() {
 
             // Arrange - create user and movie-list
             UserCreateDto userRequest = new UserCreateDto();
@@ -402,6 +402,7 @@ class MovieListControllerIntegrationTest {
 
             MovieListCreateByUserIdBodyDto createRequest = new MovieListCreateByUserIdBodyDto();
             createRequest.setMovieListName( "Old Name" );
+            createRequest.setDescription( "Old Description" );
             createRequest.setUserId( user.getUserId() );
             MovieListMovieOneLineResponseDto created =
                     restTemplate.postForObject( "/movie-lists", createRequest, MovieListMovieOneLineResponseDto.class );
@@ -409,6 +410,7 @@ class MovieListControllerIntegrationTest {
             // create update request
             MovieListUpdateDto updateRequest = new MovieListUpdateDto();
             updateRequest.setMovieListName( "New Name" );
+            updateRequest.setMovieListDescription( "New Description" );
 
             // Act
             ResponseEntity< MovieListMovieOneLineResponseDto > response = restTemplate.exchange(
@@ -422,6 +424,117 @@ class MovieListControllerIntegrationTest {
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.OK );
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovieListName() ).isEqualTo( "New Name" );
+            assertThat( response.getBody().getDescription() ).isEqualTo( "New Description" );
+        }
+        @Test
+        @DisplayName( "Update movie-list successful with name | return code 200" )
+        void putMovieList_whenMovieListExists_whenNewName_shouldReturnOkCode() {
+
+            // Arrange - create user and movie-list
+            UserCreateDto userRequest = new UserCreateDto();
+            userRequest.setUserName( "User123" );
+            UserResponseShortDto user =
+                    restTemplate.postForObject( "/users", userRequest, UserResponseShortDto.class );
+
+            MovieListCreateByUserIdBodyDto createRequest = new MovieListCreateByUserIdBodyDto();
+            createRequest.setMovieListName( "Old Name" );
+            createRequest.setDescription( "Old Description" );
+            createRequest.setUserId( user.getUserId() );
+            MovieListMovieOneLineResponseDto created =
+                    restTemplate.postForObject( "/movie-lists", createRequest, MovieListMovieOneLineResponseDto.class );
+
+            // create update request
+            MovieListUpdateDto updateRequest = new MovieListUpdateDto();
+            updateRequest.setMovieListName( "New Name" );
+            updateRequest.setMovieListDescription( "" );
+
+            // Act
+            ResponseEntity< MovieListMovieOneLineResponseDto > response = restTemplate.exchange(
+                    "/movie-lists/" + created.getMovieListId(),
+                    HttpMethod.PUT,
+                    new HttpEntity<>( updateRequest ),
+                    MovieListMovieOneLineResponseDto.class
+            );
+
+            // Assert
+            assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.OK );
+            Assertions.assertNotNull( response.getBody() );
+            assertThat( response.getBody().getMovieListName() ).isEqualTo( "New Name" );
+            assertThat( response.getBody().getDescription() ).isEqualTo( "Old Description" );
+        }
+
+        @Test
+        @DisplayName( "Update movie-list successful with description | return code 200" )
+        void putMovieList_whenMovieListExists_whenNewDescription_shouldReturnOkCode() {
+
+            // Arrange - create user and movie-list
+            UserCreateDto userRequest = new UserCreateDto();
+            userRequest.setUserName( "User123" );
+            UserResponseShortDto user =
+                    restTemplate.postForObject( "/users", userRequest, UserResponseShortDto.class );
+
+            MovieListCreateByUserIdBodyDto createRequest = new MovieListCreateByUserIdBodyDto();
+            createRequest.setMovieListName( "Old Name" );
+            createRequest.setDescription( "Old Description" );
+            createRequest.setUserId( user.getUserId() );
+            MovieListMovieOneLineResponseDto created =
+                    restTemplate.postForObject( "/movie-lists", createRequest, MovieListMovieOneLineResponseDto.class );
+
+            // create update request
+            MovieListUpdateDto updateRequest = new MovieListUpdateDto();
+            updateRequest.setMovieListName( "" );
+            updateRequest.setMovieListDescription( "New Description" );
+
+            // Act
+            ResponseEntity< MovieListMovieOneLineResponseDto > response = restTemplate.exchange(
+                    "/movie-lists/" + created.getMovieListId(),
+                    HttpMethod.PUT,
+                    new HttpEntity<>( updateRequest ),
+                    MovieListMovieOneLineResponseDto.class
+            );
+
+            // Assert
+            assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.OK );
+            Assertions.assertNotNull( response.getBody() );
+            assertThat( response.getBody().getMovieListName() ).isEqualTo( "Old Name" );
+            assertThat( response.getBody().getDescription() ).isEqualTo( "New Description" );
+        }
+
+        @Test
+        @DisplayName( "No update of movie-list when no name and description | return code 422" )
+        void putMovieList_whenMovieListExists_whenNoNameAndDescription_shouldReturnBadRequestCode() {
+
+            // Arrange - create user and movie-list
+            UserCreateDto userRequest = new UserCreateDto();
+            userRequest.setUserName( "User123" );
+            UserResponseShortDto user =
+                    restTemplate.postForObject( "/users", userRequest, UserResponseShortDto.class );
+
+            MovieListCreateByUserIdBodyDto createRequest = new MovieListCreateByUserIdBodyDto();
+            createRequest.setMovieListName( "Old Name" );
+            createRequest.setDescription( "Old Description" );
+            createRequest.setUserId( user.getUserId() );
+            MovieListMovieOneLineResponseDto created =
+                    restTemplate.postForObject( "/movie-lists", createRequest, MovieListMovieOneLineResponseDto.class );
+
+            // create update request
+            MovieListUpdateDto updateRequest = new MovieListUpdateDto();
+            updateRequest.setMovieListName( "" );
+            updateRequest.setMovieListDescription( "" );
+
+            // Act
+            ResponseEntity< MovieListMovieOneLineResponseDto > response = restTemplate.exchange(
+                    "/movie-lists/" + created.getMovieListId(),
+                    HttpMethod.PUT,
+                    new HttpEntity<>( updateRequest ),
+                    MovieListMovieOneLineResponseDto.class
+            );
+
+            // Assert
+            assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
+//            Assertions.assertNotNull( response.getBody() );
+//            assertThat( response.getBody().getMovieListName() ).isEqualTo( "Old Name" );
+//            assertThat( response.getBody().getDescription() ).isEqualTo( "Old Description" );
         }
 
 
