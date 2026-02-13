@@ -50,6 +50,11 @@ public class MovieListController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request - Problem with the syntax of the body",
+                    content = @Content( schema = @Schema( implementation = UserResponseShortDto.class ) )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "Not found - No user with the given name or ID",
                     content = @Content( schema = @Schema( hidden = true ) )
@@ -245,7 +250,7 @@ public class MovieListController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Not Found - No user or movie-list with given name",
+                    description = "Not Found - No user or movie-list with given name or both",
                     content = @Content( schema = @Schema( hidden = true ) )
             ),
             @ApiResponse(
