@@ -233,6 +233,8 @@ class MovieControllerIntegrationTest {
     @DisplayName( "POST /movies/batch - Create Movie Batch" )
     class CreateMovieBatchTests {
 
+        // @ToDo: Create tests for batch creation of complete type movies
+
         @Test
         @DisplayName( "Should create a batch of movies with basic type | return 200" )
         void createMovieBatch_whenValidByBasicType_shouldReturnSuccessCode() {
