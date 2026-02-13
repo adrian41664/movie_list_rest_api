@@ -13,7 +13,7 @@ public class MovieBatchCreateBasicDtos extends MovieBatchCreateDtos< MovieBatchC
         implements MovieBatchCreateSubTypeMarker {
 
     @Schema( description = "Type of creation", example = "basic", accessMode = Schema.AccessMode.READ_ONLY )
-    private String type = "basic";
+    private final String type = "basic";
 
 
 
