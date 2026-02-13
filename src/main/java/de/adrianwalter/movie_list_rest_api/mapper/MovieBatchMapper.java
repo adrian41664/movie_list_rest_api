@@ -3,6 +3,7 @@ package de.adrianwalter.movie_list_rest_api.mapper;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.*;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
+import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class MovieBatchMapper {
 
         } else {
 
-            throw new InvalidBodyException( "Body is invalid!" );
+            throw new BadRequestException();
         }
     }
 

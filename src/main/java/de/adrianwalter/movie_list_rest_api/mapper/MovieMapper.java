@@ -7,6 +7,7 @@ import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieBatchCreateOneLin
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieResponseBatchCreateOneLineDtos;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
+import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
@@ -107,7 +108,7 @@ public class MovieMapper {
 
         if ( oneLineMovieFields.length != FIELD_COUNT ) {
 
-            throw new InvalidBodyException( "" );
+            throw new BadRequestException();
 
         }
         Movie movie = mapToMovie( oneLineMovieFields );

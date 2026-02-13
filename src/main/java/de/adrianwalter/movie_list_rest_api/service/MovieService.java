@@ -4,6 +4,7 @@ import de.adrianwalter.movie_list_rest_api.dto.movie.*;
 import de.adrianwalter.movie_list_rest_api.dto.moviebatch.*;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
+import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
 import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
@@ -62,6 +63,11 @@ public class MovieService {
 
             MovieList movieListToAddTo = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
 
+            if( movieBatchCreateDtos.getMovies().isEmpty() ){
+
+                throw new BadRequestException();
+            }
+
             List< MovieResponseOneLineDto > oneLineResponses =
                     this.movieBatchMapper.mapToMovies( movieBatchCreateDtos, movieListToAddTo ).stream()
                             .map( this::createAndSave )
@@ -72,7 +78,7 @@ public class MovieService {
 
         } else {
 
-            throw new InvalidBodyException( "Body is invalid!" );
+            throw new BadRequestException();
         }
     }
 
@@ -126,8 +132,7 @@ public class MovieService {
         }
         if ( movieName.isBlank() ) {
 
-            throw new InvalidBodyException(
-                    "Cant create new Movie; Given name is blank" );
+            throw new BadRequestException();
         }
 
         this.keywordFieldsToUpperCase( movie );
