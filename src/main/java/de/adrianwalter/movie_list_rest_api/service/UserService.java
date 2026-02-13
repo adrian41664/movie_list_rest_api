@@ -73,6 +73,7 @@ public class UserService {
 
     }
 
+
     public User findUserById( long userId ) {
 
         return userRepository.findByUserId( userId )
@@ -115,11 +116,7 @@ public class UserService {
 
     private User updateUserFields( User user, UserUpdateDto userUpdateDto ) {
 
-        if ( userUpdateDto.getUserName().isBlank() ) {
-
-            throw new InvalidBodyException();
-        }
-        else if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
+        if ( this.userIsExisting( userUpdateDto.getUserName() ) ) {
 
             throw new NameAlreadyExistsException( "User with name " + userUpdateDto.getUserName() + " already exists!" );
         }

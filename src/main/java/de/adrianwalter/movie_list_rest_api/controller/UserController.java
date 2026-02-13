@@ -113,41 +113,6 @@ public class UserController {
     }
 
 
-    //    @Operation(
-//            summary = "Get all Users",
-//            description = "Get a pageable list of all users with detailed information"
-//    )
-//    @ApiResponses( value = {
-//            @ApiResponse(
-//                    responseCode = "200",
-//                    description = "Successfully retrieved a detailed list of all users",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            array = @ArraySchema( schema = @Schema( implementation = UserResponseShortDto.class ) )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "500",
-//                    description = "Internal server error"
-//            )
-//    } )
-// @GetMapping("/details")
-    public ResponseEntity< List< UserResponseShortDto > > getAllUsersDetails(
-            @Parameter(
-                    description = "Pagination parameters (page, size, sort)",
-                    example = "page=0&size=10&sort=username,asc"
-            )
-            Pageable pageable
-    ) {
-
-        // ToDo: Implement when Movie full implemented: All Users with all their MovieLists, UserResponseDto
-
-        List< UserResponseShortDto > users = userService.findAll( pageable );
-
-        return ResponseEntity.ok( users );
-    }
-
-
     @Operation( summary = "Create a new user" )
     @ApiResponses( value = {
             @ApiResponse(
@@ -217,36 +182,6 @@ public class UserController {
     }
 
 
-    //    @Operation( summary = "Get a user and associated movie lists by ID" )
-//    @ApiResponses( value = {
-//            @ApiResponse(
-//                    responseCode = "200",
-//                    description = "User retrieved successfully",
-//                    content = @Content( schema = @Schema( implementation = UserResponseShortDto.class ) )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "404",
-//                    description = "Not Found - No User with given ID"
-//            ),
-//            @ApiResponse(
-//                    responseCode = "500",
-//                    description = "Internal server error"
-//            )
-//    } )
-// @GetMapping("/{userId}/details")
-    public ResponseEntity< UserResponseShortDto > getUserDetails(
-            @Parameter( description = "ID of user to retrieve", required = true )
-            @PathVariable Long userId
-    ) {
-
-        // ToDo: Implement when Movie full implemented: User with all MovieLists, UserResponseDto
-
-        UserResponseShortDto responseDto = userService.findUserDetails( userId );
-
-        return ResponseEntity.ok( responseDto );
-    }
-
-
     @Operation( summary = "Delete a user by ID" )
     @ApiResponses( value = {
             @ApiResponse(
@@ -276,6 +211,71 @@ public class UserController {
 
         return ResponseEntity.ok( responseDto );
     }
+
+
+    //    @Operation(
+//            summary = "Get all Users",
+//            description = "Get a pageable list of all users with detailed information"
+//    )
+//    @ApiResponses( value = {
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Successfully retrieved a detailed list of all users",
+//                    content = @Content(
+//                            mediaType = "application/json",
+//                            array = @ArraySchema( schema = @Schema( implementation = UserResponseShortDto.class ) )
+//                    )
+//            ),
+//            @ApiResponse(
+//                    responseCode = "500",
+//                    description = "Internal server error"
+//            )
+//    } )
+// @GetMapping("/details")
+//    public ResponseEntity< List< UserResponseShortDto > > getAllUsersDetails(
+//            @Parameter(
+//                    description = "Pagination parameters (page, size, sort)",
+//                    example = "page=0&size=10&sort=username,asc"
+//            )
+//            Pageable pageable
+//    ) {
+//
+//        // ToDo: Implement when Movie full implemented: All Users with all their MovieLists, UserResponseDto
+//
+//        List< UserResponseShortDto > users = userService.findAll( pageable );
+//
+//        return ResponseEntity.ok( users );
+//    }
+
+
+    //    @Operation( summary = "Get a user and associated movie lists by ID" )
+//    @ApiResponses( value = {
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "User retrieved successfully",
+//                    content = @Content( schema = @Schema( implementation = UserResponseShortDto.class ) )
+//            ),
+//            @ApiResponse(
+//                    responseCode = "404",
+//                    description = "Not Found - No User with given ID"
+//            ),
+//            @ApiResponse(
+//                    responseCode = "500",
+//                    description = "Internal server error"
+//            )
+//    } )
+// @GetMapping("/{userId}/details")
+//    public ResponseEntity< UserResponseShortDto > getUserDetails(
+//            @Parameter( description = "ID of user to retrieve", required = true )
+//            @PathVariable Long userId
+//    ) {
+//
+//        // ToDo: Implement when Movie full implemented: User with all MovieLists, UserResponseDto
+//
+//        UserResponseShortDto responseDto = userService.findUserDetails( userId );
+//
+//        return ResponseEntity.ok( responseDto );
+//    }
 
 
 }
