@@ -18,6 +18,10 @@ API may evolve as new functionality is added.
 
 Implementing comprehensive test coverage to enable confident refactoring and early error detection.
 
+### Latest Test Coverage
+
+![testcoverageScreenshot](testCoverage.png)
+
 ## Getting Started:
 
 The application needs a MySQL-Database. Start one using Docker:
