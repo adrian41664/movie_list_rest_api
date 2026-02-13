@@ -166,15 +166,13 @@ public class MovieListService {
     private User findUser( MovieListCreateDto movieListCreateDto ) {
 
         if ( movieListCreateDto instanceof MovieListCreateByUserNameBodyDto nameDto ) {
-
             return this.userService.findUserByName( nameDto.getUserName() );
-
-        } else if ( movieListCreateDto instanceof MovieListCreateByUserIdBodyDto idDto ) {
-
-            return this.userService.findUserById( idDto.getUserId() );
         }
 
-        throw new InvalidBodyException( "Body is invalid!" );
+        // if its not ByUserName it must be ByUserId
+        MovieListCreateByUserIdBodyDto idDto = (MovieListCreateByUserIdBodyDto) movieListCreateDto;
+
+        return this.userService.findUserById( idDto.getUserId() );
     }
 
 
