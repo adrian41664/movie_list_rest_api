@@ -426,6 +426,8 @@ class MovieListControllerIntegrationTest {
             assertThat( response.getBody().getMovieListName() ).isEqualTo( "New Name" );
             assertThat( response.getBody().getDescription() ).isEqualTo( "New Description" );
         }
+
+
         @Test
         @DisplayName( "Update movie-list successful with name | return code 200" )
         void putMovieList_whenMovieListExists_whenNewName_shouldReturnOkCode() {
@@ -532,9 +534,6 @@ class MovieListControllerIntegrationTest {
 
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
-//            Assertions.assertNotNull( response.getBody() );
-//            assertThat( response.getBody().getMovieListName() ).isEqualTo( "Old Name" );
-//            assertThat( response.getBody().getDescription() ).isEqualTo( "Old Description" );
         }
 
 

@@ -189,19 +189,20 @@ public class MovieListService {
 
         MovieList movieList = this.findById( movieListId );
 
-        if ( !movieListUpdateDto.getMovieListName().isBlank() ) {
-
-            this.changeNameIfNotExisting( movieList, movieListUpdateDto.getMovieListName() );
-
-        } else if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
-
-            movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
-
-        } else {
+        if ( movieListUpdateDto.getMovieListName().isBlank() && movieListUpdateDto.getMovieListDescription().isBlank() ) {
 
             throw new BadRequestException();
-        }
+        } else {
 
+            if ( !movieListUpdateDto.getMovieListName().isBlank() ) {
+
+                this.changeNameIfNotExisting( movieList, movieListUpdateDto.getMovieListName() );
+            }
+            if ( !movieListUpdateDto.getMovieListDescription().isBlank() ) {
+
+                movieList.setDescription( movieListUpdateDto.getMovieListDescription() );
+            }
+        }
         return movieList;
     }
 
@@ -222,3 +223,4 @@ public class MovieListService {
 
 
 }
+
