@@ -99,7 +99,7 @@ public class MovieListSortAndSearchService {
             );
             case "rating", "user-rating" -> Comparator.comparing(
                     Movie::getUserRating,
-                    Comparator.nullsLast( Comparator.naturalOrder() )
+                    Comparator.nullsFirst( Comparator.naturalOrder() )
             );
             case "year", "release-year" -> Comparator.comparing(
                     Movie::getReleaseYear,
