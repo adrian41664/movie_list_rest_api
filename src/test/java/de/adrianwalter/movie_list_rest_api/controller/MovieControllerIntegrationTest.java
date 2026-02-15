@@ -647,8 +647,13 @@ class MovieControllerIntegrationTest {
 
             // create update request
             MovieUpdateDto updateRequest = new MovieUpdateDto();
+            updateRequest.setUserRating( 9 );
             updateRequest.setMovieTitle( "New Title" );
             updateRequest.setReleaseYear( 2000 );
+            updateRequest.setSeenAt( LocalDate.parse( "2023-02-15" ) );
+            updateRequest.setSeenOn( "Prime" );
+            updateRequest.setUserNote( "boring" );
+            updateRequest.setGenre( "Thriller" );
 
             // Act
             ResponseEntity< MovieResponseBasicFullOwnershipDto > response = restTemplate.exchange(
@@ -663,6 +668,11 @@ class MovieControllerIntegrationTest {
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovieTitle() ).isEqualTo( "New Title" );
             assertThat( response.getBody().getReleaseYear() ).isEqualTo( 2000 );
+            assertThat( response.getBody().getSeenAt() ).isEqualTo( LocalDate.parse( "2023-02-15" ) );
+            assertThat( response.getBody().getSeenOn() ).isEqualTo( "Prime".toUpperCase() );
+            assertThat( response.getBody().getUserNote() ).isEqualTo( "boring" );
+            assertThat( response.getBody().getGenre() ).isEqualTo( "Thriller".toUpperCase() );
+
         }
 
 
