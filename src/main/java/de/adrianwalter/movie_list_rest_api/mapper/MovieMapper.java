@@ -36,7 +36,7 @@ public class MovieMapper {
         // ToDo: Delete -1 test
         // ToDo: Optional verwenden
         String releaseYear = ( movie.getReleaseYear() == null || movie.getReleaseYear() == -1 ) ?
-                "" : movie.getReleaseYear().toString();
+                null : movie.getReleaseYear().toString();
 
         String seenAt = movie.getSeenAt() == null ? "" : movie.getSeenAt().toString();
 
@@ -121,13 +121,12 @@ public class MovieMapper {
 
     public Movie mapToMovie( String[] oneLineMovieFields ) {
 
+        // "8 / The Matrix / 1999 / SciFi / Netflix / Great movie / 2024-01-15" ;
+
+
         Movie movie = new Movie();
 
-        if ( oneLineMovieFields[1].isBlank() ||
-                oneLineMovieFields[3].isBlank() ||
-                oneLineMovieFields[4].isBlank() ||
-                oneLineMovieFields[5].isBlank() ||
-                oneLineMovieFields[6].isBlank() ) {
+        if ( oneLineMovieFields[0].isBlank() || oneLineMovieFields[1].isBlank() ) {
 
             throw new BadRequestException();
         }
@@ -146,9 +145,23 @@ public class MovieMapper {
             movie.setReleaseYear( null );
         }
 
-        movie.setGenre( oneLineMovieFields[3] );
-        movie.setSeenOn( oneLineMovieFields[4] );
-        movie.setUserNote( oneLineMovieFields[5] );
+        if ( oneLineMovieFields[3].isBlank() ) {
+            movie.setGenre( null );
+        } else {
+            movie.setGenre( oneLineMovieFields[3] );
+        }
+
+        if ( oneLineMovieFields[4].isBlank() ) {
+            movie.setSeenOn( null );
+        } else {
+            movie.setSeenOn( oneLineMovieFields[4] );
+        }
+
+        if ( oneLineMovieFields[5].isBlank() ) {
+            movie.setUserNote( null );
+        } else {
+            movie.setUserNote( oneLineMovieFields[5] );
+        }
 
         try {
             movie.setSeenAt( LocalDate.parse( oneLineMovieFields[6] ) );

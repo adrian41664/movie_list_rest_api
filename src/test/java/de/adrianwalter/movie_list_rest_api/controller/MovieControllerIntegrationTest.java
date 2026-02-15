@@ -388,7 +388,8 @@ class MovieControllerIntegrationTest {
             batchList.add( batchMovie1 );
 
             MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
-            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / mind-blowing / 2024-02-20" );
+            // batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-blowing / 2024-02-20" );
+            batchMovie2.setMovieInformation( "9 / Inception / / / / / " );
 
             batchList.add( batchMovie2 );
 
@@ -417,12 +418,12 @@ class MovieControllerIntegrationTest {
 
             Movie movie2 = movieRepository.findByMovieTitle( "Inception" ).orElseThrow();
             assertThat( movie2.getMovieTitle() ).isEqualTo( "Inception" );
-            assertThat( movie2.getReleaseYear() ).isEqualTo( 2010 );
-            assertThat( movie2.getGenre() ).isEqualTo( "Thriller".toUpperCase() );
-            assertThat( movie2.getSeenOn() ).isEqualTo( "Prime".toUpperCase() );
+            assertThat( movie2.getReleaseYear() ).isNull();
+            assertThat( movie2.getGenre() ).isNull();
+            assertThat( movie2.getSeenOn() ).isNull();
             assertThat( movie2.getUserRating() ).isEqualTo( 9 );
-            assertThat( movie2.getUserNote() ).isEqualTo( "mind-blowing" );
-            assertThat( movie2.getSeenAt() ).isEqualTo( "2024-02-20" );
+            assertThat( movie2.getUserNote() ).isNull();
+            assertThat( movie2.getSeenAt() ).isNull();
         }
 
 
