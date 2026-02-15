@@ -190,16 +190,15 @@ class MovieListSortAndSearchServiceUnitTest {
         void shouldSortByRatingAscending() {
             List< Movie > result = service.filterAndSort( testMovies, null, "rating", true );
 
-            // The Dark Knight = 10
+            // Interstellar = null
+            // Avatar = 7
             // Inception = 9
             // Parasite = 9
-            // Avatar = 7
-            // Interstellar = null
-
+            // The Dark Knight = 10
 
             assertThat( result ).hasSize( 5 );
-            // Null ratings should be last
-            assertThat( result.get( 0 ).getUserRating() ).isNull(); // expected null / was 10
+            // Null ratings should be first
+            assertThat( result.get( 0 ).getUserRating() ).isNull();
             assertThat( result.get( 4 ).getUserRating() ).isEqualTo( 10 );
         }
 
@@ -257,6 +256,11 @@ class MovieListSortAndSearchServiceUnitTest {
 
             // Should return all movies unsorted (original order maintained)
             assertThat( result ).hasSize( 5 );
+            assertThat( result.get( 0 ) ).isEqualTo( testMovies.get( 0 ) );
+            assertThat( result.get( 1 ) ).isEqualTo( testMovies.get( 1 ) );
+            assertThat( result.get( 2 ) ).isEqualTo( testMovies.get( 2 ) );
+            assertThat( result.get( 3 ) ).isEqualTo( testMovies.get( 3 ) );
+            assertThat( result.get( 4 ) ).isEqualTo( testMovies.get( 4 ) );
         }
 
 
@@ -266,6 +270,11 @@ class MovieListSortAndSearchServiceUnitTest {
             List< Movie > result = service.filterAndSort( testMovies, null, "", true );
 
             assertThat( result ).hasSize( 5 );
+            assertThat( result.get( 0 ) ).isEqualTo( testMovies.get( 0 ) );
+            assertThat( result.get( 1 ) ).isEqualTo( testMovies.get( 1 ) );
+            assertThat( result.get( 2 ) ).isEqualTo( testMovies.get( 2 ) );
+            assertThat( result.get( 3 ) ).isEqualTo( testMovies.get( 3 ) );
+            assertThat( result.get( 4 ) ).isEqualTo( testMovies.get( 4 ) );
         }
 
 
@@ -275,6 +284,11 @@ class MovieListSortAndSearchServiceUnitTest {
             List< Movie > result = service.filterAndSort( testMovies, null, null, true );
 
             assertThat( result ).hasSize( 5 );
+            assertThat( result.get( 0 ) ).isEqualTo( testMovies.get( 0 ) );
+            assertThat( result.get( 1 ) ).isEqualTo( testMovies.get( 1 ) );
+            assertThat( result.get( 2 ) ).isEqualTo( testMovies.get( 2 ) );
+            assertThat( result.get( 3 ) ).isEqualTo( testMovies.get( 3 ) );
+            assertThat( result.get( 4 ) ).isEqualTo( testMovies.get( 4 ) );
         }
     }
 
@@ -508,6 +522,9 @@ class MovieListSortAndSearchServiceUnitTest {
 
             // All should be considered equal, order preserved
             assertThat( result ).hasSize( 3 );
+            assertThat( result.get( 0 ) ).isEqualTo( movies.get( 0 ) );
+            assertThat( result.get( 1 ) ).isEqualTo( movies.get( 1 ) );
+            assertThat( result.get( 2 ) ).isEqualTo( movies.get( 2 ) );
         }
     }
 }
