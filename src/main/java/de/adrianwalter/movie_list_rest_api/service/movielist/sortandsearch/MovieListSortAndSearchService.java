@@ -48,36 +48,6 @@ public class MovieListSortAndSearchService {
     }
 
 
-    // Comparator based on Movie field names
-    private Comparator< Movie > getComparator( String sortBy ) {
-
-        return switch ( sortBy.toLowerCase() ) {
-
-            case "title" -> Comparator.comparing(
-                    Movie::getMovieTitle,
-                    Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
-            );
-            case "rating", "user-rating" -> Comparator.comparing(
-                    Movie::getUserRating,
-                    Comparator.nullsLast( Comparator.naturalOrder() )
-            );
-            case "year", "release-year" -> Comparator.comparing(
-                    Movie::getReleaseYear,
-                    Comparator.nullsLast( Comparator.naturalOrder() )
-            );
-            case "genre" -> Comparator.comparing(
-                    Movie::getGenre,
-                    Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
-            );
-            case "date" -> Comparator.comparing(
-                    Movie::getSeenAt,
-                    Comparator.nullsLast( Comparator.naturalOrder() )
-            );
-            default -> null;
-        };
-    }
-
-
     // combined filter built of params
     public MovieFilter buildFilter(
             String title, Boolean isRated, Integer minRating, Integer maxRating, Integer year, Integer minYear,
@@ -115,6 +85,36 @@ public class MovieListSortAndSearchService {
         }
 
         return filter;
+    }
+
+
+    // Comparator based on Movie field names
+    private Comparator< Movie > getComparator( String sortBy ) {
+
+        return switch ( sortBy.toLowerCase() ) {
+
+            case "title" -> Comparator.comparing(
+                    Movie::getMovieTitle,
+                    Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
+            );
+            case "rating", "user-rating" -> Comparator.comparing(
+                    Movie::getUserRating,
+                    Comparator.nullsLast( Comparator.naturalOrder() )
+            );
+            case "year", "release-year" -> Comparator.comparing(
+                    Movie::getReleaseYear,
+                    Comparator.nullsLast( Comparator.naturalOrder() )
+            );
+            case "genre" -> Comparator.comparing(
+                    Movie::getGenre,
+                    Comparator.nullsLast( String.CASE_INSENSITIVE_ORDER )
+            );
+            case "date" -> Comparator.comparing(
+                    Movie::getSeenAt,
+                    Comparator.nullsLast( Comparator.naturalOrder() )
+            );
+            default -> null;
+        };
     }
 
 

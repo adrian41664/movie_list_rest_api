@@ -80,4 +80,4 @@ public class MovieFilters {
         return movie -> isRated == null ||
                 ( movie.getUserRating() != null && movie.getUserRating() >= 0 );
     }
-} // readability
+}
