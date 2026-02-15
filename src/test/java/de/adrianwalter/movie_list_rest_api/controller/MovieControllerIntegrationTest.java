@@ -6,10 +6,10 @@ import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListCreateByUserId
 import de.adrianwalter.movie_list_rest_api.dto.movielist.MovieListMovieOneLineResponseDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserResponseShortDto;
+import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.repository.MovieListRepository;
 import de.adrianwalter.movie_list_rest_api.repository.MovieRepository;
 import de.adrianwalter.movie_list_rest_api.repository.UserRepository;
-import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -57,7 +57,7 @@ class MovieControllerIntegrationTest {
 
 
     // Helper method to create user and movie-list
-    private MovieListMovieOneLineResponseDto createUserAndMovieList( ) {
+    private MovieListMovieOneLineResponseDto createUserAndMovieList() {
         UserCreateDto userRequest = new UserCreateDto();
         userRequest.setUserName( "User123" );
         UserResponseShortDto user = restTemplate.postForObject( "/users", userRequest, UserResponseShortDto.class );
@@ -104,6 +104,7 @@ class MovieControllerIntegrationTest {
             assertThat( response.getBody().getReleaseYear() ).isEqualTo( 1999 );
         }
 
+
         @Test
         @DisplayName( "Should create a new movie with complete type | return 200" )
         void createMovie_whenValidCompleteType_shouldReturnSuccessCode() {
@@ -118,7 +119,7 @@ class MovieControllerIntegrationTest {
             request.setGenre( "Sci-Fi" );
             request.setUserRating( 9 );
             request.setSeenOn( "Netflix" );
-            request.setUserNote( "Mind-bending" );
+            request.setUserNote( "Mind-blowing" );
             request.setSeenAt( LocalDate.of( 2024, 1, 15 ) );
 
             // Act
@@ -134,6 +135,7 @@ class MovieControllerIntegrationTest {
             assertThat( response.getBody().getGenre() ).isEqualTo( "Sci-Fi".toUpperCase() );
             assertThat( response.getBody().getUserRating() ).isEqualTo( 9 );
         }
+
 
         @Test
         @DisplayName( "Should create a new movie with oneLine type | return 200" )
@@ -156,6 +158,7 @@ class MovieControllerIntegrationTest {
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovieId() ).isNotNull();
         }
+
 
         @Test
         @DisplayName( "Movie name already exists in movie-list | return code 409" )
@@ -183,6 +186,7 @@ class MovieControllerIntegrationTest {
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.CONFLICT );
         }
 
+
         @Test
         @DisplayName( "Movie title is blank | return code 400" )
         void createMovie_whenTitleIsBlank_shouldReturnBadRequestCode() {
@@ -202,6 +206,7 @@ class MovieControllerIntegrationTest {
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
         }
+
 
         @Test
         @DisplayName( "Movie-list not found | return code 404" )
@@ -235,6 +240,7 @@ class MovieControllerIntegrationTest {
 
         // @ToDo: Create tests for batch creation of complete type movies
 
+
         @Test
         @DisplayName( "Should create a batch of movies with basic type | return 200" )
         void createMovieBatch_whenValidByBasicType_shouldReturnSuccessCode() {
@@ -245,19 +251,23 @@ class MovieControllerIntegrationTest {
             // create batch request with two movies (by basic)
 
             MovieBatchCreateBasicDtos batchRequest = new MovieBatchCreateBasicDtos();
-            batchRequest.setMovieListId(  movieList.getMovieListId() );
+            batchRequest.setMovieListId( movieList.getMovieListId() );
 
-            List<MovieBatchCreateBasicDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateBasicDto > batchList = new ArrayList<>();
 
             MovieBatchCreateBasicDto batchMovie1 = new MovieBatchCreateBasicDto();
             batchMovie1.setMovieTitle( "The Matrix" );
             batchMovie1.setReleaseYear( 1999 );
+            batchMovie1.setSeenOn( "Netflix" );
+            batchMovie1.setUserRating( 8 );
 
             batchList.add( batchMovie1 );
 
             MovieBatchCreateBasicDto batchMovie2 = new MovieBatchCreateBasicDto();
             batchMovie2.setMovieTitle( "Inception" );
             batchMovie2.setReleaseYear( 2010 );
+            batchMovie2.setSeenOn( "Prime" );
+            batchMovie2.setUserRating( 9 );
 
             batchList.add( batchMovie2 );
 
@@ -273,7 +283,89 @@ class MovieControllerIntegrationTest {
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovies().size() ).isEqualTo( 2 );
 
+            // Assert DB persistence
+            Movie movie1 = movieRepository.findByMovieTitle( "The Matrix" ).orElseThrow();
+            assertThat( movie1.getMovieTitle() ).isEqualTo( "The Matrix" );
+            assertThat( movie1.getReleaseYear() ).isEqualTo( 1999 );
+            assertThat( movie1.getGenre() ).isEqualTo( null );
+            assertThat( movie1.getSeenOn() ).isEqualTo( "Netflix".toUpperCase() );
+            assertThat( movie1.getUserRating() ).isEqualTo( 8 );
+            assertThat( movie1.getUserNote() ).isEqualTo( null );
+
+            Movie movie2 = movieRepository.findByMovieTitle( "Inception" ).orElseThrow();
+            assertThat( movie2.getMovieTitle() ).isEqualTo( "Inception" );
+            assertThat( movie2.getReleaseYear() ).isEqualTo( 2010 );
+            assertThat( movie2.getGenre() ).isEqualTo( null );
+            assertThat( movie2.getSeenOn() ).isEqualTo( "Prime".toUpperCase() );
+            assertThat( movie2.getUserRating() ).isEqualTo( 9 );
+            assertThat( movie2.getUserNote() ).isEqualTo( null );
         }
+
+
+        @Test
+        @DisplayName( "Should create a batch of movies with complete type | return 200" )
+        void createMovieBatch_whenValidByCompleteType_shouldReturnSuccessCode() {
+
+            // Arrange - create user and movie-list
+            MovieListMovieOneLineResponseDto movieList = createUserAndMovieList();
+
+            // create batch request with two movies (by basic)
+
+            MovieBatchCreateCompleteDtos batchRequest = new MovieBatchCreateCompleteDtos();
+            batchRequest.setMovieListId( movieList.getMovieListId() );
+
+            List< MovieBatchCreateCompleteDto > batchList = new ArrayList<>();
+
+            MovieBatchCreateCompleteDto batchMovie1 = new MovieBatchCreateCompleteDto();
+            batchMovie1.setMovieTitle( "The Matrix" );
+            batchMovie1.setReleaseYear( 1999 );
+            batchMovie1.setGenre( "SciFi, Action" );
+            batchMovie1.setSeenOn( "Netflix" );
+            batchMovie1.setUserRating( 8 );
+            batchMovie1.setUserNote( "Great movie" );
+
+            batchList.add( batchMovie1 );
+
+            MovieBatchCreateCompleteDto batchMovie2 = new MovieBatchCreateCompleteDto();
+            batchMovie2.setMovieTitle( "Inception" );
+            batchMovie2.setReleaseYear( 2010 );
+            batchMovie2.setGenre( "SciFi, Thriller" );
+            batchMovie2.setSeenOn( "Prime" );
+            batchMovie2.setUserRating( 9 );
+            batchMovie2.setUserNote( "mind-blowing" );
+
+            batchList.add( batchMovie2 );
+
+            batchRequest.setMovies( batchList );
+
+            // Act
+            ResponseEntity< MovieResponseBatchCreateOneLineDtos > response =
+                    restTemplate.postForEntity( "/movies/batch", batchRequest, MovieResponseBatchCreateOneLineDtos.class );
+
+            // Assert
+            assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.OK );
+            assertThat( response.getBody() ).isNotNull();
+            Assertions.assertNotNull( response.getBody() );
+            assertThat( response.getBody().getMovies().size() ).isEqualTo( 2 );
+
+            // Assert DB persistence
+            Movie movie1 = movieRepository.findByMovieTitle( "The Matrix" ).orElseThrow();
+            assertThat( movie1.getMovieTitle() ).isEqualTo( "The Matrix" );
+            assertThat( movie1.getReleaseYear() ).isEqualTo( 1999 );
+            assertThat( movie1.getGenre() ).isEqualTo( "SciFi, Action".toUpperCase() );
+            assertThat( movie1.getSeenOn() ).isEqualTo( "Netflix".toUpperCase() );
+            assertThat( movie1.getUserRating() ).isEqualTo( 8 );
+            assertThat( movie1.getUserNote() ).isEqualTo( "Great movie" );
+
+            Movie movie2 = movieRepository.findByMovieTitle( "Inception" ).orElseThrow();
+            assertThat( movie2.getMovieTitle() ).isEqualTo( "Inception" );
+            assertThat( movie2.getReleaseYear() ).isEqualTo( 2010 );
+            assertThat( movie2.getGenre() ).isEqualTo( "SciFi, Thriller".toUpperCase() );
+            assertThat( movie2.getSeenOn() ).isEqualTo( "Prime".toUpperCase() );
+            assertThat( movie2.getUserRating() ).isEqualTo( 9 );
+            assertThat( movie2.getUserNote() ).isEqualTo( "mind-blowing" );
+        }
+
 
         @Test
         @DisplayName( "Should create a batch of movies with oneLine type | return 200" )
@@ -285,18 +377,18 @@ class MovieControllerIntegrationTest {
             // create batch request with two movies (by oneLine)
 
             MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
-            batchRequest.setMovieListId(  movieList.getMovieListId() );
+            batchRequest.setMovieListId( movieList.getMovieListId() );
 
 
-            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateOneLineDto > batchList = new ArrayList<>();
 
             MovieBatchCreateOneLineDto batchMovie1 = new MovieBatchCreateOneLineDto();
-            batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / Sci-Fi / Netflix / Great movie / 2024-01-15" );
+            batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / SciFi / Netflix / Great movie / 2024-01-15" );
 
             batchList.add( batchMovie1 );
 
             MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
-            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-bending / 2024-02-20" );
+            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / mind-blowing / 2024-02-20" );
 
             batchList.add( batchMovie2 );
 
@@ -313,7 +405,26 @@ class MovieControllerIntegrationTest {
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovies().size() ).isEqualTo( 2 );
 
+            // Assert DB persistence
+            Movie movie1 = movieRepository.findByMovieTitle( "The Matrix" ).orElseThrow();
+            assertThat( movie1.getMovieTitle() ).isEqualTo( "The Matrix" );
+            assertThat( movie1.getReleaseYear() ).isEqualTo( 1999 );
+            assertThat( movie1.getGenre() ).isEqualTo( "SciFi".toUpperCase() );
+            assertThat( movie1.getSeenOn() ).isEqualTo( "Netflix".toUpperCase() );
+            assertThat( movie1.getUserRating() ).isEqualTo( 8 );
+            assertThat( movie1.getUserNote() ).isEqualTo( "Great movie" );
+            assertThat( movie1.getSeenAt() ).isEqualTo( "2024-01-15" );
+
+            Movie movie2 = movieRepository.findByMovieTitle( "Inception" ).orElseThrow();
+            assertThat( movie2.getMovieTitle() ).isEqualTo( "Inception" );
+            assertThat( movie2.getReleaseYear() ).isEqualTo( 2010 );
+            assertThat( movie2.getGenre() ).isEqualTo( "Thriller".toUpperCase() );
+            assertThat( movie2.getSeenOn() ).isEqualTo( "Prime".toUpperCase() );
+            assertThat( movie2.getUserRating() ).isEqualTo( 9 );
+            assertThat( movie2.getUserNote() ).isEqualTo( "mind-blowing" );
+            assertThat( movie2.getSeenAt() ).isEqualTo( "2024-02-20" );
         }
+
 
         @Test
         @DisplayName( "One movie in batch has no name | return code 400" )
@@ -322,17 +433,11 @@ class MovieControllerIntegrationTest {
             // Arrange - create user, movie-list and first movie
             MovieListMovieOneLineResponseDto movieList = createUserAndMovieList();
 
-            MovieCreateBasicDto firstMovie = new MovieCreateBasicDto();
-            firstMovie.setMovieListId( movieList.getMovieListId() );
-            firstMovie.setMovieTitle( "The Matrix" );
-            firstMovie.setReleaseYear( 1999 );
-            restTemplate.postForEntity( "/movies", firstMovie, MovieResponseBasicFullOwnershipDto.class );
-
             // Act - try to create batch with duplicate name
             MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
             batchRequest.setMovieListId( movieList.getMovieListId() );
 
-            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateOneLineDto > batchList = new ArrayList<>();
 
             MovieBatchCreateOneLineDto batchMovie1 = new MovieBatchCreateOneLineDto();
             batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / Sci-Fi / Netflix / Great movie / 2024-01-15" );
@@ -340,7 +445,7 @@ class MovieControllerIntegrationTest {
             batchList.add( batchMovie1 );
 
             MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
-            batchMovie2.setMovieInformation( "9 // 2010 / Thriller / Prime / Mind-bending / 2024-02-20" );
+            batchMovie2.setMovieInformation( "9 // 2010 / Thriller / Prime / Mind-blowing / 2024-02-20" );
 
             batchList.add( batchMovie2 );
 
@@ -351,7 +456,11 @@ class MovieControllerIntegrationTest {
 
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
+
+            // Assert DB persistence
+            assertThat( movieRepository.findByMovieTitle( "The Matrix" ).isPresent() ).isEqualTo( false );
         }
+
 
         @Test
         @DisplayName( "One movie name already exists in batch | return code 409" )
@@ -370,7 +479,7 @@ class MovieControllerIntegrationTest {
             MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
             batchRequest.setMovieListId( movieList.getMovieListId() );
 
-            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateOneLineDto > batchList = new ArrayList<>();
 
             MovieBatchCreateOneLineDto batchMovie1 = new MovieBatchCreateOneLineDto();
             batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / Sci-Fi / Netflix / Great movie / 2024-01-15" );
@@ -378,7 +487,7 @@ class MovieControllerIntegrationTest {
             batchList.add( batchMovie1 );
 
             MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
-            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-bending / 2024-02-20" );
+            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-blowing / 2024-02-20" );
 
             batchList.add( batchMovie2 );
 
@@ -389,7 +498,12 @@ class MovieControllerIntegrationTest {
 
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.CONFLICT );
+
+            // Assert DB persistence
+            assertThat( movieRepository.findByMovieTitle( "The Matrix" ).isPresent() ).isEqualTo( true );
+            assertThat( movieRepository.findByMovieTitle( "Inception" ).isPresent() ).isEqualTo( false );
         }
+
 
         @Test
         @DisplayName( "One movie has incorrect syntax | return code 400" )
@@ -400,9 +514,9 @@ class MovieControllerIntegrationTest {
 
             // Act - create batch
             MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
-            batchRequest.setMovieListId(  movieList.getMovieListId() );
+            batchRequest.setMovieListId( movieList.getMovieListId() );
 
-            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateOneLineDto > batchList = new ArrayList<>();
 
             MovieBatchCreateOneLineDto batchMovie1 = new MovieBatchCreateOneLineDto();
             batchMovie1.setMovieInformation( "8 / The Matrix / 1999 / Sci-Fi / Netflix / Great movie / 2024-01-15" );
@@ -411,7 +525,7 @@ class MovieControllerIntegrationTest {
 
             // create batch with incorrect syntax
             MovieBatchCreateOneLineDto batchMovie2 = new MovieBatchCreateOneLineDto();
-            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-bending " );
+            batchMovie2.setMovieInformation( "9 / Inception / 2010 / Thriller / Prime / Mind-blowing " );
 
             batchList.add( batchMovie2 );
 
@@ -422,7 +536,12 @@ class MovieControllerIntegrationTest {
 
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.BAD_REQUEST );
+
+            // Assert DB persistence
+            assertThat( movieRepository.findByMovieTitle( "The Matrix" ).isPresent() ).isEqualTo( false );
+            assertThat( movieRepository.findByMovieTitle( "Inception" ).isPresent() ).isEqualTo( false );
         }
+
 
         @Test
         @DisplayName( "Empty batch | return code 400" )
@@ -433,9 +552,9 @@ class MovieControllerIntegrationTest {
 
             // create batch with empty list
             MovieBatchCreateOneLineDtos batchRequest = new MovieBatchCreateOneLineDtos();
-            batchRequest.setMovieListId(  movieList.getMovieListId() );
+            batchRequest.setMovieListId( movieList.getMovieListId() );
 
-            List<MovieBatchCreateOneLineDto> batchList = new ArrayList<>();
+            List< MovieBatchCreateOneLineDto > batchList = new ArrayList<>();
 
             batchRequest.setMovies( batchList );
 
@@ -482,7 +601,9 @@ class MovieControllerIntegrationTest {
             Assertions.assertNotNull( response.getBody() );
             assertThat( response.getBody().getMovieId() ).isEqualTo( created.getMovieId() );
             assertThat( response.getBody().getMovieTitle() ).isEqualTo( "The Matrix" );
+            assertThat( response.getBody().getReleaseYear() ).isEqualTo( 1999 );
         }
+
 
         @Test
         @DisplayName( "Movie cant be found | return code 404" )
@@ -543,6 +664,7 @@ class MovieControllerIntegrationTest {
             assertThat( response.getBody().getReleaseYear() ).isEqualTo( 2000 );
         }
 
+
         @Test
         @DisplayName( "Movie to change does not exist | return code 404" )
         void putMovie_whenMovieNotExists_shouldReturnNotFoundCode() {
@@ -562,6 +684,7 @@ class MovieControllerIntegrationTest {
             // Assert
             assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.NOT_FOUND );
         }
+
 
         @Test
         @DisplayName( "Movie title is already in use | return code 409" )
@@ -640,6 +763,7 @@ class MovieControllerIntegrationTest {
                             MovieResponseBasicFullOwnershipDto.class );
             assertThat( getResponse.getStatusCode() ).isEqualTo( HttpStatus.NOT_FOUND );
         }
+
 
         @Test
         @DisplayName( "Movie to delete cant be found | return code 404" )
