@@ -14,10 +14,6 @@ decision-making.
 The project is currently at MVP stage and functional for personal use. Some features are still in development, and the 
 API may evolve as new functionality is added.
 
-**Next Priority:** 
-
-Implementing comprehensive test coverage to enable confident refactoring and early error detection.
-
 ### Latest Test Coverage
 
 ![testcoverageScreenshot](testCoverage.png)
