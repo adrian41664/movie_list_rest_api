@@ -8,7 +8,6 @@ import de.adrianwalter.movie_list_rest_api.dto.moviebatch.MovieResponseBatchCrea
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
-import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Component
 public class MovieMapper {

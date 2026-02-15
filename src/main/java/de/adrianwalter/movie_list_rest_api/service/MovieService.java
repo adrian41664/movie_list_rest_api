@@ -5,7 +5,6 @@ import de.adrianwalter.movie_list_rest_api.dto.moviebatch.*;
 import de.adrianwalter.movie_list_rest_api.entity.Movie;
 import de.adrianwalter.movie_list_rest_api.entity.MovieList;
 import de.adrianwalter.movie_list_rest_api.exception.BadRequestException;
-import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.mapper.MovieBatchMapper;
@@ -63,7 +62,7 @@ public class MovieService {
 
             MovieList movieListToAddTo = this.movieListService.findById( movieBatchCreateDtos.getMovieListId() );
 
-            if( movieBatchCreateDtos.getMovies().isEmpty() ){
+            if ( movieBatchCreateDtos.getMovies().isEmpty() ) {
 
                 throw new BadRequestException();
             }
@@ -171,18 +170,14 @@ public class MovieService {
             return this.movieMapper.mapToMovie(
                     movieCreateDto,
                     this.movieListService.findById( movieCreateDto.getMovieListId() ) );
-
-        } else if ( movieCreateSubTypeDto instanceof MovieCreateOneLineDto movieCreateOneLineDto ) {
-
-            return this.movieMapper.mapToMovie(
-                    movieCreateOneLineDto,
-                    this.movieListService.findById( movieCreateOneLineDto.getMovieListId() )
-            );
-
-        } else {
-
-            throw new InvalidBodyException( "Body is invalid!" );
         }
+
+        // movieCreateSubTypeDto must be of type: MovieCreateOneLineDto
+        MovieCreateOneLineDto movieCreateOneLineDto = (MovieCreateOneLineDto) movieCreateSubTypeDto;
+        return this.movieMapper.mapToMovie(
+                movieCreateOneLineDto,
+                this.movieListService.findById( movieCreateOneLineDto.getMovieListId() ) );
+
     }
 
 

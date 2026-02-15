@@ -1,7 +1,6 @@
 package de.adrianwalter.movie_list_rest_api.service;
 
 import de.adrianwalter.movie_list_rest_api.entity.User;
-import de.adrianwalter.movie_list_rest_api.exception.InvalidBodyException;
 import de.adrianwalter.movie_list_rest_api.exception.NameAlreadyExistsException;
 import de.adrianwalter.movie_list_rest_api.exception.ResourceNotFoundException;
 import de.adrianwalter.movie_list_rest_api.dto.user.UserCreateDto;
